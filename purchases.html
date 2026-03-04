@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchases — CTRC Club Manager</title>
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: block; src: url('fonts/inter-400.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: block; src: url('fonts/inter-500.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: block; src: url('fonts/inter-600.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: block; src: url('fonts/inter-700.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: block; src: url('fonts/inter-800.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 900; font-display: block; src: url('fonts/inter-900.woff2') format('woff2'); }
+  </style>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <style>
+    :root {
+      --yellow:#F5D000; --yellow-dim:#C8AA00; --yellow-bg:#FFFBDC;
+      --black:#171717; --black-2:#262626; --black-3:#404040;
+      --gray-1:#737373; --gray-2:#A3A3A3; --gray-3:#D4D4D4; --gray-4:#F5F5F5;
+      --white:#FFFFFF; --sidebar-w:240px; --radius:10px; --radius-sm:6px;
+      --shadow:0 1px 3px rgba(0,0,0,.08); --shadow-md:0 4px 12px rgba(0,0,0,.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-4); color: var(--black); min-height: 100vh; display: flex; overflow-x: hidden; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: var(--sidebar-w); background: var(--black); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-logo { padding: 20px 18px 16px; border-bottom: 1px solid var(--black-3); }
+    .sidebar-logo img { width: 140px; display: block; }
+    .sidebar-logo-sub { font-size: 10px; color: var(--gray-2); letter-spacing: .08em; text-transform: uppercase; margin-top: 6px; }
+    .sidebar-nav { flex: 1; overflow-y: auto; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .nav-section-label { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--gray-1); padding: 10px 8px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); color: var(--gray-2); font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s, color .15s; text-decoration: none; }
+    .nav-item:hover { background: var(--black-2); color: var(--white); }
+    .nav-item.active { background: var(--yellow); color: var(--black); font-weight: 700; }
+    .nav-item.active i { color: var(--black); }
+    .nav-item i { width: 16px; height: 16px; }
+    .nav-badge { margin-left: auto; background: var(--yellow); color: var(--black); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
+    .nav-item.active .nav-badge { background: var(--black); color: var(--yellow); }
+    .sidebar-footer { padding: 14px 14px; border-top: 1px solid var(--black-3); }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .sidebar-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--yellow); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .sidebar-user-info { flex: 1; min-width: 0; }
+    .sidebar-user-name { font-size: 13px; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-user-role { font-size: 11px; color: var(--gray-2); }
+
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: var(--white); border-bottom: 1px solid var(--gray-3); padding: 0 28px; height: 56px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 50; }
+    .topbar-search { flex: 1; max-width: 400px; display: flex; align-items: center; gap: 8px; background: var(--gray-4); border: 1px solid var(--gray-3); border-radius: var(--radius-sm); padding: 7px 12px; }
+    .topbar-search input { border: none; background: transparent; font-family: inherit; font-size: 13px; color: var(--black); outline: none; flex: 1; }
+    .topbar-search i { width: 14px; height: 14px; color: var(--gray-2); flex-shrink: 0; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 8px 14px; border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; border: none; text-decoration: none; }
+    .btn-yellow { background: var(--yellow); color: var(--black); }
+    .btn-yellow:hover { background: var(--yellow-dim); }
+    .btn-white { background: var(--white); color: var(--black); border: 1px solid var(--gray-3); }
+    .btn-white:hover { background: var(--gray-4); }
+    .btn-black { background: var(--black); color: var(--white); }
+    .btn-black:hover { background: var(--black-2); }
+    .btn-sm { padding: 6px 10px; font-size: 12px; }
+    .btn i { width: 14px; height: 14px; }
+    .icon-btn { width: 36px; height: 36px; border-radius: var(--radius-sm); border: 1px solid var(--gray-3); background: var(--white); display: flex; align-items: center; justify-content: center; cursor: pointer; color: var(--gray-1); transition: all .15s; position: relative; }
+    .icon-btn:hover { background: var(--gray-4); color: var(--black); }
+    .icon-btn i { width: 16px; height: 16px; }
+    .notif-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; border: 1.5px solid var(--white); }
+
+    /* ── CAUTION STRIP ── */
+    .caution-strip { height: 5px; background: repeating-linear-gradient(-55deg, var(--yellow) 0, var(--yellow) 10px, var(--black) 10px, var(--black) 20px); opacity: .15; }
+
+    /* ── CONTENT ── */
+    .content { padding: 28px; display: flex; flex-direction: column; gap: 24px; }
+    .page-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .page-title { font-size: 22px; font-weight: 800; color: var(--black); letter-spacing: -.02em; }
+    .page-subtitle { font-size: 13px; color: var(--gray-1); margin-top: 2px; }
+
+    /* ── STAT CARDS ── */
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stat-card { background: var(--white); border: 1px solid var(--gray-3); border-radius: var(--radius); padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; box-shadow: var(--shadow); }
+    .stat-card.accent-yellow { border-top: 3px solid var(--yellow); }
+    .stat-card.accent-black { border-top: 3px solid var(--black); }
+    .stat-card.accent-red { border-top: 3px solid #EF4444; }
+    .stat-label { font-size: 10px; font-weight: 700; color: var(--gray-1); letter-spacing: .06em; text-transform: uppercase; }
+    .stat-value { font-size: 26px; font-weight: 900; color: var(--black); letter-spacing: -.03em; line-height: 1; }
+    .stat-meta { font-size: 12px; color: var(--gray-1); }
+
+    /* ── CARD ── */
+    .card { background: var(--white); border: 1px solid var(--gray-3); border-radius: var(--radius); box-shadow: var(--shadow); }
+    .card-header { padding: 16px 20px; border-bottom: 1px solid var(--gray-3); display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .card-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .card-body { padding: 20px; }
+
+    /* ── SYNC PANEL ── */
+    .sync-panel { background: var(--black); border-radius: var(--radius); padding: 28px 32px; display: flex; align-items: center; gap: 28px; position: relative; overflow: hidden; }
+    .sync-panel::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(-55deg, var(--yellow) 0, var(--yellow) 10px, transparent 10px, transparent 20px); opacity: .04; pointer-events: none; }
+    .sync-icon { width: 52px; height: 52px; border-radius: var(--radius); background: var(--yellow); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .sync-icon i { width: 26px; height: 26px; color: var(--black); }
+    .sync-info { flex: 1; }
+    .sync-title { font-size: 16px; font-weight: 800; color: var(--white); margin-bottom: 4px; }
+    .sync-desc { font-size: 13px; color: var(--gray-2); line-height: 1.5; }
+    .sync-meta { font-size: 11.5px; color: var(--gray-1); margin-top: 6px; }
+    .sync-meta span { color: var(--yellow); font-weight: 600; }
+    .sync-actions { display: flex; flex-direction: column; gap: 8px; align-items: flex-end; flex-shrink: 0; }
+    .sync-status { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--gray-2); }
+    .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #22C55E; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .4; } }
+
+    /* ── FILTER BAR ── */
+    .filter-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .filter-bar input { flex: 1; min-width: 200px; padding: 8px 12px; border: 1px solid var(--gray-3); border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; color: var(--black); background: var(--white); outline: none; }
+    .filter-bar input:focus { border-color: var(--black); }
+    .filter-bar select { padding: 8px 10px; border: 1px solid var(--gray-3); border-radius: var(--radius-sm); font-family: inherit; font-size: 13px; color: var(--black); background: var(--white); outline: none; cursor: pointer; }
+    .filter-bar select:focus { border-color: var(--black); }
+
+    /* ── TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+    thead th { padding: 10px 16px; text-align: left; font-size: 11px; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--gray-1); border-bottom: 1px solid var(--gray-3); white-space: nowrap; }
+    tbody td { padding: 13px 16px; border-bottom: 1px solid var(--gray-4); vertical-align: middle; }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr:hover { background: var(--gray-4); }
+    tbody tr.pending-row { background: #FFFBDC; }
+    tbody tr.pending-row:hover { background: #FFF3B0; }
+
+    /* ── BADGES ── */
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 700; white-space: nowrap; }
+    .badge-green { background: #D1FAE5; color: #065F46; }
+    .badge-yellow { background: var(--yellow-bg); color: #92700A; }
+    .badge-red { background: #FEE2E2; color: #991B1B; }
+    .badge-gray { background: var(--gray-4); color: var(--gray-1); border: 1px solid var(--gray-3); }
+    .badge-black { background: var(--black); color: var(--white); }
+
+    /* ── VENDOR LOGO PLACEHOLDER ── */
+    .vendor-cell { display: flex; align-items: center; gap: 10px; }
+    .vendor-icon { width: 30px; height: 30px; border-radius: 6px; background: var(--gray-4); border: 1px solid var(--gray-3); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 800; color: var(--gray-1); flex-shrink: 0; }
+    .vendor-name { font-weight: 600; color: var(--black); }
+    .vendor-ref { font-size: 11.5px; color: var(--gray-1); }
+
+    /* ── EMPTY / LOADING STATES ── */
+    .empty-state { text-align: center; padding: 56px 20px; color: var(--gray-1); }
+    .empty-state i { width: 40px; height: 40px; margin: 0 auto 12px; display: block; }
+    .empty-state p { font-size: 14px; font-weight: 500; color: var(--gray-1); }
+    .empty-state small { font-size: 12.5px; color: var(--gray-2); }
+    .loading-row td { padding: 20px 16px; }
+    .skeleton { height: 14px; border-radius: 4px; background: linear-gradient(90deg, var(--gray-3) 25%, var(--gray-4) 50%, var(--gray-3) 75%); background-size: 200% 100%; animation: shimmer 1.4s infinite; }
+    @keyframes shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+
+    /* ── EXPORT PANEL ── */
+    .export-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .export-card { border: 1px solid var(--gray-3); border-radius: var(--radius-sm); padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color .15s, box-shadow .15s; cursor: pointer; }
+    .export-card:hover { border-color: var(--black); box-shadow: var(--shadow-md); }
+    .export-card-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+    .export-card-icon.green { background: #D1FAE5; }
+    .export-card-icon.blue { background: #DBEAFE; }
+    .export-card-icon.orange { background: #FEF3C7; }
+    .export-card-icon i { width: 18px; height: 18px; }
+    .export-card-icon.green i { color: #065F46; }
+    .export-card-icon.blue i { color: #1D4ED8; }
+    .export-card-icon.orange i { color: #92400E; }
+    .export-card-title { font-size: 13px; font-weight: 700; color: var(--black); }
+    .export-card-desc { font-size: 12px; color: var(--gray-1); line-height: 1.4; }
+
+    /* ── TOAST ── */
+    #toast { position: fixed; bottom: 24px; right: 24px; background: var(--black); color: var(--white); padding: 12px 18px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 600; display: flex; align-items: center; gap: 8px; box-shadow: var(--shadow-md); transform: translateY(80px); opacity: 0; transition: all .3s; z-index: 9999; }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    #toast i { width: 16px; height: 16px; color: var(--yellow); }
+
+    /* ── AMOUNT ── */
+    .amount { font-weight: 700; font-variant-numeric: tabular-nums; }
+    .amount.positive { color: #065F46; }
+    .amount.negative { color: #DC2626; }
+
+    /* ── TWO-COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+  </style>
+</head>
+<body>
+
+  <!-- SIDEBAR -->
+  <nav class="sidebar">
+    <div class="sidebar-logo">
+      <img src="logo-white.png" alt="CTRC" />
+      <div class="sidebar-logo-sub">Club Manager</div>
+    </div>
+    <div class="sidebar-nav">
+      <div class="nav-section-label">General</div>
+      <a class="nav-item" href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+      <a class="nav-item" href="students.html"><i data-lucide="users"></i> Students</a>
+      <a class="nav-item" href="foundation.html"><i data-lucide="book-open"></i> Foundation</a>
+      <a class="nav-item" href="teams.html"><i data-lucide="cpu"></i> Teams</a>
+      <a class="nav-item" href="tasks.html"><i data-lucide="circle-check"></i> Tasks <span class="nav-badge">5</span></a>
+
+      <div class="nav-section-label" style="margin-top:8px;">Competition</div>
+      <a class="nav-item" href="https://matchsight.ct839.com/events?programId=1" target="_blank"><i data-lucide="trophy"></i> Competitions</a>
+
+      <div class="nav-section-label" style="margin-top:8px;">Operations</div>
+      <a class="nav-item" href="inventory.html"><i data-lucide="package"></i> Inventory</a>
+      <a class="nav-item active" href="purchases.html"><i data-lucide="receipt"></i> Purchases</a>
+      <a class="nav-item" href="reports.html"><i data-lucide="bar-chart-2"></i> Reports</a>
+
+      <div style="margin-top:auto;"></div>
+      <a class="nav-item" href="#"><i data-lucide="settings"></i> Settings</a>
+    </div>
+    <div class="sidebar-footer">
+      <div class="sidebar-user">
+        <div class="sidebar-avatar"><img src="icon-white.png" alt="User" /></div>
+        <div class="sidebar-user-info">
+          <div class="sidebar-user-name">Coach Henderson</div>
+          <div class="sidebar-user-role">Lead Mentor</div>
+        </div>
+        <i data-lucide="chevron-up" style="width:14px;height:14px;color:#737373;"></i>
+      </div>
+    </div>
+  </nav>
+
+  <!-- MAIN -->
+  <div class="main">
+    <div class="caution-strip"></div>
+
+    <!-- TOPBAR -->
+    <div class="topbar">
+      <div class="topbar-search">
+        <i data-lucide="search"></i>
+        <input type="text" placeholder="Search invoices, vendors..." id="search-input" oninput="applyFilters()" />
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-white" onclick="exportCSV()"><i data-lucide="download"></i> Export CSV</button>
+        <button class="btn btn-yellow" id="sync-btn" onclick="triggerSync()"><i data-lucide="refresh-cw"></i> Sync Invoices</button>
+        <div class="icon-btn" onclick="openNotifPanel()" style="position:relative;cursor:pointer;"><i data-lucide="bell" style="width:15px;height:15px;"></i><span class="notif-dot"></span></div>
+        <div class="icon-btn"><i data-lucide="help-circle"></i></div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="content">
+
+      <!-- PAGE HEADER -->
+      <div class="page-header">
+        <div>
+          <div class="page-title">Purchases</div>
+          <div class="page-subtitle">Invoices synced from your Outlook inbox · <span id="last-sync-label">Last synced Today, 9:14 AM</span></div>
+        </div>
+      </div>
+
+      <!-- SYNC PANEL -->
+      <div class="sync-panel">
+        <div class="sync-icon"><i data-lucide="mail"></i></div>
+        <div class="sync-info">
+          <div class="sync-title">Outlook Invoice Sync</div>
+          <div class="sync-desc">Automatically scans your Outlook inbox for invoices from VEX Robotics, Amazon, and other vendors. Extracts amounts, dates, and order references.</div>
+          <div class="sync-meta">Connected as <span>coach@cautiontape.org</span> · Scanning: Inbox + Sent · Keywords: invoice, receipt, order confirmation</div>
+        </div>
+        <div class="sync-actions">
+          <div class="sync-status"><div class="sync-dot"></div> Connected to Outlook</div>
+          <button class="btn btn-yellow" onclick="triggerSync()"><i data-lucide="refresh-cw"></i> Sync Now</button>
+          <button class="btn btn-white btn-sm" onclick="showToast('Opening Outlook settings…')"><i data-lucide="settings-2"></i> Configure</button>
+        </div>
+      </div>
+
+      <!-- STAT CARDS -->
+      <div class="stat-grid">
+        <div class="stat-card accent-black">
+          <div class="stat-label">Total Spent (Season)</div>
+          <div class="stat-value">$4,820</div>
+          <div class="stat-meta">Across 24 invoices</div>
+        </div>
+        <div class="stat-card accent-yellow">
+          <div class="stat-label">This Month</div>
+          <div class="stat-value">$1,240</div>
+          <div class="stat-meta">8 invoices in Feb</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending Review</div>
+          <div class="stat-value" style="color:#D97706;">3</div>
+          <div class="stat-meta">Need categorization</div>
+        </div>
+        <div class="stat-card accent-red">
+          <div class="stat-label">Unmatched</div>
+          <div class="stat-value" style="color:#DC2626;">1</div>
+          <div class="stat-meta">No PO reference found</div>
+        </div>
+      </div>
+
+      <!-- MAIN TABLE + EXPORT SIDE -->
+      <div class="two-col">
+        <!-- INVOICE TABLE -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Invoices <span id="count-badge" style="font-size:12px;font-weight:500;color:var(--gray-1);margin-left:4px;"></span></div>
+            <div class="filter-bar" style="margin:0;">
+              <select id="filter-status" onchange="applyFilters()">
+                <option value="">All Statuses</option>
+                <option value="paid">Paid</option>
+                <option value="pending">Pending Review</option>
+                <option value="unmatched">Unmatched</option>
+              </select>
+              <select id="filter-vendor" onchange="applyFilters()">
+                <option value="">All Vendors</option>
+                <option value="VEX Robotics">VEX Robotics</option>
+                <option value="Amazon">Amazon</option>
+                <option value="McMaster-Carr">McMaster-Carr</option>
+                <option value="OfficeMax">OfficeMax</option>
+                <option value="Home Depot">Home Depot</option>
+              </select>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Vendor</th>
+                  <th>Description</th>
+                  <th>Date</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Category</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="invoice-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- EXPORT PANEL -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Export for Admin</div>
+            </div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;">
+              <div class="export-grid" style="grid-template-columns:1fr;">
+                <div class="export-card" onclick="exportCSV()">
+                  <div class="export-card-icon green"><i data-lucide="file-spreadsheet"></i></div>
+                  <div class="export-card-title">Export to CSV</div>
+                  <div class="export-card-desc">All invoices as a spreadsheet. Open in Excel or Google Sheets.</div>
+                </div>
+                <div class="export-card" onclick="exportPDF()">
+                  <div class="export-card-icon blue"><i data-lucide="file-text"></i></div>
+                  <div class="export-card-title">Season Summary PDF</div>
+                  <div class="export-card-desc">Full spend report grouped by category and month.</div>
+                </div>
+                <div class="export-card" onclick="showToast('Email sent to treasurer@cautiontape.org')">
+                  <div class="export-card-icon orange"><i data-lucide="send"></i></div>
+                  <div class="export-card-title">Email to Treasurer</div>
+                  <div class="export-card-desc">Send this month's invoices directly to your treasurer.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-header"><div class="card-title">Spend by Category</div></div>
+            <div class="card-body" style="display:flex;flex-direction:column;gap:10px;" id="category-bars"></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+
+  <!-- PRINT AREA (hidden normally) -->
+  <div id="print-area" style="display:none;"></div>
+
+  <!-- TOAST -->
+  <div id="toast"><i data-lucide="check-circle"></i> <span id="toast-msg"></span></div>
+
+  <script>
+    lucide.createIcons();
+
+    const COMP_URL = 'https://matchsight.ct839.com/events?programId=1';
+
+    const INVOICES = [
+      { id:1,  vendor:'VEX Robotics',  ref:'VEX-2024-8821', desc:'V5 Smart Motors (×6) + Cables',     date:'Feb 14, 2024', amount:389.94, status:'paid',      category:'Hardware',    source:'email' },
+      { id:2,  vendor:'VEX Robotics',  ref:'VEX-2024-8750', desc:'V5 Competition Super Kit',           date:'Feb 08, 2024', amount:899.99, status:'paid',      category:'Hardware',    source:'email' },
+      { id:3,  vendor:'Amazon',        ref:'AMZ-112-4459021', desc:'3D Printer Filament (5kg PLA)',    date:'Feb 06, 2024', amount:74.99,  status:'paid',      category:'Fabrication', source:'email' },
+      { id:4,  vendor:'McMaster-Carr', ref:'MCM-88291',      desc:'Aluminum Bar Stock 1" × 1/8"',      date:'Feb 03, 2024', amount:52.40,  status:'pending',   category:'Fabrication', source:'email' },
+      { id:5,  vendor:'Amazon',        ref:'AMZ-112-4412890', desc:'Hex Standoffs M3 Assorted Kit',   date:'Jan 29, 2024', amount:18.99,  status:'paid',      category:'Hardware',    source:'email' },
+      { id:6,  vendor:'VEX Robotics',  ref:'VEX-2024-8601', desc:'Pneumatics Kit + Reservoir',        date:'Jan 24, 2024', amount:244.99, status:'paid',      category:'Hardware',    source:'email' },
+      { id:7,  vendor:'Home Depot',    ref:'HD-0291-4421',   desc:'Plywood 3/4" × 4×8 (×3)',          date:'Jan 20, 2024', amount:87.60,  status:'paid',      category:'Field Build',  source:'email' },
+      { id:8,  vendor:'Amazon',        ref:'AMZ-112-4398120', desc:'Team Polo Shirts (×15)',           date:'Jan 17, 2024', amount:210.75, status:'pending',   category:'Apparel',     source:'email' },
+      { id:9,  vendor:'OfficeMax',     ref:'OMX-77123',      desc:'Engineering Notebooks (×20)',       date:'Jan 12, 2024', amount:99.80,  status:'paid',      category:'Admin',       source:'email' },
+      { id:10, vendor:'VEX Robotics',  ref:'VEX-2024-8441', desc:'Competition Registration × 2 Teams',date:'Jan 08, 2024', amount:300.00, status:'paid',      category:'Events',      source:'email' },
+      { id:11, vendor:'Amazon',        ref:'AMZ-112-4372110', desc:'Power Strip × 4 + Extension Cords',date:'Jan 05, 2024',amount:44.96,  status:'paid',      category:'Admin',       source:'email' },
+      { id:12, vendor:'McMaster-Carr', ref:'MCM-87941',      desc:'Nylon Spacers + Shoulder Bolts',   date:'Dec 18, 2023', amount:31.20,  status:'unmatched', category:'Hardware',    source:'email' },
+      { id:13, vendor:'VEX Robotics',  ref:'VEX-2023-8201', desc:'V5 Brain Replacement Unit',         date:'Dec 12, 2023', amount:349.99, status:'paid',      category:'Hardware',    source:'email' },
+      { id:14, vendor:'Amazon',        ref:'AMZ-112-4310220', desc:'Gaffer Tape × 6 Rolls',           date:'Dec 08, 2023', amount:39.99,  status:'paid',      category:'Field Build',  source:'email' },
+      { id:15, vendor:'Home Depot',    ref:'HD-0291-4190',   desc:'PVC Pipe + Fittings for Field',     date:'Dec 01, 2023', amount:63.45,  status:'paid',      category:'Field Build',  source:'email' },
+    ];
+
+    const STATUS_BADGE = {
+      paid:      '<span class="badge badge-green">Paid</span>',
+      pending:   '<span class="badge badge-yellow">Pending</span>',
+      unmatched: '<span class="badge badge-red">Unmatched</span>',
+    };
+
+    const VENDOR_INITIALS = { 'VEX Robotics':'VEX', 'Amazon':'AMZ', 'McMaster-Carr':'MCM', 'OfficeMax':'OMX', 'Home Depot':'HD' };
+
+    function fmtMoney(n) { return '$' + n.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ','); }
+
+    let filtered = [...INVOICES];
+
+    function applyFilters() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const st = document.getElementById('filter-status').value;
+      const vn = document.getElementById('filter-vendor').value;
+      filtered = INVOICES.filter(inv => {
+        const matchQ = !q || inv.vendor.toLowerCase().includes(q) || inv.desc.toLowerCase().includes(q) || inv.ref.toLowerCase().includes(q);
+        const matchSt = !st || inv.status === st;
+        const matchVn = !vn || inv.vendor === vn;
+        return matchQ && matchSt && matchVn;
+      });
+      renderTable();
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('invoice-tbody');
+      document.getElementById('count-badge').textContent = `(${filtered.length})`;
+      if (!filtered.length) {
+        tbody.innerHTML = `<tr><td colspan="7"><div class="empty-state"><i data-lucide="inbox"></i><p>No invoices match your filters</p><small>Try adjusting your search or status filter</small></div></td></tr>`;
+        lucide.createIcons();
+        return;
+      }
+      tbody.innerHTML = filtered.map(inv => `
+        <tr class="${inv.status === 'pending' ? 'pending-row' : ''}">
+          <td>
+            <div class="vendor-cell">
+              <div class="vendor-icon">${VENDOR_INITIALS[inv.vendor] || inv.vendor.slice(0,3).toUpperCase()}</div>
+              <div>
+                <div class="vendor-name">${inv.vendor}</div>
+                <div class="vendor-ref">${inv.ref}</div>
+              </div>
+            </div>
+          </td>
+          <td style="max-width:220px;color:var(--black);">${inv.desc}</td>
+          <td style="color:var(--gray-1);white-space:nowrap;">${inv.date}</td>
+          <td><span class="amount">${fmtMoney(inv.amount)}</span></td>
+          <td>${STATUS_BADGE[inv.status]}</td>
+          <td><span class="badge badge-gray">${inv.category}</span></td>
+          <td>
+            <button class="btn btn-white btn-sm" onclick="viewInvoice(${inv.id})" style="white-space:nowrap;">
+              <i data-lucide="eye"></i> View
+            </button>
+          </td>
+        </tr>
+      `).join('');
+      lucide.createIcons();
+    }
+
+    function renderCategoryBars() {
+      const totals = {};
+      INVOICES.forEach(inv => { totals[inv.category] = (totals[inv.category] || 0) + inv.amount; });
+      const sorted = Object.entries(totals).sort((a,b) => b[1]-a[1]);
+      const max = sorted[0][1];
+      const el = document.getElementById('category-bars');
+      el.innerHTML = sorted.map(([cat, amt]) => `
+        <div>
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:12.5px;font-weight:600;color:var(--black);">${cat}</span>
+            <span style="font-size:12.5px;font-weight:700;color:var(--black);">${fmtMoney(amt)}</span>
+          </div>
+          <div style="height:6px;background:var(--gray-3);border-radius:99px;overflow:hidden;">
+            <div style="height:100%;width:${Math.round((amt/max)*100)}%;background:var(--yellow);border-radius:99px;"></div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function viewInvoice(id) {
+      const inv = INVOICES.find(i => i.id === id);
+      showToast(`Opening ${inv.vendor} invoice — ${inv.ref}`);
+    }
+
+    function triggerSync() {
+      const btn = document.getElementById('sync-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i data-lucide="loader-2" style="animation:spin .8s linear infinite;"></i> Syncing…';
+      lucide.createIcons();
+
+      // Add skeleton rows
+      const tbody = document.getElementById('invoice-tbody');
+      tbody.innerHTML = [1,2,3].map(() => `
+        <tr class="loading-row">
+          <td><div class="skeleton" style="width:140px;"></div></td>
+          <td><div class="skeleton" style="width:200px;"></div></td>
+          <td><div class="skeleton" style="width:80px;"></div></td>
+          <td><div class="skeleton" style="width:60px;"></div></td>
+          <td><div class="skeleton" style="width:70px;"></div></td>
+          <td><div class="skeleton" style="width:80px;"></div></td>
+          <td></td>
+        </tr>
+      `).join('');
+
+      setTimeout(() => {
+        btn.disabled = false;
+        btn.innerHTML = '<i data-lucide="refresh-cw"></i> Sync Invoices';
+        lucide.createIcons();
+        document.getElementById('last-sync-label').textContent = 'Last synced just now';
+        applyFilters();
+        showToast('✓ 15 invoices synced from Outlook');
+      }, 2200);
+    }
+
+    function exportCSV() {
+      const headers = ['Vendor','Reference','Description','Date','Amount','Status','Category'];
+      const rows = filtered.map(inv => [
+        inv.vendor, inv.ref, `"${inv.desc}"`, inv.date, inv.amount.toFixed(2), inv.status, inv.category
+      ]);
+      const csv = [headers, ...rows].map(r => r.join(',')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `CTRC_Purchases_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      showToast('CSV exported successfully');
+    }
+
+    function exportPDF() {
+      const total = INVOICES.reduce((s,i) => s+i.amount, 0);
+      const byCategory = {};
+      INVOICES.forEach(inv => { byCategory[inv.category] = (byCategory[inv.category] || 0) + inv.amount; });
+
+      const printEl = document.getElementById('print-area');
+      printEl.innerHTML = `
+        <div style="font-family:Inter,sans-serif;max-width:700px;margin:0 auto;padding:40px 0;">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:32px;">
+            <div>
+              <div style="font-size:22px;font-weight:900;color:#171717;">Purchase Report</div>
+              <div style="font-size:13px;color:#737373;margin-top:4px;">Caution Tape Robotics Club · 2023–2024 Season</div>
+            </div>
+            <div style="text-align:right;">
+              <div style="font-size:12px;color:#737373;">Generated ${new Date().toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'})}</div>
+              <div style="font-size:24px;font-weight:900;color:#171717;margin-top:6px;">${fmtMoney(total)}</div>
+              <div style="font-size:12px;color:#737373;">Total Season Spend</div>
+            </div>
+          </div>
+          <table style="width:100%;border-collapse:collapse;font-size:12.5px;margin-bottom:32px;">
+            <thead>
+              <tr style="border-bottom:2px solid #171717;">
+                <th style="text-align:left;padding:8px 0;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#737373;">Vendor</th>
+                <th style="text-align:left;padding:8px 0;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#737373;">Description</th>
+                <th style="text-align:left;padding:8px 0;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#737373;">Date</th>
+                <th style="text-align:right;padding:8px 0;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#737373;">Amount</th>
+                <th style="text-align:left;padding:8px 0;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#737373;">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${INVOICES.map(inv => `
+                <tr style="border-bottom:1px solid #F5F5F5;">
+                  <td style="padding:9px 0;font-weight:600;">${inv.vendor}</td>
+                  <td style="padding:9px 0;color:#404040;">${inv.desc}</td>
+                  <td style="padding:9px 0;color:#737373;white-space:nowrap;">${inv.date}</td>
+                  <td style="padding:9px 0;text-align:right;font-weight:700;">${fmtMoney(inv.amount)}</td>
+                  <td style="padding:9px 0;text-transform:capitalize;color:${inv.status==='paid'?'#065F46':inv.status==='pending'?'#92700A':'#991B1B'};">${inv.status}</td>
+                </tr>
+              `).join('')}
+            </tbody>
+            <tfoot>
+              <tr style="border-top:2px solid #171717;">
+                <td colspan="3" style="padding:10px 0;font-weight:700;">Total</td>
+                <td style="padding:10px 0;text-align:right;font-weight:900;font-size:15px;">${fmtMoney(total)}</td>
+                <td></td>
+              </tr>
+            </tfoot>
+          </table>
+          <div style="font-size:11px;color:#A3A3A3;border-top:1px solid #E5E5E5;padding-top:16px;">
+            Caution Tape Robotics Club · Generated by CTRC Club Manager
+          </div>
+        </div>
+      `;
+
+      const ps = document.createElement('style');
+      ps.id = 'print-inject';
+      ps.textContent = `@media print { body .main, body .sidebar { display:none!important; } body #print-area { display:block!important; } }`;
+      document.head.appendChild(ps);
+      window.print();
+      setTimeout(() => { ps.remove(); printEl.innerHTML = ''; }, 1500);
+    }
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      document.getElementById('toast-msg').textContent = msg;
+      t.classList.add('show');
+      setTimeout(() => t.classList.remove('show'), 3000);
+      lucide.createIcons();
+    }
+
+    // Init
+    applyFilters();
+    renderCategoryBars();
+
+    /* ── NOTIFICATIONS ────────────────────────────────── */
+    const NOTIFS = [
+      { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
+      { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
+      { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
+      { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
+      { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
+      { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
+    ];
+
+    function renderNotifs() {
+      const list = document.getElementById('notif-list');
+      if (!list) return;
+      list.innerHTML = NOTIFS.map(n => `
+        <div style="display:flex;gap:12px;padding:12px 20px;cursor:pointer;background:${n.unread ? '#FAFAFA' : 'transparent'};border-left:3px solid ${n.unread ? 'var(--yellow)' : 'transparent'};transition:background .12s;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background='${n.unread ? '#FAFAFA' : 'transparent'}';" onclick="dismissNotif(${n.id},this)">
+          <div style="width:34px;height:34px;border-radius:50%;background:${n.color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <i data-lucide="${n.icon}" style="width:15px;height:15px;color:${n.color};"></i>
+          </div>
+          <div style="flex:1;min-width:0;">
+            <div style="font-size:13px;font-weight:${n.unread ? '700' : '500'};color:var(--black);margin-bottom:2px;">${n.title}</div>
+            <div style="font-size:12px;color:var(--gray-1);line-height:1.4;margin-bottom:4px;">${n.body}</div>
+            <div style="font-size:11px;color:var(--gray-2);">${n.time}</div>
+          </div>
+        </div>`).join('');
+      lucide.createIcons();
+    }
+
+    function dismissNotif(id, el) {
+      const idx = NOTIFS.findIndex(n => n.id === id);
+      if (idx > -1) { NOTIFS[idx].unread = false; }
+      el.style.borderLeftColor = 'transparent';
+      el.style.background = 'transparent';
+      el.querySelector('div[style*="font-weight"]').style.fontWeight = '500';
+      updateBadge();
+    }
+
+    function markAllRead() {
+      NOTIFS.forEach(n => n.unread = false);
+      renderNotifs();
+      updateBadge();
+    }
+
+    function updateBadge() {
+      const dot = document.querySelector('.notif-dot');
+      if (!dot) return;
+      dot.style.display = NOTIFS.some(n => n.unread) ? '' : 'none';
+    }
+
+    function openNotifPanel() {
+      const overlay = document.getElementById('notif-overlay');
+      const panel   = document.getElementById('notif-panel');
+      overlay.style.display = 'block';
+      renderNotifs();
+      setTimeout(() => { panel.style.transform = 'translateX(0)'; }, 10);
+    }
+
+    function closeNotifPanel(e) {
+      if (e && e.target !== document.getElementById('notif-overlay')) return;
+      const panel = document.getElementById('notif-panel');
+      panel.style.transform = 'translateX(100%)';
+      setTimeout(() => { document.getElementById('notif-overlay').style.display = 'none'; }, 230);
+    }
+
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeNotifPanel(null);
+    });
+  </script>
+
+<!-- Notification Panel -->
+<div id="notif-overlay" style="display:none;position:fixed;inset:0;z-index:600;" onclick="closeNotifPanel(event)">
+  <div id="notif-panel" style="position:absolute;top:0;right:0;width:340px;height:100%;background:var(--white);box-shadow:-4px 0 24px rgba(0,0,0,.14);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s ease;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--gray-3);">
+      <span style="font-size:15px;font-weight:700;color:var(--black);">Notifications</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="markAllRead()" style="font-size:11px;font-weight:600;color:var(--gray-1);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background='none'">Mark all read</button>
+        <button onclick="closeNotifPanel(null)" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+      </div>
+    </div>
+    <div id="notif-list" style="flex:1;overflow-y:auto;padding:8px 0;"></div>
+    <div style="padding:14px 20px;border-top:1px solid var(--gray-3);">
+      <a href="#" style="font-size:12.5px;font-weight:600;color:var(--gray-1);text-decoration:none;">View all activity</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

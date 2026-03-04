@@ -1,0 +1,1263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Profile — CTRC Club Manager</title>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: block; src: url('fonts/inter-400.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: block; src: url('fonts/inter-500.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: block; src: url('fonts/inter-600.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: block; src: url('fonts/inter-700.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: block; src: url('fonts/inter-800.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 900; font-display: block; src: url('fonts/inter-900.woff2') format('woff2'); }
+  </style>
+
+  <style>
+    :root {
+      --yellow:     #F5D000;
+      --yellow-dim: #C8AA00;
+      --yellow-bg:  #FFFBDC;
+      --black:      #171717;
+      --black-2:    #262626;
+      --black-3:    #404040;
+      --gray-1:     #737373;
+      --gray-2:     #A3A3A3;
+      --gray-3:     #D4D4D4;
+      --gray-4:     #F5F5F5;
+      --white:      #FFFFFF;
+      --sidebar-w:  240px;
+      --radius:     10px;
+      --radius-sm:  6px;
+      --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md:  0 4px 12px rgba(0,0,0,.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-4); color: var(--black); min-height: 100vh; display: flex; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: var(--sidebar-w); background: var(--black); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-logo { padding: 20px 18px 16px; border-bottom: 1px solid var(--black-2); }
+    .sidebar-logo img { width: 140px; display: block; }
+    .sidebar-logo-sub { font-size: 10px; color: var(--gray-2); letter-spacing: .08em; text-transform: uppercase; margin-top: 6px; }
+    .sidebar-nav { flex: 1; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; }
+    .nav-section-label { font-size: 10px; font-weight: 600; color: var(--gray-1); letter-spacing: .1em; text-transform: uppercase; padding: 10px 8px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); color: var(--gray-2); font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s, color .15s; text-decoration: none; }
+    .nav-item:hover { background: var(--black-2); color: var(--white); }
+    .nav-item.active { background: var(--yellow); color: var(--black); font-weight: 700; }
+    .nav-item i { width: 16px; height: 16px; }
+    .nav-badge { margin-left: auto; background: var(--yellow); color: var(--black); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
+    .nav-item.active .nav-badge { background: var(--black); color: var(--yellow); }
+    .sidebar-footer { padding: 14px 14px; border-top: 1px solid var(--black-3); }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .sidebar-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--yellow); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .sidebar-user-info { flex: 1; min-width: 0; }
+    .sidebar-user-name { font-size: 13px; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-user-role { font-size: 11px; color: var(--gray-2); }
+
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: var(--white); border-bottom: 1px solid var(--gray-3); padding: 0 28px; height: 56px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 50; }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .breadcrumb a { color: var(--gray-1); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { color: var(--black); }
+    .breadcrumb-sep { color: var(--gray-3); }
+    .breadcrumb-cur { color: var(--black); font-weight: 600; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: opacity .15s, transform .1s; white-space: nowrap; }
+    .btn:active { transform: scale(.97); }
+    .btn-yellow { background: var(--yellow); color: var(--black); }
+    .btn-yellow:hover { opacity: .88; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--gray-3); color: var(--black-3); }
+    .btn-outline:hover { border-color: var(--gray-2); }
+    .btn-ghost { background: transparent; color: var(--gray-1); padding: 7px 10px; }
+    .btn-ghost:hover { background: var(--gray-4); color: var(--black); }
+    .icon-btn { width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--gray-3); background: var(--white); cursor: pointer; color: var(--gray-1); transition: all .15s; position: relative; }
+    .icon-btn:hover { border-color: var(--gray-2); color: var(--black); }
+    .notif-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; border: 1.5px solid var(--white); }
+
+    /* ── CONTENT ── */
+    .content { padding: 28px; display: flex; flex-direction: column; gap: 20px; max-width: 1200px; }
+
+    /* ── PROFILE HERO ── */
+    .profile-hero {
+      background: var(--white);
+      border: 1px solid var(--gray-3);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 28px;
+    }
+    .hero-avatar {
+      width: 72px; height: 72px;
+      border-radius: 50%;
+      font-size: 24px; font-weight: 800;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 2px var(--gray-3);
+      position: relative;
+    }
+    .hero-avatar-status {
+      position: absolute;
+      bottom: 2px; right: 2px;
+      width: 14px; height: 14px;
+      border-radius: 50%;
+      border: 2px solid var(--white);
+    }
+    .hero-info { flex: 1; }
+    .hero-name { font-size: 22px; font-weight: 900; color: var(--black); letter-spacing: -.02em; }
+    .hero-meta { display: flex; align-items: center; gap: 16px; margin-top: 5px; flex-wrap: wrap; }
+    .hero-meta-item { display: flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--gray-1); }
+    .hero-actions { display: flex; gap: 8px; align-items: center; }
+
+    .status-pill {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; padding: 3px 9px;
+      border-radius: 99px; letter-spacing: .04em;
+    }
+    .status-active   { background: #DCFCE7; color: #15803D; }
+    .status-risk     { background: #FEE2E2; color: #DC2626; }
+    .status-inactive { background: var(--gray-3); color: var(--gray-1); }
+
+    .hero-strip {
+      height: 5px;
+      background: repeating-linear-gradient(-55deg, var(--yellow) 0, var(--yellow) 10px, var(--black) 10px, var(--black) 20px);
+      opacity: .15;
+    }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--gray-3); padding: 0 28px; background: var(--white); }
+    .tab {
+      padding: 12px 16px; font-size: 13.5px; font-weight: 600;
+      color: var(--gray-1); cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: color .15s, border-color .15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab:hover { color: var(--black); }
+    .tab.active { color: var(--black); border-bottom-color: var(--yellow); }
+
+    /* ── STAT MINI CARDS ── */
+    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stat-mini {
+      background: var(--white); border: 1px solid var(--gray-3);
+      border-radius: var(--radius); padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+    .stat-mini-label { font-size: 10.5px; font-weight: 700; color: var(--gray-1); text-transform: uppercase; letter-spacing: .07em; }
+    .stat-mini-value { font-size: 28px; font-weight: 900; color: var(--black); letter-spacing: -.03em; line-height: 1.1; margin-top: 4px; }
+    .stat-mini-sub { font-size: 11.5px; color: var(--gray-2); margin-top: 3px; }
+    .stat-mini-bar { height: 4px; background: var(--gray-3); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+    .stat-mini-fill { height: 100%; background: var(--yellow); border-radius: 99px; }
+    .stat-mini-fill.green { background: #22C55E; }
+    .stat-mini-fill.red { background: #EF4444; }
+
+    /* ── TWO COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 300px; gap: 20px; align-items: start; }
+
+    /* ── CARD ── */
+    .card { background: var(--white); border: 1px solid var(--gray-3); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--gray-3); }
+    .card-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .card-link { font-size: 12px; color: var(--gray-1); font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 3px; text-decoration: none; }
+    .card-link:hover { color: var(--black); }
+    .card-body { padding: 18px 20px; }
+
+    /* ── ATTENDANCE CALENDAR ── */
+    .att-calendar { display: flex; flex-direction: column; gap: 8px; }
+    .att-week { display: flex; gap: 5px; align-items: center; }
+    .att-week-label { font-size: 10px; color: var(--gray-2); width: 56px; flex-shrink: 0; text-align: right; padding-right: 8px; }
+    .att-dot {
+      width: 22px; height: 22px; border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px; font-weight: 700; cursor: default;
+      position: relative;
+    }
+    .att-dot.present  { background: var(--yellow); color: var(--black); }
+    .att-dot.absent   { background: #FEE2E2; color: #DC2626; }
+    .att-dot.excused  { background: var(--gray-3); color: var(--gray-1); }
+    .att-dot.future   { background: var(--gray-4); border: 1px dashed var(--gray-3); }
+    .att-legend { display: flex; gap: 14px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--gray-3); }
+    .att-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: var(--gray-1); }
+    .att-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
+
+    /* ── TASKS ── */
+    .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-3); }
+    .task-item:last-child { border-bottom: none; }
+    .task-check { width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--gray-3); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; }
+    .task-check.done { background: var(--yellow); border-color: var(--yellow); }
+    .task-name { font-size: 13px; font-weight: 600; color: var(--black); }
+    .task-name.done { text-decoration: line-through; color: var(--gray-2); }
+    .task-meta { font-size: 11.5px; color: var(--gray-1); margin-top: 2px; display: flex; gap: 10px; }
+    .task-due-red { color: #DC2626; font-weight: 600; }
+
+    /* ── NOTES ── */
+    .note-item { display: flex; gap: 12px; padding: 14px 0; border-bottom: 1px solid var(--gray-3); }
+    .note-item:last-child { border-bottom: none; }
+    .note-avatar { width: 30px; height: 30px; border-radius: 50%; background: var(--black); display: flex; align-items: center; justify-content: center; font-size: 10px; font-weight: 700; color: var(--yellow); flex-shrink: 0; }
+    .note-author { font-size: 12.5px; font-weight: 700; color: var(--black); }
+    .note-date { font-size: 11px; color: var(--gray-2); float: right; }
+    .note-text { font-size: 13px; color: var(--black-3); line-height: 1.6; margin-top: 4px; }
+
+    /* ── ADD NOTE FORM ── */
+    .add-note { padding: 14px 20px; border-top: 1px solid var(--gray-3); background: var(--gray-4); display: flex; gap: 10px; align-items: flex-end; }
+    .add-note textarea { flex: 1; border: 1.5px solid var(--gray-3); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 13px; font-family: inherit; color: var(--black); resize: none; outline: none; background: var(--white); transition: border-color .15s; }
+    .add-note textarea:focus { border-color: var(--yellow); }
+
+    /* ── RISK ALERT ── */
+    .risk-alert { background: #FEF2F2; border: 1px solid #FECACA; border-radius: var(--radius); padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; }
+    .risk-alert-icon { color: #DC2626; flex-shrink: 0; margin-top: 1px; }
+    .risk-alert-title { font-size: 13.5px; font-weight: 700; color: #DC2626; }
+    .risk-alert-desc { font-size: 12.5px; color: #7F1D1D; margin-top: 3px; line-height: 1.5; }
+
+    /* ── ROLES ── */
+    .role-item { display: flex; align-items: center; gap: 12px; padding: 11px 0; border-bottom: 1px solid var(--gray-3); }
+    .role-item:last-child { border-bottom: none; }
+    .role-icon { width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--gray-4); display: flex; align-items: center; justify-content: center; color: var(--gray-1); flex-shrink: 0; }
+    .role-name { font-size: 13px; font-weight: 600; color: var(--black); }
+    .role-primary { margin-left: auto; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 4px; background: var(--yellow); color: var(--black); }
+    .manage-roles-btn { width: 100%; padding: 9px; border-radius: var(--radius-sm); border: 1.5px dashed var(--gray-3); background: transparent; font-size: 12.5px; font-weight: 600; color: var(--gray-1); cursor: pointer; transition: all .15s; display: flex; align-items: center; justify-content: center; gap: 6px; margin-top: 10px; }
+    .manage-roles-btn:hover { border-color: var(--black); color: var(--black); }
+
+    /* ── SKILLS PREVIEW ── */
+    .skill-row { display: flex; flex-direction: column; gap: 10px; }
+    .skill-item-label { display: flex; justify-content: space-between; margin-bottom: 4px; }
+    .skill-item-name { font-size: 12.5px; font-weight: 600; color: var(--black-3); }
+    .skill-item-level { font-size: 12px; font-weight: 700; color: var(--black); }
+    .skill-bar { height: 6px; background: var(--gray-3); border-radius: 99px; overflow: hidden; }
+    .skill-fill { height: 100%; background: var(--yellow); border-radius: 99px; }
+    .skill-fill.s1 { background: #93C5FD; }
+    .skill-fill.s2 { background: #6EE7B7; }
+    .skill-fill.s3 { background: var(--yellow); }
+    .skill-fill.s4 { background: #F97316; }
+    .skill-fill.s5 { background: #EF4444; }
+
+    /* ── BADGES ── */
+    .badge-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
+    .badge-card {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      padding: 12px 8px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--gray-3); text-align: center;
+      transition: border-color .15s, box-shadow .15s;
+      cursor: default;
+    }
+    .badge-card:hover { border-color: var(--yellow); box-shadow: 0 0 0 2px var(--yellow-bg); }
+    .badge-card.locked { opacity: .35; }
+    .badge-icon { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+    .badge-name { font-size: 10px; font-weight: 700; color: var(--black-3); line-height: 1.3; }
+
+    /* ── COMPETITION HISTORY ── */
+    .comp-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--gray-3); }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-rank { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; }
+    .comp-rank.gold   { background: var(--yellow); color: var(--black); }
+    .comp-rank.silver { background: var(--gray-3); color: var(--black-3); }
+    .comp-rank.other  { background: var(--gray-4); color: var(--gray-1); border: 1px solid var(--gray-3); }
+    .comp-name { font-size: 13px; font-weight: 700; color: var(--black); }
+    .comp-date { font-size: 11.5px; color: var(--gray-1); margin-top: 1px; }
+    .comp-result { margin-left: auto; text-align: right; font-size: 12px; font-weight: 700; color: var(--black); }
+    .comp-result-sub { font-size: 11px; color: var(--gray-1); font-weight: 400; }
+
+    /* ── BADGE PILLS ── */
+    .pill { display: inline-flex; align-items: center; gap: 4px; font-size: 10.5px; font-weight: 700; padding: 2px 8px; border-radius: 4px; }
+    .pill-green  { background: #F0FDF4; color: #15803D; }
+    .pill-yellow { background: var(--yellow-bg); color: #92700A; }
+    .pill-gray   { background: var(--gray-3); color: var(--black-3); }
+    .pill-v5rc   { background: var(--black); color: var(--white); }
+    .pill-viqrc  { background: #EDE9FE; color: #5B21B6; }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logo-white.png" alt="Caution Tape Robotics" />
+    <div class="sidebar-logo-sub">Club Manager</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item" href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item active" href="students.html"><i data-lucide="users"></i> Students</a>
+    <a class="nav-item" href="foundation.html"><i data-lucide="book-open"></i> Foundation</a>
+    <a class="nav-item" href="teams.html"><i data-lucide="cpu"></i> Teams</a>
+    <a class="nav-item" href="tasks.html"><i data-lucide="circle-check"></i> Tasks <span class="nav-badge">5</span></a>
+    <div class="nav-section-label" style="margin-top:8px;">Competition</div>
+    <a class="nav-item" href="https://matchsight.ct839.com/events?programId=1" target="_blank"><i data-lucide="trophy"></i> Competitions</a>
+    <div class="nav-section-label" style="margin-top:8px;">Operations</div>
+    <a class="nav-item" href="inventory.html"><i data-lucide="package"></i> Inventory</a>
+    <a class="nav-item" href="purchases.html"><i data-lucide="receipt"></i> Purchases</a>
+    <a class="nav-item" href="reports.html"><i data-lucide="bar-chart-2"></i> Reports</a>
+    <div style="margin-top:auto;"></div>
+    <a class="nav-item" href="#"><i data-lucide="settings"></i> Settings</a>
+  </nav>
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar"><img src="icon-white.png" alt="User" /></div>
+      <div style="flex:1;min-width:0;">
+        <div class="sidebar-user-name">Coach Henderson</div>
+        <div class="sidebar-user-role">Lead Mentor</div>
+      </div>
+      <i data-lucide="chevron-up" style="width:14px;height:14px;color:#737373;flex-shrink:0;"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<div class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <div class="breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb-sep"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></span>
+      <a href="students.html">Students</a>
+      <span class="breadcrumb-sep"><i data-lucide="chevron-right" style="width:13px;height:13px;"></i></span>
+      <span class="breadcrumb-cur" id="bc-name">Alex Rivera</span>
+    </div>
+    <div class="topbar-right">
+      <button class="btn btn-ghost" onclick="window.location='students.html'">
+        <i data-lucide="arrow-left" style="width:13px;height:13px;"></i> Back
+      </button>
+      <button class="btn btn-outline" onclick="openEditProfile()">
+        <i data-lucide="pencil" style="width:13px;height:13px;"></i>
+        Edit Profile
+      </button>
+      <button class="btn btn-yellow" onclick="document.getElementById('note-input').focus()">
+        <i data-lucide="message-square-plus" style="width:13px;height:13px;"></i>
+        Add Note
+      </button>
+      <div class="icon-btn" onclick="openNotifPanel()" style="position:relative;cursor:pointer;">
+        <i data-lucide="bell" style="width:15px;height:15px;"></i>
+        <span class="notif-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <!-- PROFILE HERO -->
+    <div class="profile-hero">
+      <div class="hero-top">
+        <div class="hero-avatar" id="hero-avatar" style="background:#DBEAFE;color:#1D4ED8;">
+          AR
+          <div class="hero-avatar-status" style="background:#22C55E;"></div>
+        </div>
+        <div class="hero-info">
+          <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <div class="hero-name" id="hero-name">Alex Rivera</div>
+            <span class="status-pill status-active">
+              <i data-lucide="circle" style="width:7px;height:7px;fill:currentColor;"></i>
+              Active
+            </span>
+          </div>
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <i data-lucide="graduation-cap" style="width:13px;height:13px;"></i>
+              Grade 11
+            </div>
+            <div class="hero-meta-item">
+              <i data-lucide="cpu" style="width:13px;height:13px;"></i>
+              <span class="pill pill-v5rc" style="font-size:11px;">42A — Iron Gears</span>
+            </div>
+            <div class="hero-meta-item">
+              <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+              Member since Sept 2023
+            </div>
+            <div class="hero-meta-item">
+              <i data-lucide="mail" style="width:13px;height:13px;"></i>
+              a.rivera@club.org
+            </div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <button class="btn btn-outline" id="mark-present-btn" onclick="togglePresent()">
+            <i data-lucide="user-check" style="width:13px;height:13px;"></i>
+            Mark Present
+          </button>
+          <button class="btn btn-outline" onclick="openBadgeModal()">
+            <i data-lucide="shield-plus" style="width:13px;height:13px;"></i>
+            Issue Badge
+          </button>
+          <div class="icon-btn" id="sp-more-btn" onclick="toggleSPMenu(event)" style="position:relative;">
+            <i data-lucide="more-horizontal" style="width:15px;height:15px;"></i>
+            <div id="sp-more-menu" style="display:none;position:absolute;top:38px;right:0;background:var(--white);border:1px solid var(--gray-3);border-radius:var(--radius-sm);box-shadow:0 4px 12px rgba(0,0,0,.10);z-index:200;min-width:170px;overflow:hidden;">
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:var(--black-3);cursor:pointer;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background=''" onclick="window.location='students.html'"><i data-lucide="users" style="width:13px;height:13px;"></i> All Students</div>
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:var(--black-3);cursor:pointer;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background=''" onclick="showSPToast('Student report generated')"><i data-lucide="file-text" style="width:13px;height:13px;"></i> Export Report</div>
+              <div style="height:1px;background:var(--gray-3);margin:3px 0;"></div>
+              <div style="display:flex;align-items:center;gap:8px;padding:9px 14px;font-size:13px;color:#DC2626;cursor:pointer;" onmouseover="this.style.background='#FEF2F2'" onmouseout="this.style.background=''" onclick="showSPToast('Student archived')"><i data-lucide="archive" style="width:13px;height:13px;"></i> Archive Student</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-strip"></div>
+
+      <!-- TABS -->
+      <div class="tabs">
+        <div class="tab active" onclick="switchTab('overview', this)">
+          <i data-lucide="layout-dashboard" style="width:14px;height:14px;"></i>
+          Overview
+        </div>
+        <div class="tab" onclick="switchTab('skills', this)">
+          <i data-lucide="bar-chart-2" style="width:14px;height:14px;"></i>
+          Skills Matrix
+        </div>
+        <div class="tab" onclick="switchTab('attendance', this)">
+          <i data-lucide="calendar-check" style="width:14px;height:14px;"></i>
+          Attendance
+        </div>
+        <div class="tab" onclick="switchTab('competitions', this)">
+          <i data-lucide="trophy" style="width:14px;height:14px;"></i>
+          Competitions
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ OVERVIEW TAB ═══ -->
+    <div id="tab-overview">
+
+      <!-- STAT MINI ROW -->
+      <div class="stat-row">
+        <div class="stat-mini">
+          <div class="stat-mini-label">Attendance</div>
+          <div class="stat-mini-value" style="color:#15803D;">95%</div>
+          <div class="stat-mini-bar"><div class="stat-mini-fill green" style="width:95%"></div></div>
+          <div class="stat-mini-sub">↑ up from 91% last month</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Skill Level</div>
+          <div class="stat-mini-value">Lvl 4</div>
+          <div class="stat-mini-bar"><div class="stat-mini-fill" style="width:75%"></div></div>
+          <div class="stat-mini-sub">75% to Level 5</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Badges Earned</div>
+          <div class="stat-mini-value">4</div>
+          <div class="stat-mini-sub" style="color:#15803D;">+1 this month</div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Open Tasks</div>
+          <div class="stat-mini-value" style="color:#DC2626;">2</div>
+          <div class="stat-mini-sub" style="color:#DC2626;">1 overdue</div>
+        </div>
+      </div>
+
+      <!-- RISK ALERT -->
+      <div class="risk-alert">
+        <div class="risk-alert-icon"><i data-lucide="triangle-alert" style="width:18px;height:18px;"></i></div>
+        <div>
+          <div class="risk-alert-title">Engineering Notebook Overdue</div>
+          <div class="risk-alert-desc">Alex hasn't updated the engineering notebook in 9 days. This is required before the Feb 22 qualifier. Assign or follow up directly.</div>
+        </div>
+        <button class="btn btn-outline" style="margin-left:auto;flex-shrink:0;">Dismiss</button>
+      </div>
+
+      <!-- TWO COL -->
+      <div class="two-col">
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- ATTENDANCE HEATMAP -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Attendance — Last 8 Weeks</div>
+              <span style="font-size:12px;font-weight:700;color:#15803D;">95% this season</span>
+            </div>
+            <div class="card-body">
+              <div class="att-calendar">
+                <div class="att-week">
+                  <div class="att-week-label">Week 1</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 2</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot absent" title="Absent">A</div>
+                  <div class="att-dot present" title="Present">P</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 3</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 4</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot excused" title="Excused">E</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 5</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 6</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 7</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot present" title="Present">P</div>
+                </div>
+                <div class="att-week">
+                  <div class="att-week-label">Week 8</div>
+                  <div class="att-dot present" title="Present">P</div>
+                  <div class="att-dot future"></div>
+                  <div class="att-dot future"></div>
+                </div>
+              </div>
+              <div class="att-legend">
+                <div class="att-legend-item"><div class="att-legend-dot" style="background:var(--yellow);"></div> Present</div>
+                <div class="att-legend-item"><div class="att-legend-dot" style="background:#FEE2E2;border:1px solid #FECACA;"></div> Absent</div>
+                <div class="att-legend-item"><div class="att-legend-dot" style="background:var(--gray-3);"></div> Excused</div>
+                <div class="att-legend-item"><div class="att-legend-dot" style="background:var(--gray-4);border:1px dashed var(--gray-3);"></div> Upcoming</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- TASKS -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Assigned Tasks</div>
+              <a class="card-link" href="tasks.html">View all <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></a>
+            </div>
+            <div class="card-body" style="padding-top:4px;padding-bottom:4px;">
+              <div class="task-item">
+                <div class="task-check"></div>
+                <div style="flex:1;">
+                  <div class="task-name">Update Engineering Notebook</div>
+                  <div class="task-meta">
+                    <span>Team 42A</span>
+                    <span class="task-due-red">Due Yesterday</span>
+                  </div>
+                </div>
+                <span class="pill" style="background:#FEF2F2;color:#DC2626;font-size:10px;">Overdue</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check"></div>
+                <div style="flex:1;">
+                  <div class="task-name">Mount Intake Motor — right side</div>
+                  <div class="task-meta">
+                    <span>Team 42A</span>
+                    <span style="color:#D97706;font-weight:600;">Due Feb 20</span>
+                  </div>
+                </div>
+                <span class="pill pill-yellow" style="font-size:10px;">In Progress</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check done">
+                  <i data-lucide="check" style="width:10px;height:10px;color:var(--black);"></i>
+                </div>
+                <div style="flex:1;">
+                  <div class="task-name done">Calibrate drive base PID</div>
+                  <div class="task-meta"><span>Team 42A</span><span>Completed Feb 14</span></div>
+                </div>
+                <span class="pill pill-green" style="font-size:10px;">Done</span>
+              </div>
+              <div class="task-item">
+                <div class="task-check done">
+                  <i data-lucide="check" style="width:10px;height:10px;color:var(--black);"></i>
+                </div>
+                <div style="flex:1;">
+                  <div class="task-name done">Film autonomous skills run</div>
+                  <div class="task-meta"><span>Team 42A</span><span>Completed Feb 10</span></div>
+                </div>
+                <span class="pill pill-green" style="font-size:10px;">Done</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- COACH NOTES -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Coach Notes</div>
+              <a class="card-link" href="#">View all <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></a>
+            </div>
+            <div style="padding: 0 20px;">
+              <div class="note-item">
+                <div class="note-avatar">CH</div>
+                <div style="flex:1;">
+                  <div><span class="note-author">Coach Henderson</span><span class="note-date">2 days ago</span></div>
+                  <div class="note-text">Excellent leadership during the motor assembly phase. Alex guided two new members through the torque calibration process. Showed real patience — promote to lead role on drive base build.</div>
+                </div>
+              </div>
+              <div class="note-item">
+                <div class="note-avatar" style="background:#262626;">MS</div>
+                <div style="flex:1;">
+                  <div><span class="note-author">Mentor Sarah</span><span class="note-date">Feb 12</span></div>
+                  <div class="note-text">Completed the C++ Level 2 workshop. Demonstrated strong understanding of class structures and inheritance. Ready to take on the autonomous routine refactor.</div>
+                </div>
+              </div>
+            </div>
+            <div class="add-note">
+              <textarea id="note-input" rows="2" placeholder="Add a note about Alex…"></textarea>
+              <button class="btn btn-yellow" style="flex-shrink:0;" onclick="postNote()">
+                <i data-lucide="send" style="width:13px;height:13px;"></i>
+                Post
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- RIGHT COL -->
+        <div style="display:flex;flex-direction:column;gap:16px;">
+
+          <!-- ROLES -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Assigned Roles</div>
+            </div>
+            <div class="card-body" style="padding-top:6px;padding-bottom:6px;">
+              <div class="role-item">
+                <div class="role-icon"><i data-lucide="settings-2" style="width:15px;height:15px;"></i></div>
+                <div class="role-name">Lead Mechanic</div>
+                <span class="role-primary">Primary</span>
+              </div>
+              <div class="role-item">
+                <div class="role-icon"><i data-lucide="code-2" style="width:15px;height:15px;"></i></div>
+                <div class="role-name">Junior Coder</div>
+              </div>
+              <div class="role-item">
+                <div class="role-icon"><i data-lucide="package" style="width:15px;height:15px;"></i></div>
+                <div class="role-name">Parts Inventory</div>
+              </div>
+              <button class="manage-roles-btn" onclick="openManageRoles()">
+                <i data-lucide="plus" style="width:13px;height:13px;"></i>
+                Manage Roles
+              </button>
+            </div>
+          </div>
+
+          <!-- SKILLS PREVIEW -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Skills Preview</div>
+              <a class="card-link" href="#" onclick="switchTab('skills', document.querySelectorAll('.tab')[1])">
+                Full matrix <i data-lucide="arrow-right" style="width:12px;height:12px;"></i>
+              </a>
+            </div>
+            <div class="card-body">
+              <div class="skill-row">
+                <div>
+                  <div class="skill-item-label"><span class="skill-item-name">Mechanical Design</span><span class="skill-item-level">Level 3</span></div>
+                  <div class="skill-bar"><div class="skill-fill s3" style="width:72%"></div></div>
+                </div>
+                <div>
+                  <div class="skill-item-label"><span class="skill-item-name">C++ Programming</span><span class="skill-item-level">Level 1</span></div>
+                  <div class="skill-bar"><div class="skill-fill s1" style="width:28%"></div></div>
+                </div>
+                <div>
+                  <div class="skill-item-label"><span class="skill-item-name">Circuitry & Wiring</span><span class="skill-item-level">Level 2</span></div>
+                  <div class="skill-bar"><div class="skill-fill s2" style="width:50%"></div></div>
+                </div>
+                <div>
+                  <div class="skill-item-label"><span class="skill-item-name">Engineering Notebook</span><span class="skill-item-level">Level 2</span></div>
+                  <div class="skill-bar"><div class="skill-fill s2" style="width:40%"></div></div>
+                </div>
+                <div>
+                  <div class="skill-item-label"><span class="skill-item-name">Team Leadership</span><span class="skill-item-level">Level 4</span></div>
+                  <div class="skill-bar"><div class="skill-fill s4" style="width:88%"></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- BADGES EARNED -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Badges</div>
+              <span style="font-size:12px;color:var(--gray-1);">4 of 12 earned</span>
+            </div>
+            <div class="card-body">
+              <div class="badge-grid">
+                <div class="badge-card">
+                  <div class="badge-icon" style="background:#FEF3C7;">🏆</div>
+                  <div class="badge-name">First Regional</div>
+                </div>
+                <div class="badge-card">
+                  <div class="badge-icon" style="background:#DCFCE7;">⚡</div>
+                  <div class="badge-name">Perfect Month</div>
+                </div>
+                <div class="badge-card">
+                  <div class="badge-icon" style="background:#EDE9FE;">💻</div>
+                  <div class="badge-name">Code Master</div>
+                </div>
+                <div class="badge-card">
+                  <div class="badge-icon" style="background:#FEE2E2;">🔧</div>
+                  <div class="badge-name">Build Lead</div>
+                </div>
+                <div class="badge-card locked">
+                  <div class="badge-icon" style="background:var(--gray-4);">🎯</div>
+                  <div class="badge-name">Skills Top 10</div>
+                </div>
+                <div class="badge-card locked">
+                  <div class="badge-icon" style="background:var(--gray-4);">📓</div>
+                  <div class="badge-name">Notebook Pro</div>
+                </div>
+                <div class="badge-card locked">
+                  <div class="badge-icon" style="background:var(--gray-4);">🥇</div>
+                  <div class="badge-name">State Champ</div>
+                </div>
+                <div class="badge-card locked">
+                  <div class="badge-icon" style="background:var(--gray-4);">🌟</div>
+                  <div class="badge-name">Excellence</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SKILLS TAB ═══ -->
+    <div id="tab-skills" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Full Skills Matrix</div>
+          <span style="font-size:12px;color:var(--gray-1);">Last updated Feb 14</span>
+        </div>
+        <div class="card-body">
+          <div style="display:flex;flex-direction:column;gap:20px;">
+            <!-- Category -->
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--gray-3);">Mechanical</div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div><div class="skill-item-label"><span class="skill-item-name">Drive Base Construction</span><span class="skill-item-level">Level 4</span></div><div class="skill-bar"><div class="skill-fill s4" style="width:85%"></div></div></div>
+                <div><div class="skill-item-label"><span class="skill-item-name">Subsystem Design</span><span class="skill-item-level">Level 3</span></div><div class="skill-bar"><div class="skill-fill s3" style="width:70%"></div></div></div>
+                <div><div class="skill-item-label"><span class="skill-item-name">CAD (Onshape)</span><span class="skill-item-level">Level 2</span></div><div class="skill-bar"><div class="skill-fill s2" style="width:45%"></div></div></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--gray-3);">Programming</div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div><div class="skill-item-label"><span class="skill-item-name">C++ Fundamentals</span><span class="skill-item-level">Level 1</span></div><div class="skill-bar"><div class="skill-fill s1" style="width:28%"></div></div></div>
+                <div><div class="skill-item-label"><span class="skill-item-name">Autonomous Routines</span><span class="skill-item-level">Level 1</span></div><div class="skill-bar"><div class="skill-fill s1" style="width:20%"></div></div></div>
+                <div><div class="skill-item-label"><span class="skill-item-name">PID Tuning</span><span class="skill-item-level">Level 2</span></div><div class="skill-bar"><div class="skill-fill s2" style="width:40%"></div></div></div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.08em;margin-bottom:12px;padding-bottom:6px;border-bottom:1px solid var(--gray-3);">Soft Skills & Documentation</div>
+              <div style="display:flex;flex-direction:column;gap:12px;">
+                <div><div class="skill-item-label"><span class="skill-item-name">Team Leadership</span><span class="skill-item-level">Level 4</span></div><div class="skill-bar"><div class="skill-fill s4" style="width:88%"></div></div></div>
+                <div><div class="skill-item-label"><span class="skill-item-name">Engineering Notebook</span><span class="skill-item-level">Level 2</span></div><div class="skill-bar"><div class="skill-fill s2" style="width:40%"></div></div></div>
+                <div><div class="skill-item-label"><span class="skill-item-name">Judges Interview Prep</span><span class="skill-item-level">Level 3</span></div><div class="skill-bar"><div class="skill-fill s3" style="width:65%"></div></div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ATTENDANCE TAB ═══ -->
+    <div id="tab-attendance" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Full Attendance Record</div>
+          <span style="font-size:12px;font-weight:700;color:#15803D;">95% — 19 of 20 sessions</span>
+        </div>
+        <div class="card-body">
+          <table style="width:100%;border-collapse:collapse;">
+            <thead><tr>
+              <th style="text-align:left;font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;padding:8px 0;border-bottom:1px solid var(--gray-3);">Date</th>
+              <th style="text-align:left;font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;padding:8px 0;border-bottom:1px solid var(--gray-3);">Meeting</th>
+              <th style="text-align:left;font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;padding:8px 0;border-bottom:1px solid var(--gray-3);">Status</th>
+              <th style="text-align:left;font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;padding:8px 0;border-bottom:1px solid var(--gray-3);">Note</th>
+            </tr></thead>
+            <tbody>
+              <tr style="border-bottom:1px solid var(--gray-3);">
+                <td style="padding:10px 0;font-size:13px;color:var(--gray-1);">Feb 17</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;">V5RC Team A Kickoff</td>
+                <td style="padding:10px 0;"><span class="pill pill-green">Present</span></td>
+                <td style="padding:10px 0;font-size:12px;color:var(--gray-1);">—</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--gray-3);">
+                <td style="padding:10px 0;font-size:13px;color:var(--gray-1);">Feb 14</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;">Build Session — Intake</td>
+                <td style="padding:10px 0;"><span class="pill pill-green">Present</span></td>
+                <td style="padding:10px 0;font-size:12px;color:var(--gray-1);">Led the session</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--gray-3);">
+                <td style="padding:10px 0;font-size:13px;color:var(--gray-1);">Feb 10</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;">Autonomous Programming</td>
+                <td style="padding:10px 0;"><span class="pill" style="background:#FEF2F2;color:#DC2626;">Absent</span></td>
+                <td style="padding:10px 0;font-size:12px;color:var(--gray-1);">Unexcused</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--gray-3);">
+                <td style="padding:10px 0;font-size:13px;color:var(--gray-1);">Feb 7</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;">Strategy Review</td>
+                <td style="padding:10px 0;"><span class="pill pill-green">Present</span></td>
+                <td style="padding:10px 0;font-size:12px;color:var(--gray-1);">—</td>
+              </tr>
+              <tr style="border-bottom:1px solid var(--gray-3);">
+                <td style="padding:10px 0;font-size:13px;color:var(--gray-1);">Feb 3</td>
+                <td style="padding:10px 0;font-size:13px;font-weight:600;">Drive Skills Practice</td>
+                <td style="padding:10px 0;"><span class="pill pill-gray">Excused</span></td>
+                <td style="padding:10px 0;font-size:12px;color:var(--gray-1);">School conflict</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ COMPETITIONS TAB ═══ -->
+    <div id="tab-competitions" style="display:none;">
+      <div class="card">
+        <div class="card-header">
+          <div class="card-title">Competition History</div>
+          <span style="font-size:12px;color:var(--gray-1);">3 events this season</span>
+        </div>
+        <div class="card-body" style="padding-top:4px;padding-bottom:4px;">
+          <div class="comp-row">
+            <div class="comp-rank gold">1</div>
+            <div>
+              <div class="comp-name">Midwest Regional Qualifier</div>
+              <div class="comp-date">Jan 18, 2026 · V5RC · Team 42A</div>
+            </div>
+            <div class="comp-result">
+              <div>1st Place</div>
+              <div class="comp-result-sub">Tournament Champions</div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-rank silver">3</div>
+            <div>
+              <div class="comp-name">Winter Invitational</div>
+              <div class="comp-date">Dec 7, 2025 · V5RC · Team 42A</div>
+            </div>
+            <div class="comp-result">
+              <div>3rd Place</div>
+              <div class="comp-result-sub">Finalist Alliance</div>
+            </div>
+          </div>
+          <div class="comp-row">
+            <div class="comp-rank other">12</div>
+            <div>
+              <div class="comp-name">Fall Kickoff Tournament</div>
+              <div class="comp-date">Oct 19, 2025 · V5RC · Team 42A</div>
+            </div>
+            <div class="comp-result">
+              <div>12th Place</div>
+              <div class="comp-result-sub">Qual rounds only</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ═══ BADGE MODAL ═══ -->
+<div id="badge-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeBadgeModal(event)">
+  <div style="background:var(--white);border-radius:var(--radius);box-shadow:0 16px 48px rgba(0,0,0,.18);width:100%;max-width:420px;overflow:hidden;" onclick="event.stopPropagation()">
+    <div style="padding:18px 20px;border-bottom:1px solid var(--gray-3);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;color:var(--black);">Issue Badge</div>
+      <button onclick="closeBadgeModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-1);display:flex;padding:4px;">
+        <i data-lucide="x" style="width:16px;height:16px;"></i>
+      </button>
+    </div>
+    <div style="padding:18px 20px;">
+      <p style="font-size:12.5px;color:var(--gray-1);margin-bottom:14px;">Select a badge to award to Alex Rivera:</p>
+      <div id="badge-picker" style="display:grid;grid-template-columns:repeat(4,1fr);gap:10px;">
+        <!-- Dynamically rendered -->
+      </div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--gray-3);display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-outline" onclick="closeBadgeModal()">Cancel</button>
+      <button class="btn btn-yellow" id="issue-badge-confirm" onclick="issueBadge()" disabled style="opacity:.5;cursor:not-allowed;">
+        <i data-lucide="shield-plus" style="width:13px;height:13px;"></i>
+        Issue Badge
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="sp-toast" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--black);color:var(--white);padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.2);align-items:center;gap:8px;"></div>
+
+<script>
+lucide.createIcons();
+
+function switchTab(name, el) {
+  ['overview','skills','attendance','competitions'].forEach(t => {
+    document.getElementById('tab-' + t).style.display = 'none';
+  });
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('tab-' + name).style.display = '';
+  el.classList.add('active');
+  lucide.createIcons();
+}
+
+/* ── MARK PRESENT ─────────────────────────────── */
+let isPresent = false;
+function togglePresent() {
+  const btn = document.getElementById('mark-present-btn');
+  isPresent = !isPresent;
+  if (isPresent) {
+    btn.className = 'btn btn-yellow';
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg> Marked Present';
+    showSPToast('Alex marked present for today');
+  } else {
+    btn.className = 'btn btn-outline';
+    btn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle><polyline points="20 6 9 17 4 12"></polyline></svg> Mark Present';
+    showSPToast('Attendance cleared for today');
+  }
+}
+
+/* ── POST NOTE ────────────────────────────────── */
+function postNote() {
+  const ta = document.getElementById('note-input');
+  const text = ta.value.trim();
+  if (!text) {
+    ta.style.borderColor = '#EF4444';
+    ta.focus();
+    return;
+  }
+  ta.style.borderColor = '';
+  // Prepend new note to feed
+  const notesFeed = document.querySelector('.card-body[style*="padding-top:4px"] + .add-note')?.previousElementSibling;
+  // Find the notes container (div with padding 0 20px)
+  const containers = document.querySelectorAll('[style*="padding: 0 20px"]');
+  let noteContainer = null;
+  containers.forEach(c => { if (c.querySelector('.note-item')) noteContainer = c; });
+  if (noteContainer) {
+    const now = new Date();
+    const timeStr = 'Just now';
+    const newNote = document.createElement('div');
+    newNote.className = 'note-item';
+    newNote.innerHTML = `
+      <div class="note-avatar">CH</div>
+      <div style="flex:1;">
+        <div><span class="note-author">Coach Henderson</span><span class="note-date">${timeStr}</span></div>
+        <div class="note-text">${text.replace(/</g,'&lt;')}</div>
+      </div>`;
+    noteContainer.insertBefore(newNote, noteContainer.firstChild);
+  }
+  ta.value = '';
+  showSPToast('Note added to Alex\'s profile');
+}
+
+/* ── ISSUE BADGE MODAL ───────────────────────── */
+const ALL_BADGES = [
+  { emoji:'🏆', name:'First Regional', bg:'#FEF3C7', unlocked:true },
+  { emoji:'⚡', name:'Perfect Month', bg:'#DCFCE7', unlocked:true },
+  { emoji:'💻', name:'Code Master', bg:'#EDE9FE', unlocked:true },
+  { emoji:'🔧', name:'Build Lead', bg:'#FEE2E2', unlocked:true },
+  { emoji:'🎯', name:'Skills Top 10', bg:null, unlocked:false },
+  { emoji:'📓', name:'Notebook Pro', bg:null, unlocked:false },
+  { emoji:'🥇', name:'State Champ', bg:null, unlocked:false },
+  { emoji:'🌟', name:'Excellence', bg:null, unlocked:false },
+  { emoji:'🤝', name:'Team Spirit', bg:null, unlocked:false },
+  { emoji:'🛠️', name:'Full Build', bg:null, unlocked:false },
+  { emoji:'📐', name:'CAD Wizard', bg:null, unlocked:false },
+  { emoji:'🔬', name:'R&D Star', bg:null, unlocked:false },
+];
+let selectedBadge = null;
+
+function openBadgeModal() {
+  selectedBadge = null;
+  const confirm = document.getElementById('issue-badge-confirm');
+  confirm.disabled = true;
+  confirm.style.opacity = '.5';
+  confirm.style.cursor = 'not-allowed';
+
+  const picker = document.getElementById('badge-picker');
+  picker.innerHTML = ALL_BADGES.map((b, i) => `
+    <div class="badge-card${b.unlocked ? ' already' : ''}" id="bpick-${i}" onclick="selectBadge(${i})" style="cursor:pointer;${b.unlocked ? 'border-color:var(--gray-2);' : ''}">
+      <div class="badge-icon" style="background:${b.bg || 'var(--gray-4)'};">${b.emoji}</div>
+      <div class="badge-name">${b.name}</div>
+      ${b.unlocked ? '<div style="font-size:9px;color:#15803D;font-weight:700;margin-top:2px;">Earned</div>' : ''}
+    </div>`).join('');
+
+  document.getElementById('badge-backdrop').style.display = 'flex';
+  lucide.createIcons();
+}
+
+function selectBadge(i) {
+  selectedBadge = i;
+  document.querySelectorAll('#badge-picker .badge-card').forEach((el, idx) => {
+    el.style.borderColor = idx === i ? 'var(--yellow)' : '';
+    el.style.boxShadow = idx === i ? '0 0 0 2px var(--yellow-bg)' : '';
+  });
+  const confirm = document.getElementById('issue-badge-confirm');
+  confirm.disabled = false;
+  confirm.style.opacity = '1';
+  confirm.style.cursor = 'pointer';
+}
+
+function closeBadgeModal(e) {
+  if (e && e.target !== document.getElementById('badge-backdrop')) return;
+  document.getElementById('badge-backdrop').style.display = 'none';
+}
+
+function issueBadge() {
+  if (selectedBadge === null) return;
+  const badge = ALL_BADGES[selectedBadge];
+  document.getElementById('badge-backdrop').style.display = 'none';
+  // Mark as earned in the grid
+  const gridCards = document.querySelectorAll('#tab-overview .badge-card');
+  gridCards.forEach(c => {
+    if (c.querySelector('.badge-name')?.textContent === badge.name) {
+      c.classList.remove('locked');
+    }
+  });
+  showSPToast('Badge "' + badge.name + '" issued to Alex!');
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') {
+    document.getElementById('badge-backdrop').style.display = 'none';
+    document.getElementById('ep-backdrop').style.display = 'none';
+    document.getElementById('mr-backdrop').style.display = 'none';
+    const menu = document.getElementById('sp-more-menu');
+    if (menu) menu.style.display = 'none';
+  }
+});
+
+/* ── MORE MENU ───────────────────────────────── */
+function toggleSPMenu(event) {
+  event.stopPropagation();
+  const menu = document.getElementById('sp-more-menu');
+  menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+document.addEventListener('click', () => {
+  const menu = document.getElementById('sp-more-menu');
+  if (menu) menu.style.display = 'none';
+});
+
+/* ── EDIT PROFILE ────────────────────────────── */
+function openEditProfile() {
+  document.getElementById('ep-backdrop').style.display = 'flex';
+  setTimeout(() => document.getElementById('ep-name').focus(), 50);
+}
+function closeEditProfile(e) {
+  if (e && e.target !== document.getElementById('ep-backdrop')) return;
+  document.getElementById('ep-backdrop').style.display = 'none';
+}
+function submitEditProfile() {
+  const name  = document.getElementById('ep-name').value.trim();
+  const email = document.getElementById('ep-email').value.trim();
+  const grade = document.getElementById('ep-grade').value;
+  const team  = document.getElementById('ep-team').value;
+  if (!name) { document.getElementById('ep-name').focus(); return; }
+  // Update displayed name in header
+  const nameEl = document.querySelector('.profile-name');
+  if (nameEl) nameEl.textContent = name;
+  document.getElementById('ep-backdrop').style.display = 'none';
+  showSPToast('Profile updated for ' + name);
+}
+
+/* ── MANAGE ROLES ────────────────────────────── */
+const ALL_ROLES = ['Programmer','Driver','Builder','CAD Designer','Notebook Author','Captain','Co-Captain','Safety Officer','Outreach Lead'];
+let activeRoles = ['Programmer','Driver'];
+
+function openManageRoles() {
+  const list = document.getElementById('mr-role-list');
+  list.innerHTML = ALL_ROLES.map(r => {
+    const active = activeRoles.includes(r);
+    return `<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-radius:var(--radius-sm);background:${active ? 'var(--yellow-bg)' : 'var(--gray-4)'};margin-bottom:6px;cursor:pointer;border:1px solid ${active ? 'var(--yellow)' : 'transparent'};transition:all .15s;" onclick="toggleRole(this,'${r}')">
+      <span style="font-size:13px;font-weight:500;color:var(--black);">${r}</span>
+      <span style="font-size:11px;font-weight:700;color:${active ? 'var(--yellow-dim)' : 'var(--gray-2)'};">${active ? 'ASSIGNED' : '+ Assign'}</span>
+    </div>`;
+  }).join('');
+  document.getElementById('mr-backdrop').style.display = 'flex';
+}
+function toggleRole(el, role) {
+  const idx = activeRoles.indexOf(role);
+  if (idx > -1) {
+    activeRoles.splice(idx, 1);
+    el.style.background = 'var(--gray-4)';
+    el.style.borderColor = 'transparent';
+    el.querySelector('span:last-child').textContent = '+ Assign';
+    el.querySelector('span:last-child').style.color = 'var(--gray-2)';
+  } else {
+    activeRoles.push(role);
+    el.style.background = 'var(--yellow-bg)';
+    el.style.borderColor = 'var(--yellow)';
+    el.querySelector('span:last-child').textContent = 'ASSIGNED';
+    el.querySelector('span:last-child').style.color = 'var(--yellow-dim)';
+  }
+}
+function closeManageRoles(e) {
+  if (e && e.target !== document.getElementById('mr-backdrop')) return;
+  document.getElementById('mr-backdrop').style.display = 'none';
+}
+function submitManageRoles() {
+  document.getElementById('mr-backdrop').style.display = 'none';
+  showSPToast('Roles updated (' + activeRoles.length + ' assigned)');
+}
+
+/* ── TOAST ───────────────────────────────────── */
+let spToastTimer;
+function showSPToast(msg) {
+  const t = document.getElementById('sp-toast');
+  t.style.display = 'flex';
+  t.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5D000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>&nbsp;' + msg;
+  clearTimeout(spToastTimer);
+  spToastTimer = setTimeout(() => { t.style.display = 'none'; }, 3200);
+}
+
+/* ── NOTIFICATIONS ────────────────────────────────── */
+const NOTIFS = [
+  { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
+  { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
+  { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
+  { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
+  { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
+  { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
+];
+
+function renderNotifs() {
+  const list = document.getElementById('notif-list');
+  if (!list) return;
+  list.innerHTML = NOTIFS.map(n => `
+    <div style="display:flex;gap:12px;padding:12px 20px;cursor:pointer;background:${n.unread ? '#FAFAFA' : 'transparent'};border-left:3px solid ${n.unread ? 'var(--yellow)' : 'transparent'};transition:background .12s;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background='${n.unread ? '#FAFAFA' : 'transparent'}';" onclick="dismissNotif(${n.id},this)">
+      <div style="width:34px;height:34px;border-radius:50%;background:${n.color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <i data-lucide="${n.icon}" style="width:15px;height:15px;color:${n.color};"></i>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:${n.unread ? '700' : '500'};color:var(--black);margin-bottom:2px;">${n.title}</div>
+        <div style="font-size:12px;color:var(--gray-1);line-height:1.4;margin-bottom:4px;">${n.body}</div>
+        <div style="font-size:11px;color:var(--gray-2);">${n.time}</div>
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function dismissNotif(id, el) {
+  const idx = NOTIFS.findIndex(n => n.id === id);
+  if (idx > -1) { NOTIFS[idx].unread = false; }
+  el.style.borderLeftColor = 'transparent';
+  el.style.background = 'transparent';
+  el.querySelector('div[style*="font-weight"]').style.fontWeight = '500';
+  updateBadge();
+}
+
+function markAllRead() {
+  NOTIFS.forEach(n => n.unread = false);
+  renderNotifs();
+  updateBadge();
+}
+
+function updateBadge() {
+  const dot = document.querySelector('.notif-dot');
+  if (!dot) return;
+  dot.style.display = NOTIFS.some(n => n.unread) ? '' : 'none';
+}
+
+function openNotifPanel() {
+  const overlay = document.getElementById('notif-overlay');
+  const panel   = document.getElementById('notif-panel');
+  overlay.style.display = 'block';
+  renderNotifs();
+  setTimeout(() => { panel.style.transform = 'translateX(0)'; }, 10);
+}
+
+function closeNotifPanel(e) {
+  if (e && e.target !== document.getElementById('notif-overlay')) return;
+  const panel = document.getElementById('notif-panel');
+  panel.style.transform = 'translateX(100%)';
+  setTimeout(() => { document.getElementById('notif-overlay').style.display = 'none'; }, 230);
+}
+</script>
+
+<!-- Edit Profile Modal -->
+<div id="ep-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeEditProfile(event)">
+  <div style="background:var(--white);border-radius:var(--radius);padding:28px;width:100%;max-width:440px;box-shadow:0 8px 32px rgba(0,0,0,.18);" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <span style="font-size:16px;font-weight:700;color:var(--black);">Edit Profile</span>
+      <button onclick="document.getElementById('ep-backdrop').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Full Name</label>
+        <input id="ep-name" type="text" value="Alex Rivera" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Email</label>
+        <input id="ep-email" type="email" value="alex.rivera@school.edu" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Grade</label>
+          <select id="ep-grade" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);background:var(--white);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+            <option value="9">9th Grade</option>
+            <option value="10">10th Grade</option>
+            <option value="11" selected>11th Grade</option>
+            <option value="12">12th Grade</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Team</label>
+          <select id="ep-team" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);background:var(--white);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+            <option value="">Unassigned</option>
+            <option value="42A" selected>Team 42A</option>
+            <option value="42B">Team 42B</option>
+            <option value="42C">Team 42C</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px;">
+      <button onclick="document.getElementById('ep-backdrop').style.display='none'" style="padding:9px 18px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:var(--white);color:var(--black-3);font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="submitEditProfile()" style="padding:9px 18px;border:none;border-radius:var(--radius-sm);background:var(--yellow);color:var(--black);font-size:13px;font-weight:700;cursor:pointer;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notif-overlay" style="display:none;position:fixed;inset:0;z-index:600;" onclick="closeNotifPanel(event)">
+  <div id="notif-panel" style="position:absolute;top:0;right:0;width:340px;height:100%;background:var(--white);box-shadow:-4px 0 24px rgba(0,0,0,.14);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s ease;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--gray-3);">
+      <span style="font-size:15px;font-weight:700;color:var(--black);">Notifications</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="markAllRead()" style="font-size:11px;font-weight:600;color:var(--gray-1);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background='none'">Mark all read</button>
+        <button onclick="closeNotifPanel(null)" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+      </div>
+    </div>
+    <div id="notif-list" style="flex:1;overflow-y:auto;padding:8px 0;"></div>
+    <div style="padding:14px 20px;border-top:1px solid var(--gray-3);">
+      <a href="#" style="font-size:12.5px;font-weight:600;color:var(--gray-1);text-decoration:none;">View all activity</a>
+    </div>
+  </div>
+</div>
+
+<!-- Manage Roles Modal -->
+<div id="mr-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeManageRoles(event)">
+  <div style="background:var(--white);border-radius:var(--radius);padding:28px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.18);max-height:90vh;overflow-y:auto;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-size:16px;font-weight:700;color:var(--black);">Manage Roles</span>
+      <button onclick="document.getElementById('mr-backdrop').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+    </div>
+    <p style="font-size:12.5px;color:var(--gray-1);margin-bottom:16px;">Click a role to assign or remove it from Alex Rivera.</p>
+    <div id="mr-role-list"></div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:20px;">
+      <button onclick="document.getElementById('mr-backdrop').style.display='none'" style="padding:9px 18px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:var(--white);color:var(--black-3);font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="submitManageRoles()" style="padding:9px 18px;border:none;border-radius:var(--radius-sm);background:var(--yellow);color:var(--black);font-size:13px;font-weight:700;cursor:pointer;">Save Roles</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

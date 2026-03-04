@@ -1,0 +1,1828 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Teams — CTRC Club Manager</title>
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: block; src: url('fonts/inter-400.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: block; src: url('fonts/inter-500.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: block; src: url('fonts/inter-600.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: block; src: url('fonts/inter-700.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: block; src: url('fonts/inter-800.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 900; font-display: block; src: url('fonts/inter-900.woff2') format('woff2'); }
+  </style>
+
+  <style>
+    /* ── DESIGN TOKENS ─────────────────────────────── */
+    :root {
+      --yellow:      #F5D000;
+      --yellow-dim:  #C8AA00;
+      --yellow-bg:   #FFFBDC;
+      --black:       #171717;
+      --black-2:     #262626;
+      --black-3:     #404040;
+      --gray-1:      #737373;
+      --gray-2:      #A3A3A3;
+      --gray-3:      #D4D4D4;
+      --gray-4:      #F5F5F5;
+      --white:       #FFFFFF;
+      --sidebar-w:   240px;
+      --radius:      10px;
+      --radius-sm:   6px;
+      --shadow:      0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md:   0 4px 12px rgba(0,0,0,.10);
+      --purple:      #7C3AED;
+      --purple-bg:   #F5F3FF;
+    }
+
+    /* ── RESET ─────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-4);
+      color: var(--black);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* ── SIDEBAR ───────────────────────────────────── */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--black);
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      top: 0; left: 0; bottom: 0;
+      z-index: 100;
+    }
+    .sidebar-logo {
+      padding: 20px 18px 16px;
+      border-bottom: 1px solid var(--black-3);
+    }
+    .sidebar-logo img { width: 140px; display: block; }
+    .sidebar-logo-sub {
+      font-size: 10px;
+      color: var(--gray-2);
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: 6px;
+    }
+    .sidebar-nav {
+      flex: 1;
+      padding: 12px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      overflow-y: auto;
+    }
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gray-1);
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      padding: 10px 8px 4px;
+    }
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      color: var(--gray-2);
+      font-size: 13.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      text-decoration: none;
+      position: relative;
+    }
+    .nav-item:hover { background: var(--black-2); color: var(--white); }
+    .nav-item.active { background: var(--yellow); color: var(--black); font-weight: 700; }
+    .nav-item.active i { color: var(--black); }
+    .nav-item i { width: 16px; height: 16px; }
+    .nav-badge {
+      margin-left: auto;
+      background: var(--yellow);
+      color: var(--black);
+      font-size: 10px;
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 99px;
+    }
+    .nav-item.active .nav-badge { background: var(--black); color: var(--yellow); }
+    .sidebar-footer {
+      padding: 14px 14px;
+      border-top: 1px solid var(--black-3);
+    }
+    .sidebar-user {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+    }
+    .sidebar-avatar {
+      width: 34px; height: 34px;
+      border-radius: 50%;
+      background: var(--yellow);
+      display: flex; align-items: center; justify-content: center;
+      overflow: hidden;
+      flex-shrink: 0;
+    }
+    .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .sidebar-user-info { flex: 1; min-width: 0; }
+    .sidebar-user-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--white);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .sidebar-user-role { font-size: 11px; color: var(--gray-2); }
+
+    /* ── MAIN ──────────────────────────────────────── */
+    .main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      min-width: 0;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ────────────────────────────────────── */
+    .topbar {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-3);
+      padding: 0 28px;
+      height: 56px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+    }
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: var(--gray-1);
+    }
+    .breadcrumb a {
+      color: var(--gray-1);
+      text-decoration: none;
+      transition: color .15s;
+    }
+    .breadcrumb a:hover { color: var(--black); }
+    .breadcrumb .sep { color: var(--gray-3); }
+    .breadcrumb .current { color: var(--black); font-weight: 600; }
+    .topbar-right {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .icon-btn { width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--gray-3); background: var(--white); cursor: pointer; color: var(--gray-1); transition: all .15s; position: relative; }
+    .icon-btn:hover { border-color: var(--gray-2); color: var(--black); }
+    .notif-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; border: 1.5px solid var(--white); }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 7px 14px;
+      border-radius: var(--radius-sm);
+      border: none;
+      cursor: pointer;
+      transition: opacity .15s, transform .1s;
+      font-family: 'Inter', sans-serif;
+    }
+    .btn:active { transform: scale(.97); }
+    .btn-yellow { background: var(--yellow); color: var(--black); }
+    .btn-yellow:hover { opacity: .88; }
+    .btn-outline {
+      background: transparent;
+      border: 1.5px solid var(--gray-3);
+      color: var(--black-3);
+    }
+    .btn-outline:hover { border-color: var(--gray-2); background: var(--gray-4); }
+
+    /* ── CONTENT ───────────────────────────────────── */
+    .content {
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    /* ── PAGE HEADER ───────────────────────────────── */
+    .page-header h1 {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: -.02em;
+    }
+    .page-header p {
+      font-size: 13px;
+      color: var(--gray-1);
+      margin-top: 3px;
+    }
+
+    /* ── PROGRAM TABS ──────────────────────────────── */
+    .tab-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--gray-3);
+    }
+    .tab {
+      padding: 10px 18px;
+      font-size: 13.5px;
+      font-weight: 500;
+      color: var(--gray-1);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -2px;
+      transition: color .15s, border-color .15s;
+      user-select: none;
+    }
+    .tab:hover { color: var(--black); }
+    .tab.active {
+      color: var(--black);
+      font-weight: 700;
+      border-bottom-color: var(--yellow);
+    }
+    .tab-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gray-3);
+      color: var(--gray-1);
+      font-size: 10px;
+      font-weight: 700;
+      border-radius: 99px;
+      padding: 1px 6px;
+      margin-left: 6px;
+    }
+    .tab.active .tab-count {
+      background: var(--yellow);
+      color: var(--black);
+    }
+
+    /* ── TEAM GRID ─────────────────────────────────── */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    @media (min-width: 1200px) {
+      .team-grid { grid-template-columns: repeat(3, 1fr); }
+    }
+
+    /* ── TEAM CARD ─────────────────────────────────── */
+    .team-card {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border-left: 4px solid var(--black);
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: box-shadow .2s, transform .1s;
+    }
+    .team-card:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); }
+    .team-card.active-card { box-shadow: 0 0 0 2px var(--yellow), var(--shadow-md); }
+    .team-card.iqrc { border-left-color: var(--purple); }
+    .team-card.dev { border-left-color: var(--gray-2); }
+
+    .team-card-inner { padding: 16px 16px 14px; }
+
+    .team-card-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .program-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 99px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .badge-vrc { background: var(--black); color: var(--yellow); }
+    .badge-iqrc { background: var(--purple); color: var(--white); }
+    .badge-dev { background: var(--gray-3); color: var(--gray-1); }
+
+    .three-dot {
+      width: 28px; height: 28px;
+      border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-2);
+      cursor: pointer;
+      transition: background .15s, color .15s;
+      position: relative;
+    }
+    .three-dot:hover { background: var(--gray-4); color: var(--black); }
+
+    .team-name {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: -.01em;
+      line-height: 1.2;
+    }
+    .team-member-count {
+      font-size: 12px;
+      color: var(--gray-1);
+      margin-top: 3px;
+    }
+
+    .team-stats {
+      display: flex;
+      gap: 16px;
+      margin: 14px 0;
+      padding: 12px 0;
+      border-top: 1px solid var(--gray-4);
+      border-bottom: 1px solid var(--gray-4);
+    }
+    .stat-item { flex: 1; }
+    .stat-label {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gray-2);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+    .stat-value {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--black);
+      margin-top: 2px;
+      letter-spacing: -.02em;
+    }
+    .stat-value.green { color: #16A34A; }
+    .stat-value.yellow-val { color: #CA8A04; }
+    .stat-value.red { color: #DC2626; }
+    .stat-value.na { font-size: 13px; color: var(--gray-2); font-weight: 500; }
+
+    .team-card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 12px;
+    }
+
+    .status-chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 9px;
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+    .chip-green { background: #DCFCE7; color: #15803D; }
+    .chip-red { background: #FEE2E2; color: #B91C1C; }
+    .chip-gray { background: var(--gray-4); color: var(--gray-1); }
+    .chip-blue { background: #EFF6FF; color: #1D4ED8; }
+
+    /* ── AVATAR STACK ──────────────────────────────── */
+    .avatar-stack {
+      display: flex;
+      align-items: center;
+    }
+    .avatar-stack .av {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--white);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 9px;
+      font-weight: 700;
+      color: var(--white);
+      margin-left: -6px;
+      flex-shrink: 0;
+    }
+    .avatar-stack .av:first-child { margin-left: 0; }
+    .av-c1 { background: #3B82F6; }
+    .av-c2 { background: #8B5CF6; }
+    .av-c3 { background: #EC4899; }
+    .av-c4 { background: #F59E0B; color: var(--black) !important; }
+    .av-c5 { background: #10B981; }
+    .av-c6 { background: #EF4444; }
+    .av-gray { background: var(--gray-3); }
+
+    .av-more {
+      background: var(--gray-3);
+      color: var(--gray-1) !important;
+      font-size: 9px;
+    }
+
+    /* ── ADD CARD (DASHED) ─────────────────────────── */
+    .team-card-add {
+      background: var(--white);
+      border-radius: var(--radius);
+      border: 2px dashed var(--gray-3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 16px;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      min-height: 200px;
+      color: var(--gray-1);
+      gap: 10px;
+    }
+    .team-card-add:hover {
+      border-color: var(--yellow-dim);
+      background: var(--yellow-bg);
+      color: var(--black-3);
+    }
+    .team-card-add .add-icon {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: var(--gray-4);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--gray-2);
+      transition: background .15s, color .15s;
+    }
+    .team-card-add:hover .add-icon {
+      background: var(--yellow);
+      color: var(--black);
+    }
+    .team-card-add span {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ── DROPDOWN MENU ─────────────────────────────── */
+    .dropdown-menu {
+      position: absolute;
+      top: 36px; right: 8px;
+      background: var(--white);
+      border: 1px solid var(--gray-3);
+      border-radius: var(--radius-sm);
+      box-shadow: var(--shadow-md);
+      z-index: 200;
+      min-width: 160px;
+      overflow: hidden;
+      display: none;
+    }
+    .dropdown-menu.open { display: block; }
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      font-size: 13px;
+      color: var(--black-3);
+      cursor: pointer;
+      transition: background .1s;
+    }
+    .dropdown-item:hover { background: var(--gray-4); }
+    .dropdown-item.danger { color: #DC2626; }
+    .dropdown-item.danger:hover { background: #FEF2F2; }
+    .dropdown-divider { height: 1px; background: var(--gray-3); margin: 3px 0; }
+
+    /* ── ROSTER DETAIL PANEL ───────────────────────── */
+    .roster-panel {
+      background: var(--white);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-md);
+      border: 1px solid var(--gray-3);
+      overflow: hidden;
+      display: none;
+    }
+    .roster-panel.open { display: block; }
+
+    .roster-panel-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--gray-3);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .roster-panel-title {
+      flex: 1;
+    }
+    .roster-panel-title h2 {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--black);
+      letter-spacing: -.01em;
+    }
+    .roster-panel-title p {
+      font-size: 12px;
+      color: var(--gray-1);
+      margin-top: 2px;
+    }
+    .roster-panel-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .roster-table-wrap {
+      padding: 0 24px 20px;
+    }
+    .roster-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 16px;
+    }
+    .roster-table th {
+      text-align: left;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--gray-1);
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      padding: 8px 10px;
+      border-bottom: 2px solid var(--gray-3);
+    }
+    .roster-table td {
+      padding: 11px 10px;
+      border-bottom: 1px solid var(--gray-4);
+      vertical-align: middle;
+    }
+    .roster-table tr:last-child td { border-bottom: none; }
+    .roster-table tr:hover td { background: var(--gray-4); }
+
+    .member-cell {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .member-av {
+      width: 30px; height: 30px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--white);
+      flex-shrink: 0;
+    }
+    .member-name { font-weight: 600; color: var(--black); }
+    .member-grade { font-size: 12px; color: var(--gray-1); }
+
+    .role-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 99px;
+    }
+    .role-captain { background: var(--yellow-bg); color: var(--yellow-dim); }
+    .role-driver { background: #EFF6FF; color: #1D4ED8; }
+    .role-programmer { background: #F5F3FF; color: #7C3AED; }
+    .role-builder { background: #FFF7ED; color: #C2410C; }
+    .role-notebooker { background: #F0FDF4; color: #15803D; }
+
+    .attendance-bar {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .att-track {
+      width: 60px; height: 6px;
+      background: var(--gray-3);
+      border-radius: 99px;
+      overflow: hidden;
+    }
+    .att-fill {
+      height: 100%;
+      border-radius: 99px;
+    }
+    .att-high { background: #16A34A; }
+    .att-mid { background: #CA8A04; }
+    .att-low { background: #DC2626; }
+    .att-label { font-size: 12px; color: var(--gray-1); font-weight: 500; }
+
+    .action-link {
+      color: var(--yellow-dim);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .action-link:hover { color: var(--black); }
+
+    /* ── CAUTION TAPE ──────────────────────────────── */
+    .caution-tape {
+      height: 5px;
+      background: repeating-linear-gradient(
+        -55deg,
+        var(--yellow) 0, var(--yellow) 10px,
+        var(--black) 10px, var(--black) 20px
+      );
+      opacity: .15;
+    }
+
+    /* ── CLOSE ROSTER BTN ──────────────────────────── */
+    .close-panel-btn {
+      width: 32px; height: 32px;
+      border-radius: var(--radius-sm);
+      border: 1.5px solid var(--gray-3);
+      background: var(--white);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: var(--gray-1);
+      transition: all .15s;
+    }
+    .close-panel-btn:hover { background: var(--gray-4); color: var(--black); }
+
+    .hidden-card { display: none !important; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════════
+     SIDEBAR
+═════════════════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logo-white.png" alt="CTRC Logo" />
+    <div class="sidebar-logo-sub">Club Manager</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a href="index.html" class="nav-item">
+      <i data-lucide="layout-dashboard"></i> Dashboard
+    </a>
+    <a href="students.html" class="nav-item">
+      <i data-lucide="users"></i> Students
+    </a>
+    <a href="foundation.html" class="nav-item">
+      <i data-lucide="book-open"></i> Foundation
+    </a>
+    <a href="teams.html" class="nav-item active">
+      <i data-lucide="cpu"></i> Teams
+    </a>
+    <a href="tasks.html" class="nav-item">
+      <i data-lucide="circle-check"></i> Tasks
+      <span class="nav-badge">5</span>
+    </a>
+
+    <div class="nav-section-label" style="margin-top:8px;">Competition</div>
+    <a href="https://matchsight.ct839.com/events?programId=1" target="_blank" class="nav-item">
+      <i data-lucide="trophy"></i> Competitions
+    </a>
+
+    <div class="nav-section-label" style="margin-top:8px;">Operations</div>
+    <a href="inventory.html" class="nav-item">
+      <i data-lucide="package"></i> Inventory
+    </a>
+    <a href="purchases.html" class="nav-item">
+      <i data-lucide="receipt"></i> Purchases
+    </a>
+    <a href="reports.html" class="nav-item">
+      <i data-lucide="bar-chart-2"></i> Reports
+    </a>
+
+    <div style="margin-top:auto;"></div>
+    <a href="#" class="nav-item">
+      <i data-lucide="settings"></i> Settings
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <img src="icon-white.png" alt="Coach Henderson" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:13px;font-weight:700;color:var(--black)\'>CH</span>'" />
+      </div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">Coach Henderson</div>
+        <div class="sidebar-user-role">Lead Mentor</div>
+      </div>
+      <i data-lucide="chevron-up" style="color:var(--gray-2);width:14px;height:14px;flex-shrink:0;"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- ════════════════════════════════════════════════════
+     MAIN
+═════════════════════════════════════════════════════ -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <nav class="breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="sep"><i data-lucide="chevron-right" style="width:14px;height:14px;vertical-align:middle;"></i></span>
+      <span class="current">Teams</span>
+    </nav>
+    <div class="topbar-right">
+      <button class="btn btn-outline" onclick="openTeamFilter()">
+        <i data-lucide="sliders-horizontal"></i> Filter
+      </button>
+      <button class="btn btn-yellow" onclick="openCreateTeam()">
+        <i data-lucide="plus"></i> Create Team
+      </button>
+      <div class="icon-btn" onclick="openNotifPanel()" style="position:relative;cursor:pointer;">
+        <i data-lucide="bell" style="width:15px;height:15px;"></i>
+        <span class="notif-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- Page Header -->
+    <div class="page-header">
+      <h1>Teams</h1>
+      <p>Manage rosters, track performance, and prepare for competitions.</p>
+    </div>
+
+    <!-- Program Tabs -->
+    <div>
+      <div class="tab-bar" id="tabBar">
+        <div class="tab active" data-filter="all" onclick="setTab(this,'all')">
+          All Teams <span class="tab-count">5</span>
+        </div>
+        <div class="tab" data-filter="vrc" onclick="setTab(this,'vrc')">
+          V5RC (VRC) <span class="tab-count">2</span>
+        </div>
+        <div class="tab" data-filter="iqrc" onclick="setTab(this,'iqrc')">
+          VIQRC (IQ) <span class="tab-count">2</span>
+        </div>
+        <div class="tab" data-filter="dev" onclick="setTab(this,'dev')">
+          Development <span class="tab-count">1</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Team Grid -->
+    <div class="team-grid" id="teamGrid">
+
+      <!-- ── CARD 1: 42A Iron Gears ── -->
+      <div class="team-card" data-program="vrc" data-team="42a" onclick="toggleRoster(this,'42a')">
+        <div class="team-card-inner">
+          <div class="team-card-top">
+            <span class="program-badge badge-vrc">V5RC</span>
+            <div class="three-dot" onclick="toggleDropdown(event,'dd-42a')">
+              <i data-lucide="more-vertical"></i>
+              <div class="dropdown-menu" id="dd-42a">
+                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Edit Team</div>
+                <div class="dropdown-item"><i data-lucide="trophy" style="width:14px;height:14px;"></i> Assign to Competition</div>
+                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Member</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item danger" onclick="openArchiveConfirm(this)"><i data-lucide="archive" style="width:14px;height:14px;"></i> Archive Team</div>
+              </div>
+            </div>
+          </div>
+          <div class="team-name">42A — Iron Gears</div>
+          <div class="team-member-count">5 members</div>
+          <div class="team-stats">
+            <div class="stat-item">
+              <div class="stat-label">Avg Skills Score</div>
+              <div class="stat-value">142</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Win Rate</div>
+              <div class="stat-value green">68%</div>
+            </div>
+          </div>
+          <div class="team-card-bottom">
+            <span class="status-chip chip-green">Competition Ready</span>
+            <div class="avatar-stack">
+              <div class="av av-c1">AR</div>
+              <div class="av av-c2">ML</div>
+              <div class="av av-c3">RK</div>
+              <div class="av av-more">+2</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 2: 42B Cyber Knights ── -->
+      <div class="team-card" data-program="vrc" data-team="42b" onclick="toggleRoster(this,'42b')">
+        <div class="team-card-inner">
+          <div class="team-card-top">
+            <span class="program-badge badge-vrc">V5RC</span>
+            <div class="three-dot" onclick="toggleDropdown(event,'dd-42b')">
+              <i data-lucide="more-vertical"></i>
+              <div class="dropdown-menu" id="dd-42b">
+                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Edit Team</div>
+                <div class="dropdown-item"><i data-lucide="trophy" style="width:14px;height:14px;"></i> Assign to Competition</div>
+                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Member</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item danger" onclick="openArchiveConfirm(this)"><i data-lucide="archive" style="width:14px;height:14px;"></i> Archive Team</div>
+              </div>
+            </div>
+          </div>
+          <div class="team-name">42B — Cyber Knights</div>
+          <div class="team-member-count">4 members</div>
+          <div class="team-stats">
+            <div class="stat-item">
+              <div class="stat-label">Avg Skills Score</div>
+              <div class="stat-value">110</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Win Rate</div>
+              <div class="stat-value green">72%</div>
+            </div>
+          </div>
+          <div class="team-card-bottom">
+            <span class="status-chip chip-green">Registered</span>
+            <div class="avatar-stack">
+              <div class="av av-c5">SP</div>
+              <div class="av av-c4">DS</div>
+              <div class="av av-c1">TW</div>
+              <div class="av av-more">+1</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 3: 42C Robo Wizards ── -->
+      <div class="team-card iqrc" data-program="iqrc" data-team="42c" onclick="toggleRoster(this,'42c')">
+        <div class="team-card-inner">
+          <div class="team-card-top">
+            <span class="program-badge badge-iqrc">VIQRC</span>
+            <div class="three-dot" onclick="toggleDropdown(event,'dd-42c')">
+              <i data-lucide="more-vertical"></i>
+              <div class="dropdown-menu" id="dd-42c">
+                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Edit Team</div>
+                <div class="dropdown-item"><i data-lucide="trophy" style="width:14px;height:14px;"></i> Assign to Competition</div>
+                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Member</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item danger" onclick="openArchiveConfirm(this)"><i data-lucide="archive" style="width:14px;height:14px;"></i> Archive Team</div>
+              </div>
+            </div>
+          </div>
+          <div class="team-name">42C — Robo Wizards</div>
+          <div class="team-member-count">6 members</div>
+          <div class="team-stats">
+            <div class="stat-item">
+              <div class="stat-label">Avg Skills Score</div>
+              <div class="stat-value">155</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Win Rate</div>
+              <div class="stat-value green">81%</div>
+            </div>
+          </div>
+          <div class="team-card-bottom">
+            <span class="status-chip chip-red">Action Required: Roster</span>
+            <div class="avatar-stack">
+              <div class="av av-c2">JL</div>
+              <div class="av av-c3">MC</div>
+              <div class="av av-c5">LM</div>
+              <div class="av av-more">+3</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 4: 42D Gear Grinders ── -->
+      <div class="team-card iqrc" data-program="iqrc" data-team="42d" onclick="toggleRoster(this,'42d')">
+        <div class="team-card-inner">
+          <div class="team-card-top">
+            <span class="program-badge badge-iqrc">VIQRC</span>
+            <div class="three-dot" onclick="toggleDropdown(event,'dd-42d')">
+              <i data-lucide="more-vertical"></i>
+              <div class="dropdown-menu" id="dd-42d">
+                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Edit Team</div>
+                <div class="dropdown-item"><i data-lucide="trophy" style="width:14px;height:14px;"></i> Assign to Competition</div>
+                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Member</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item danger" onclick="openArchiveConfirm(this)"><i data-lucide="archive" style="width:14px;height:14px;"></i> Archive Team</div>
+              </div>
+            </div>
+          </div>
+          <div class="team-name">42D — Gear Grinders</div>
+          <div class="team-member-count">3 members</div>
+          <div class="team-stats">
+            <div class="stat-item">
+              <div class="stat-label">Avg Skills Score</div>
+              <div class="stat-value">95</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Win Rate</div>
+              <div class="stat-value yellow-val">55%</div>
+            </div>
+          </div>
+          <div class="team-card-bottom">
+            <span class="status-chip chip-gray">Active</span>
+            <div class="avatar-stack">
+              <div class="av av-c6">CP</div>
+              <div class="av av-c4">AJ</div>
+              <div class="av av-c1">PN</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── CARD 5: 42E Dev Squad ── -->
+      <div class="team-card dev" data-program="dev" data-team="42e" onclick="toggleRoster(this,'42e')">
+        <div class="team-card-inner">
+          <div class="team-card-top">
+            <span class="program-badge badge-dev">Development</span>
+            <div class="three-dot" onclick="toggleDropdown(event,'dd-42e')">
+              <i data-lucide="more-vertical"></i>
+              <div class="dropdown-menu" id="dd-42e">
+                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Edit Team</div>
+                <div class="dropdown-item"><i data-lucide="arrow-up-right" style="width:14px;height:14px;"></i> Graduate to Competition</div>
+                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Member</div>
+                <div class="dropdown-divider"></div>
+                <div class="dropdown-item danger" onclick="openArchiveConfirm(this)"><i data-lucide="archive" style="width:14px;height:14px;"></i> Archive Team</div>
+              </div>
+            </div>
+          </div>
+          <div class="team-name">42E — Dev Squad</div>
+          <div class="team-member-count">4 members</div>
+          <div class="team-stats">
+            <div class="stat-item">
+              <div class="stat-label">Avg Skills Score</div>
+              <div class="stat-value na">No data yet</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">Win Rate</div>
+              <div class="stat-value na">—</div>
+            </div>
+          </div>
+          <div class="team-card-bottom">
+            <span class="status-chip chip-blue">In Training</span>
+            <div class="avatar-stack">
+              <div class="av av-gray"></div>
+              <div class="av av-gray"></div>
+              <div class="av av-gray"></div>
+              <div class="av av-gray"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── ADD NEW TEAM CARD ── -->
+      <div class="team-card-add" data-program="all" onclick="openCreateTeam()">
+        <div class="add-icon">
+          <i data-lucide="plus" style="width:20px;height:20px;"></i>
+        </div>
+        <span>Add New Team</span>
+        <p style="font-size:12px;color:var(--gray-2);text-align:center;max-width:160px;">
+          Set up a new team with roster and program type
+        </p>
+      </div>
+
+    </div><!-- /team-grid -->
+
+    <!-- ════════════ ROSTER DETAIL PANELS ════════════ -->
+
+    <!-- 42A Roster -->
+    <div class="roster-panel" id="roster-42a">
+      <div class="roster-panel-header">
+        <div class="program-badge badge-vrc" style="flex-shrink:0;">V5RC</div>
+        <div class="roster-panel-title">
+          <h2>42A — Iron Gears</h2>
+          <p>Competition Ready &nbsp;&bull;&nbsp; 5 members &nbsp;&bull;&nbsp; Skills: 142 &nbsp;&bull;&nbsp; Win Rate: 68%</p>
+        </div>
+        <div class="roster-panel-actions">
+          <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
+            <i data-lucide="trophy"></i> Assign to Competition
+          </button>
+          <button class="btn btn-yellow" onclick="openEditTeam('42A','VRC Robotics')">
+            <i data-lucide="pencil"></i> Edit Team
+          </button>
+          <button class="close-panel-btn" onclick="closeRoster('42a')">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="roster-table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Grade</th>
+              <th>Attendance</th>
+              <th>Skills Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c1">AR</div><span class="member-name">Alex Rivera</span></div></td>
+              <td><span class="role-badge role-captain">Captain</span></td>
+              <td><span class="member-grade">11th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:92%;"></div></div><span class="att-label">92%</span></div></td>
+              <td><strong>148</strong></td>
+              <td><a class="action-link" href="student-profile.html?id=1">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c2">ML</div><span class="member-name">Maya Liu</span></div></td>
+              <td><span class="role-badge role-programmer">Programmer</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:88%;"></div></div><span class="att-label">88%</span></div></td>
+              <td><strong>136</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c3">RK</div><span class="member-name">Ryan Kim</span></div></td>
+              <td><span class="role-badge role-builder">Builder</span></td>
+              <td><span class="member-grade">11th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:74%;"></div></div><span class="att-label">74%</span></div></td>
+              <td><strong>130</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c5">JS</div><span class="member-name">Jason Scott</span></div></td>
+              <td><span class="role-badge role-driver">Driver</span></td>
+              <td><span class="member-grade">12th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:95%;"></div></div><span class="att-label">95%</span></div></td>
+              <td><strong>158</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c6">EB</div><span class="member-name">Ethan Brooks</span></div></td>
+              <td><span class="role-badge role-notebooker">Notebooker</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:79%;"></div></div><span class="att-label">79%</span></div></td>
+              <td><strong>138</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caution-tape"></div>
+    </div>
+
+    <!-- 42B Roster -->
+    <div class="roster-panel" id="roster-42b">
+      <div class="roster-panel-header">
+        <div class="program-badge badge-vrc" style="flex-shrink:0;">V5RC</div>
+        <div class="roster-panel-title">
+          <h2>42B — Cyber Knights</h2>
+          <p>Registered &nbsp;&bull;&nbsp; 4 members &nbsp;&bull;&nbsp; Skills: 110 &nbsp;&bull;&nbsp; Win Rate: 72%</p>
+        </div>
+        <div class="roster-panel-actions">
+          <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
+            <i data-lucide="trophy"></i> Assign to Competition
+          </button>
+          <button class="btn btn-yellow" onclick="openEditTeam('42B','VIQRC Junior')">
+            <i data-lucide="pencil"></i> Edit Team
+          </button>
+          <button class="close-panel-btn" onclick="closeRoster('42b')">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="roster-table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Grade</th>
+              <th>Attendance</th>
+              <th>Skills Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c5">SP</div><span class="member-name">Sofia Park</span></div></td>
+              <td><span class="role-badge role-captain">Captain</span></td>
+              <td><span class="member-grade">12th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:97%;"></div></div><span class="att-label">97%</span></div></td>
+              <td><strong>118</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c4">DS</div><span class="member-name">Dev Sharma</span></div></td>
+              <td><span class="role-badge role-programmer">Programmer</span></td>
+              <td><span class="member-grade">11th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:85%;"></div></div><span class="att-label">85%</span></div></td>
+              <td><strong>105</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c1">TW</div><span class="member-name">Tyler Wong</span></div></td>
+              <td><span class="role-badge role-builder">Builder</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:68%;"></div></div><span class="att-label">68%</span></div></td>
+              <td><strong>102</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c3">CP</div><span class="member-name">Chloe Patel</span></div></td>
+              <td><span class="role-badge role-notebooker">Notebooker</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:91%;"></div></div><span class="att-label">91%</span></div></td>
+              <td><strong>115</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caution-tape"></div>
+    </div>
+
+    <!-- 42C Roster -->
+    <div class="roster-panel" id="roster-42c">
+      <div class="roster-panel-header">
+        <div class="program-badge badge-iqrc" style="flex-shrink:0;">VIQRC</div>
+        <div class="roster-panel-title">
+          <h2>42C — Robo Wizards</h2>
+          <p style="color:#B91C1C;font-weight:600;">
+            <i data-lucide="alert-circle" style="width:12px;height:12px;display:inline;vertical-align:middle;"></i>
+            Action Required: Roster incomplete — 6 members &nbsp;&bull;&nbsp; Skills: 155 &nbsp;&bull;&nbsp; Win Rate: 81%
+          </p>
+        </div>
+        <div class="roster-panel-actions">
+          <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
+            <i data-lucide="trophy"></i> Assign to Competition
+          </button>
+          <button class="btn btn-yellow" onclick="openEditTeam('42C','VRC Rookie')">
+            <i data-lucide="pencil"></i> Edit Team
+          </button>
+          <button class="close-panel-btn" onclick="closeRoster('42c')">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="roster-table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Grade</th>
+              <th>Attendance</th>
+              <th>Skills Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c2">JL</div><span class="member-name">Jordan Lee</span></div></td>
+              <td><span class="role-badge role-captain">Captain</span></td>
+              <td><span class="member-grade">11th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:90%;"></div></div><span class="att-label">90%</span></div></td>
+              <td><strong>160</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c3">MC</div><span class="member-name">Marcus Chen</span></div></td>
+              <td><span class="role-badge role-builder">Builder</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:83%;"></div></div><span class="att-label">83%</span></div></td>
+              <td><strong>152</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c5">LM</div><span class="member-name">Lily Martinez</span></div></td>
+              <td><span class="role-badge role-programmer">Programmer</span></td>
+              <td><span class="member-grade">11th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:88%;"></div></div><span class="att-label">88%</span></div></td>
+              <td><strong>165</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c1">PN</div><span class="member-name">Priya Nair</span></div></td>
+              <td><span class="role-badge role-driver">Driver</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:72%;"></div></div><span class="att-label">72%</span></div></td>
+              <td><strong>148</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c4">AJ</div><span class="member-name">Aisha Jackson</span></div></td>
+              <td><span class="role-badge role-notebooker">Notebooker</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:94%;"></div></div><span class="att-label">94%</span></div></td>
+              <td><strong>155</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c6">NA</div><span class="member-name">Noel Ahmed</span></div></td>
+              <td><span class="role-badge role-builder">Builder</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-low" style="width:58%;"></div></div><span class="att-label">58%</span></div></td>
+              <td><strong>141</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caution-tape"></div>
+    </div>
+
+    <!-- 42D Roster -->
+    <div class="roster-panel" id="roster-42d">
+      <div class="roster-panel-header">
+        <div class="program-badge badge-iqrc" style="flex-shrink:0;">VIQRC</div>
+        <div class="roster-panel-title">
+          <h2>42D — Gear Grinders</h2>
+          <p>Active &nbsp;&bull;&nbsp; 3 members &nbsp;&bull;&nbsp; Skills: 95 &nbsp;&bull;&nbsp; Win Rate: 55%</p>
+        </div>
+        <div class="roster-panel-actions">
+          <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
+            <i data-lucide="trophy"></i> Assign to Competition
+          </button>
+          <button class="btn btn-yellow" onclick="openEditTeam('42D','VRC Robotics')">
+            <i data-lucide="pencil"></i> Edit Team
+          </button>
+          <button class="close-panel-btn" onclick="closeRoster('42d')">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="roster-table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Grade</th>
+              <th>Attendance</th>
+              <th>Skills Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c6">CP</div><span class="member-name">Cody Park</span></div></td>
+              <td><span class="role-badge role-captain">Captain</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:76%;"></div></div><span class="att-label">76%</span></div></td>
+              <td><strong>98</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c4">AJ</div><span class="member-name">Aisha Jackson</span></div></td>
+              <td><span class="role-badge role-programmer">Programmer</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:87%;"></div></div><span class="att-label">87%</span></div></td>
+              <td><strong>92</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c1">PN</div><span class="member-name">Priya Nair</span></div></td>
+              <td><span class="role-badge role-builder">Builder</span></td>
+              <td><span class="member-grade">10th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:64%;"></div></div><span class="att-label">64%</span></div></td>
+              <td><strong>95</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caution-tape"></div>
+    </div>
+
+    <!-- 42E Roster -->
+    <div class="roster-panel" id="roster-42e">
+      <div class="roster-panel-header">
+        <div class="program-badge badge-dev" style="flex-shrink:0;">Development</div>
+        <div class="roster-panel-title">
+          <h2>42E — Dev Squad</h2>
+          <p>In Training &nbsp;&bull;&nbsp; 4 members &nbsp;&bull;&nbsp; No competition data yet</p>
+        </div>
+        <div class="roster-panel-actions">
+          <button class="btn btn-outline" onclick="showTMToast('Team promoted to Competition Track')">
+            <i data-lucide="arrow-up-right"></i> Graduate to Competition
+          </button>
+          <button class="btn btn-yellow" onclick="openEditTeam('42E','Foundation')">
+            <i data-lucide="pencil"></i> Edit Team
+          </button>
+          <button class="close-panel-btn" onclick="closeRoster('42e')">
+            <i data-lucide="x" style="width:14px;height:14px;"></i>
+          </button>
+        </div>
+      </div>
+      <div class="roster-table-wrap">
+        <table class="roster-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th>Role</th>
+              <th>Grade</th>
+              <th>Attendance</th>
+              <th>Skills Score</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
+              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:70%;"></div></div><span class="att-label">70%</span></div></td>
+              <td><span style="color:var(--gray-2);">N/A</span></td>
+              <td><a class="action-link" href="#">Assign Name</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
+              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-low" style="width:55%;"></div></div><span class="att-label">55%</span></div></td>
+              <td><span style="color:var(--gray-2);">N/A</span></td>
+              <td><a class="action-link" href="#">Assign Name</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
+              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:78%;"></div></div><span class="att-label">78%</span></div></td>
+              <td><span style="color:var(--gray-2);">N/A</span></td>
+              <td><a class="action-link" href="#">Assign Name</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
+              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
+              <td><span class="member-grade">9th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:88%;"></div></div><span class="att-label">88%</span></div></td>
+              <td><span style="color:var(--gray-2);">N/A</span></td>
+              <td><a class="action-link" href="#">Assign Name</a></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="caution-tape"></div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+
+<!-- ════════ CREATE TEAM MODAL ════════ -->
+<div id="ct-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeCreateTeam(event)">
+  <div style="background:var(--white);border-radius:var(--radius);box-shadow:0 16px 48px rgba(0,0,0,.18);width:100%;max-width:440px;overflow:hidden;" onclick="event.stopPropagation()">
+    <div style="padding:18px 20px;border-bottom:1px solid var(--gray-3);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;">Create New Team</div>
+      <button onclick="closeCreateTeam()" style="background:none;border:none;cursor:pointer;color:var(--gray-1);display:flex;padding:4px;"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+    </div>
+    <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Team Number *</label>
+        <input id="ct-number" type="text" placeholder="e.g. 42F" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'"/>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Team Name *</label>
+        <input id="ct-name" type="text" placeholder="e.g. Lightning Bolts" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'"/>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Program</label>
+        <select id="ct-program" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;background:var(--white);">
+          <option value="vrc">V5RC (VRC)</option>
+          <option value="iqrc">VIQRC (IQ)</option>
+          <option value="dev">Development</option>
+        </select>
+      </div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--gray-3);display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-outline" onclick="closeCreateTeam()">Cancel</button>
+      <button class="btn btn-yellow" onclick="submitCreateTeam()"><i data-lucide="plus" style="width:13px;height:13px;"></i> Create Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- ════════ ADD MEMBER MODAL ════════ -->
+<div id="am-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeAddMemberModal(event)">
+  <div style="background:var(--white);border-radius:var(--radius);box-shadow:0 16px 48px rgba(0,0,0,.18);width:100%;max-width:400px;overflow:hidden;" onclick="event.stopPropagation()">
+    <div style="padding:18px 20px;border-bottom:1px solid var(--gray-3);display:flex;align-items:center;justify-content:space-between;">
+      <div style="font-size:15px;font-weight:800;">Add Member</div>
+      <button onclick="closeAddMemberModal()" style="background:none;border:none;cursor:pointer;color:var(--gray-1);display:flex;padding:4px;"><i data-lucide="x" style="width:16px;height:16px;"></i></button>
+    </div>
+    <div style="padding:18px 20px;display:flex;flex-direction:column;gap:14px;">
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Student</label>
+        <select id="am-student" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;background:var(--white);">
+          <option value="">Select a student…</option>
+          <option>Alex Rivera (42A)</option>
+          <option>Jamie Smith (42A)</option>
+          <option>Jordan Lee (42C)</option>
+          <option>Maya Lopez (42B)</option>
+          <option>Ryan Kim (42A)</option>
+          <option>Sofia Patel (42B)</option>
+          <option>Marcus Chen (42C)</option>
+          <option>Priya Nair (42D)</option>
+          <option>Ethan Brooks (42B)</option>
+          <option>Aisha Johnson (42D)</option>
+          <option>Tyler Wong (42A)</option>
+          <option>Lily Martinez (42C)</option>
+          <option>Dev Shah (42B)</option>
+          <option>Chloe Park (42D)</option>
+          <option>Noah Adams (Unassigned)</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Role</label>
+        <select id="am-role" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;background:var(--white);">
+          <option>Captain</option>
+          <option>Driver</option>
+          <option>Programmer</option>
+          <option>Builder</option>
+          <option>Notebooker</option>
+        </select>
+      </div>
+    </div>
+    <div style="padding:14px 20px;border-top:1px solid var(--gray-3);display:flex;gap:8px;justify-content:flex-end;">
+      <button class="btn btn-outline" onclick="closeAddMemberModal()">Cancel</button>
+      <button class="btn btn-yellow" onclick="submitAddMember()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Add Member</button>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div id="tm-toast" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--black);color:var(--white);padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.2);align-items:center;gap:8px;"></div>
+
+<!-- ════════════════════════════════════════════════════
+     JAVASCRIPT
+═════════════════════════════════════════════════════ -->
+<script>
+  lucide.createIcons();
+
+  // ── TAB FILTERING ──────────────────────────────────
+  function setTab(el, filter) {
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    el.classList.add('active');
+
+    const cards = document.querySelectorAll('#teamGrid > [data-program]');
+    cards.forEach(card => {
+      if (filter === 'all' || card.dataset.program === filter) {
+        card.style.display = '';
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    // Close any open roster panels when switching tabs
+    document.querySelectorAll('.roster-panel.open').forEach(p => p.classList.remove('open'));
+    document.querySelectorAll('.team-card.active-card').forEach(c => c.classList.remove('active-card'));
+  }
+
+  // ── ROSTER TOGGLE ──────────────────────────────────
+  let openRoster = null;
+
+  function toggleRoster(cardEl, teamId) {
+    const panel = document.getElementById('roster-' + teamId);
+    if (!panel) return;
+
+    if (openRoster === teamId) {
+      // Close current
+      panel.classList.remove('open');
+      cardEl.classList.remove('active-card');
+      openRoster = null;
+    } else {
+      // Close any open panel
+      if (openRoster) {
+        const prev = document.getElementById('roster-' + openRoster);
+        if (prev) prev.classList.remove('open');
+        document.querySelectorAll('.team-card.active-card').forEach(c => c.classList.remove('active-card'));
+      }
+      // Open new
+      panel.classList.add('open');
+      cardEl.classList.add('active-card');
+      openRoster = teamId;
+
+      // Scroll panel into view
+      setTimeout(() => {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }, 50);
+    }
+  }
+
+  function closeRoster(teamId) {
+    const panel = document.getElementById('roster-' + teamId);
+    if (panel) panel.classList.remove('open');
+    document.querySelectorAll('.team-card.active-card').forEach(c => c.classList.remove('active-card'));
+    openRoster = null;
+  }
+
+  // ── DROPDOWN MENUS ─────────────────────────────────
+  function toggleDropdown(event, id) {
+    event.stopPropagation();
+    const dd = document.getElementById(id);
+    const isOpen = dd.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+    if (!isOpen) dd.classList.add('open');
+  }
+
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.dropdown-menu.open').forEach(m => m.classList.remove('open'));
+  });
+
+  /* ── CREATE TEAM ─────────────────────────────── */
+  function openCreateTeam() {
+    document.getElementById('ct-backdrop').style.display = 'flex';
+    lucide.createIcons();
+    setTimeout(() => document.getElementById('ct-number').focus(), 50);
+  }
+  function closeCreateTeam(e) {
+    if (e && e.target !== document.getElementById('ct-backdrop')) return;
+    document.getElementById('ct-backdrop').style.display = 'none';
+  }
+  function submitCreateTeam() {
+    const num = document.getElementById('ct-number').value.trim();
+    const name = document.getElementById('ct-name').value.trim();
+    if (!num || !name) {
+      if (!num) { document.getElementById('ct-number').style.borderColor='#EF4444'; document.getElementById('ct-number').focus(); }
+      else { document.getElementById('ct-name').style.borderColor='#EF4444'; document.getElementById('ct-name').focus(); }
+      return;
+    }
+    document.getElementById('ct-backdrop').style.display = 'none';
+    document.getElementById('ct-number').value = '';
+    document.getElementById('ct-name').value = '';
+    showTMToast('Team ' + num + ' — ' + name + ' created');
+  }
+
+  /* ── ADD MEMBER ──────────────────────────────── */
+  function openAddMember(el) {
+    document.getElementById('am-backdrop').style.display = 'flex';
+    lucide.createIcons();
+  }
+  function closeAddMemberModal(e) {
+    if (e && e.target !== document.getElementById('am-backdrop')) return;
+    document.getElementById('am-backdrop').style.display = 'none';
+  }
+  function submitAddMember() {
+    const student = document.getElementById('am-student').value;
+    const role = document.getElementById('am-role').value;
+    if (!student) {
+      document.getElementById('am-student').style.borderColor = '#EF4444';
+      return;
+    }
+    document.getElementById('am-backdrop').style.display = 'none';
+    document.getElementById('am-student').value = '';
+    showTMToast(student.split('(')[0].trim() + ' added as ' + role);
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      document.getElementById('ct-backdrop').style.display = 'none';
+      document.getElementById('am-backdrop').style.display = 'none';
+      document.getElementById('et-backdrop').style.display = 'none';
+      document.getElementById('arc-backdrop').style.display = 'none';
+      document.getElementById('tf-backdrop').style.display = 'none';
+    }
+  });
+
+  /* ── EDIT TEAM ───────────────────────────────── */
+  function openEditTeam(num, program) {
+    document.getElementById('et-number').value = num;
+    document.getElementById('et-name').value = 'Team ' + num;
+    document.getElementById('et-program').value = program || 'VRC Robotics';
+    document.getElementById('et-backdrop').style.display = 'flex';
+    setTimeout(() => document.getElementById('et-name').focus(), 50);
+  }
+  function closeEditTeam(e) {
+    if (e && e.target !== document.getElementById('et-backdrop')) return;
+    document.getElementById('et-backdrop').style.display = 'none';
+  }
+  function submitEditTeam() {
+    const num  = document.getElementById('et-number').value.trim();
+    const name = document.getElementById('et-name').value.trim();
+    if (!num || !name) return;
+    document.getElementById('et-backdrop').style.display = 'none';
+    showTMToast('Team ' + num + ' updated');
+  }
+
+  /* ── ARCHIVE CONFIRM ─────────────────────────── */
+  function openArchiveConfirm(el) {
+    // try to find the team number from the nearest heading
+    const card = el.closest('.team-card') || el.closest('[class*="card"]') || el.closest('section');
+    const heading = card ? card.querySelector('h3, .team-number, [class*="num"]') : null;
+    const teamLabel = heading ? heading.textContent.trim() : 'this team';
+    document.getElementById('arc-team-label').textContent = teamLabel;
+    document.getElementById('arc-backdrop').style.display = 'flex';
+  }
+  function closeArchiveConfirm(e) {
+    if (e && e.target !== document.getElementById('arc-backdrop')) return;
+    document.getElementById('arc-backdrop').style.display = 'none';
+  }
+  function confirmArchive() {
+    const label = document.getElementById('arc-team-label').textContent;
+    document.getElementById('arc-backdrop').style.display = 'none';
+    showTMToast(label + ' archived');
+  }
+
+  /* ── TEAM FILTER ─────────────────────────────── */
+  function openTeamFilter() {
+    document.getElementById('tf-backdrop').style.display = 'flex';
+  }
+  function closeTeamFilter(e) {
+    if (e && e.target !== document.getElementById('tf-backdrop')) return;
+    document.getElementById('tf-backdrop').style.display = 'none';
+  }
+  function applyTeamFilter() {
+    const program = document.getElementById('tf-program').value;
+    const size    = document.getElementById('tf-size').value;
+    const status  = document.getElementById('tf-status').value;
+    document.getElementById('tf-backdrop').style.display = 'none';
+    let desc = [];
+    if (program) desc.push(program);
+    if (size)    desc.push(size + ' members');
+    if (status)  desc.push(status);
+    showTMToast(desc.length ? 'Filter: ' + desc.join(' · ') : 'Filters cleared');
+  }
+
+  /* ── TOAST ───────────────────────────────────── */
+  let tmToastTimer;
+  function showTMToast(msg) {
+    const t = document.getElementById('tm-toast');
+    t.style.display = 'flex';
+    t.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F5D000" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>&nbsp;' + msg;
+    clearTimeout(tmToastTimer);
+    tmToastTimer = setTimeout(() => { t.style.display = 'none'; }, 3200);
+  }
+</script>
+
+<!-- Edit Team Modal -->
+<div id="et-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeEditTeam(event)">
+  <div style="background:var(--white);border-radius:var(--radius);padding:28px;width:100%;max-width:420px;box-shadow:0 8px 32px rgba(0,0,0,.18);" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <span style="font-size:16px;font-weight:700;color:var(--black);">Edit Team</span>
+      <button onclick="document.getElementById('et-backdrop').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:14px;">
+      <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Team #</label>
+          <input id="et-number" type="text" placeholder="42A" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Team Name</label>
+          <input id="et-name" type="text" placeholder="Team 42A" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+        </div>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Program</label>
+        <select id="et-program" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);background:var(--white);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+          <option value="VRC Robotics">VRC Robotics</option>
+          <option value="VIQRC Junior">VIQRC Junior</option>
+          <option value="VRC Rookie">VRC Rookie</option>
+          <option value="Foundation">Foundation</option>
+          <option value="VEXU">VEXU</option>
+        </select>
+      </div>
+      <div>
+        <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Season</label>
+        <select id="et-season" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);background:var(--white);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+          <option value="2025-26">2025–26</option>
+          <option value="2024-25">2024–25</option>
+          <option value="2023-24">2023–24</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:24px;">
+      <button onclick="document.getElementById('et-backdrop').style.display='none'" style="padding:9px 18px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:var(--white);color:var(--black-3);font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="submitEditTeam()" style="padding:9px 18px;border:none;border-radius:var(--radius-sm);background:var(--yellow);color:var(--black);font-size:13px;font-weight:700;cursor:pointer;">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<!-- Archive Confirm Dialog -->
+<div id="arc-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeArchiveConfirm(event)">
+  <div style="background:var(--white);border-radius:var(--radius);padding:28px;width:100%;max-width:380px;box-shadow:0 8px 32px rgba(0,0,0,.18);text-align:center;" onclick="event.stopPropagation()">
+    <div style="width:48px;height:48px;background:#FEF2F2;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;">
+      <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"></polyline><rect x="1" y="3" width="22" height="5"></rect><line x1="10" y1="12" x2="14" y2="12"></line></svg>
+    </div>
+    <h3 style="font-size:16px;font-weight:700;color:var(--black);margin-bottom:8px;">Archive Team?</h3>
+    <p style="font-size:13px;color:var(--gray-1);margin-bottom:4px;">You are about to archive <strong id="arc-team-label">this team</strong>.</p>
+    <p style="font-size:12.5px;color:var(--gray-2);margin-bottom:24px;">The team will be hidden from active views but all data will be retained.</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button onclick="document.getElementById('arc-backdrop').style.display='none'" style="padding:9px 20px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:var(--white);color:var(--black-3);font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="confirmArchive()" style="padding:9px 20px;border:none;border-radius:var(--radius-sm);background:#EF4444;color:#fff;font-size:13px;font-weight:700;cursor:pointer;">Archive Team</button>
+    </div>
+  </div>
+</div>
+
+<!-- Team Filter Panel -->
+<div id="tf-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:flex-start;justify-content:flex-end;" onclick="closeTeamFilter(event)">
+  <div style="background:var(--white);height:100%;width:300px;padding:28px 24px;box-shadow:-4px 0 24px rgba(0,0,0,.14);display:flex;flex-direction:column;gap:20px;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;">
+      <span style="font-size:16px;font-weight:700;color:var(--black);">Filter Teams</span>
+      <button onclick="document.getElementById('tf-backdrop').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+    </div>
+    <div>
+      <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:6px;">Program</label>
+      <select id="tf-program" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:inherit;color:var(--black);background:var(--white);outline:none;">
+        <option value="">All Programs</option>
+        <option value="VRC Robotics">VRC Robotics</option>
+        <option value="VIQRC Junior">VIQRC Junior</option>
+        <option value="VRC Rookie">VRC Rookie</option>
+        <option value="Foundation">Foundation</option>
+      </select>
+    </div>
+    <div>
+      <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:6px;">Team Size</label>
+      <select id="tf-size" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:inherit;color:var(--black);background:var(--white);outline:none;">
+        <option value="">Any Size</option>
+        <option value="1-3">1–3 members</option>
+        <option value="4-6">4–6 members</option>
+        <option value="7+">7+ members</option>
+      </select>
+    </div>
+    <div>
+      <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:6px;">Status</label>
+      <select id="tf-status" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13px;font-family:inherit;color:var(--black);background:var(--white);outline:none;">
+        <option value="">All Statuses</option>
+        <option value="Active">Active</option>
+        <option value="Foundation">Foundation</option>
+        <option value="Archived">Archived</option>
+      </select>
+    </div>
+    <div style="margin-top:auto;display:flex;gap:10px;">
+      <button onclick="document.getElementById('tf-program').value='';document.getElementById('tf-size').value='';document.getElementById('tf-status').value='';" style="flex:1;padding:10px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:var(--white);color:var(--black-3);font-size:13px;font-weight:600;cursor:pointer;">Clear</button>
+      <button onclick="applyTeamFilter()" style="flex:1;padding:10px;border:none;border-radius:var(--radius-sm);background:var(--yellow);color:var(--black);font-size:13px;font-weight:700;cursor:pointer;">Apply Filter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Notification Panel -->
+<div id="notif-overlay" style="display:none;position:fixed;inset:0;z-index:600;" onclick="closeNotifPanel(event)">
+  <div id="notif-panel" style="position:absolute;top:0;right:0;width:340px;height:100%;background:var(--white);box-shadow:-4px 0 24px rgba(0,0,0,.14);display:flex;flex-direction:column;transform:translateX(100%);transition:transform .22s ease;" onclick="event.stopPropagation()">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:20px 20px 16px;border-bottom:1px solid var(--gray-3);">
+      <span style="font-size:15px;font-weight:700;color:var(--black);">Notifications</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <button onclick="markAllRead()" style="font-size:11px;font-weight:600;color:var(--gray-1);background:none;border:none;cursor:pointer;padding:4px 8px;border-radius:4px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background='none'">Mark all read</button>
+        <button onclick="closeNotifPanel(null)" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+      </div>
+    </div>
+    <div id="notif-list" style="flex:1;overflow-y:auto;padding:8px 0;"></div>
+    <div style="padding:14px 20px;border-top:1px solid var(--gray-3);">
+      <a href="#" style="font-size:12.5px;font-weight:600;color:var(--gray-1);text-decoration:none;">View all activity</a>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── NOTIFICATIONS ────────────────────────────────── */
+const NOTIFS = [
+  { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
+  { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
+  { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
+  { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
+  { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
+  { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
+];
+
+function renderNotifs() {
+  const list = document.getElementById('notif-list');
+  if (!list) return;
+  list.innerHTML = NOTIFS.map(n => `
+    <div style="display:flex;gap:12px;padding:12px 20px;cursor:pointer;background:${n.unread ? '#FAFAFA' : 'transparent'};border-left:3px solid ${n.unread ? 'var(--yellow)' : 'transparent'};transition:background .12s;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background='${n.unread ? '#FAFAFA' : 'transparent'}';" onclick="dismissNotif(${n.id},this)">
+      <div style="width:34px;height:34px;border-radius:50%;background:${n.color}22;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+        <i data-lucide="${n.icon}" style="width:15px;height:15px;color:${n.color};"></i>
+      </div>
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:13px;font-weight:${n.unread ? '700' : '500'};color:var(--black);margin-bottom:2px;">${n.title}</div>
+        <div style="font-size:12px;color:var(--gray-1);line-height:1.4;margin-bottom:4px;">${n.body}</div>
+        <div style="font-size:11px;color:var(--gray-2);">${n.time}</div>
+      </div>
+    </div>`).join('');
+  lucide.createIcons();
+}
+
+function dismissNotif(id, el) {
+  const idx = NOTIFS.findIndex(n => n.id === id);
+  if (idx > -1) { NOTIFS[idx].unread = false; }
+  el.style.borderLeftColor = 'transparent';
+  el.style.background = 'transparent';
+  el.querySelector('div[style*="font-weight"]').style.fontWeight = '500';
+  updateBadge();
+}
+
+function markAllRead() {
+  NOTIFS.forEach(n => n.unread = false);
+  renderNotifs();
+  updateBadge();
+}
+
+function updateBadge() {
+  const dot = document.querySelector('.notif-dot');
+  if (!dot) return;
+  dot.style.display = NOTIFS.some(n => n.unread) ? '' : 'none';
+}
+
+function openNotifPanel() {
+  const overlay = document.getElementById('notif-overlay');
+  const panel   = document.getElementById('notif-panel');
+  overlay.style.display = 'block';
+  renderNotifs();
+  setTimeout(() => { panel.style.transform = 'translateX(0)'; }, 10);
+}
+
+function closeNotifPanel(e) {
+  if (e && e.target !== document.getElementById('notif-overlay')) return;
+  const panel = document.getElementById('notif-panel');
+  panel.style.transform = 'translateX(100%)';
+  setTimeout(() => { document.getElementById('notif-overlay').style.display = 'none'; }, 230);
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeNotifPanel(null);
+});
+</script>
+
+</body>
+</html>
