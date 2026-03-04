@@ -122,13 +122,67 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| (To be filled during roadmap creation) | | |
+| AUTH-01 | Phase 1 | Pending |
+| AUTH-02 | Phase 1 | Pending |
+| AUTH-03 | Phase 1 | Pending |
+| AUTH-04 | Phase 1 | Pending |
+| DATA-01 | Phase 2 | Pending |
+| DATA-02 | Phase 2 | Pending |
+| DATA-03 | Phase 2 | Pending |
+| DATA-04 | Phase 2 | Pending |
+| DATA-05 | Phase 2 | Pending |
+| DATA-06 | Phase 2 | Pending |
+| DATA-07 | Phase 2 | Pending |
+| DATA-08 | Phase 2 | Pending |
+| DATA-09 | Phase 2 | Pending |
+| DATA-10 | Phase 2 | Pending |
+| ATTD-01 | Phase 3 | Pending |
+| ATTD-02 | Phase 3 | Pending |
+| ATTD-03 | Phase 3 | Pending |
+| ATTD-04 | Phase 3 | Pending |
+| ATTD-05 | Phase 3 | Pending |
+| ATTD-06 | Phase 3 | Pending |
+| ATTD-07 | Phase 3 | Pending |
+| SKIL-01 | Phase 3 | Pending |
+| SKIL-02 | Phase 3 | Pending |
+| SKIL-03 | Phase 3 | Pending |
+| SKIL-04 | Phase 3 | Pending |
+| SKIL-05 | Phase 3 | Pending |
+| SKIL-06 | Phase 3 | Pending |
+| SKIL-07 | Phase 3 | Pending |
+| SKIL-08 | Phase 3 | Pending |
+| SKIL-09 | Phase 3 | Pending |
+| SKIL-10 | Phase 3 | Pending |
+| NOTE-01 | Phase 3 | Pending |
+| NOTE-02 | Phase 3 | Pending |
+| NOTE-03 | Phase 3 | Pending |
+| NOTE-04 | Phase 3 | Pending |
+| NOTE-05 | Phase 3 | Pending |
+| NOTE-06 | Phase 3 | Pending |
+| NOTE-07 | Phase 3 | Pending |
+| NOTE-08 | Phase 3 | Pending |
+| NOTE-09 | Phase 3 | Pending |
+| CURR-01 | Phase 4 | Pending |
+| CURR-02 | Phase 4 | Pending |
+| CURR-03 | Phase 4 | Pending |
+| CURR-04 | Phase 4 | Pending |
+| CURR-05 | Phase 4 | Pending |
+| CURR-06 | Phase 4 | Pending |
+| CURR-07 | Phase 4 | Pending |
+| CURR-08 | Phase 4 | Pending |
+| STUD-01 | Phase 4 | Pending |
+| STUD-02 | Phase 4 | Pending |
+| STUD-03 | Phase 4 | Pending |
+| STUD-04 | Phase 4 | Pending |
+| STUD-05 | Phase 4 | Pending |
+| STUD-06 | Phase 4 | Pending |
+| STUD-07 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 52 total
-- Mapped to phases: (pending roadmap)
-- Unmapped: (pending roadmap)
+- Mapped to phases: 52 (100%)
+- Unmapped: 0
 
 ---
 *Requirements defined: 2025-03-04*
-*Last updated: 2025-03-04 after initial definition*
+*Last updated: 2026-03-04 after roadmap creation*
