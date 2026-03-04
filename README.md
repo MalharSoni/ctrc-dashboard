@@ -2,8 +2,9 @@
 
 Robotics club management dashboard for Caution Tape Robotics Club.
 
-## Live Site
+## Links
 
+**GitHub:** https://github.com/MalharSoni/ctrc-dashboard
 **Production:** https://ctrc-v5-manager.netlify.app/
 
 ## Quick Deploy
