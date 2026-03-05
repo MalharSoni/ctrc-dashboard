@@ -5,22 +5,15 @@ let prisma
 
 function getPrismaClient() {
   if (!prisma) {
-    const connectionString = process.env.DATABASE_URL
+    console.log('DATABASE_URL exists:', !!process.env.DATABASE_URL)
+    console.log('DATABASE_URL length:', process.env.DATABASE_URL ? process.env.DATABASE_URL.length : 0)
 
-    console.log('DATABASE_URL exists:', !!connectionString)
-    console.log('DATABASE_URL length:', connectionString ? connectionString.length : 0)
-
-    if (!connectionString) {
+    if (!process.env.DATABASE_URL) {
       throw new Error('DATABASE_URL environment variable is not set. Available env vars: ' + Object.keys(process.env).join(', '))
     }
 
-    // Use Prisma directly with Neon pooler URL - no adapter needed
+    // Prisma reads DATABASE_URL from env automatically via schema.prisma
     prisma = new PrismaClient({
-      datasources: {
-        db: {
-          url: connectionString
-        }
-      },
       log: ['error', 'warn']
     })
 
