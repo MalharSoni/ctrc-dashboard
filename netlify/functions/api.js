@@ -1,12 +1,28 @@
+const { Pool, neonConfig } = require('@neondatabase/serverless')
 const { PrismaClient } = require('@prisma/client')
+const { PrismaNeon } = require('@prisma/adapter-neon')
+const ws = require('ws')
+
+// Configure Neon for serverless (WebSocket polyfill)
+neonConfig.webSocketConstructor = ws
 
 // Singleton pattern for Prisma Client in serverless
 let prisma
 
 function getPrismaClient() {
   if (!prisma) {
+    const connectionString = process.env.DATABASE_URL
+
+    if (!connectionString) {
+      throw new Error('DATABASE_URL environment variable is not set')
+    }
+
+    const pool = new Pool({ connectionString })
+    const adapter = new PrismaNeon(pool)
+
     prisma = new PrismaClient({
-      log: ['error'],
+      adapter,
+      log: ['error']
     })
   }
   return prisma
