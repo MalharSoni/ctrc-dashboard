@@ -1,6 +1,16 @@
 const { PrismaClient } = require('@prisma/client')
 
-const prisma = new PrismaClient()
+// Singleton pattern for Prisma Client in serverless
+let prisma
+
+function getPrismaClient() {
+  if (!prisma) {
+    prisma = new PrismaClient({
+      log: ['error'],
+    })
+  }
+  return prisma
+}
 
 // Helper to send JSON response
 const respond = (statusCode, body) => ({
@@ -23,10 +33,45 @@ exports.handler = async (event) => {
   const path = event.path.replace('/.netlify/functions/api', '')
   const method = event.httpMethod
 
+  console.log('API Request:', method, path)
+
   try {
+    const db = getPrismaClient()
+
+    // GET /stats (dashboard stats)
+    if (path === '/stats' && method === 'GET') {
+      console.log('Fetching stats...')
+
+      const [totalStudents, activeTasks, activeTeams, overdueTasks] = await Promise.all([
+        db.student.count({ where: { active: true } }),
+        db.task.count({ where: { status: { notIn: ['COMPLETED'] } } }),
+        db.team.count({ where: { active: true } }),
+        db.task.count({
+          where: {
+            status: { notIn: ['COMPLETED'] },
+            dueDate: { lt: new Date() },
+          },
+        }),
+      ])
+
+      const stats = {
+        totalStudents,
+        activeTasks,
+        activeTeams,
+        overdueTasks,
+        attendance: 92, // Mock for now
+        meetings: 3, // Mock for now
+      }
+
+      console.log('Stats:', stats)
+      return respond(200, stats)
+    }
+
     // GET /students
     if (path === '/students' && method === 'GET') {
-      const students = await prisma.student.findMany({
+      console.log('Fetching students...')
+
+      const students = await db.student.findMany({
         where: { active: true },
         include: {
           teams: {
@@ -44,13 +89,17 @@ exports.handler = async (event) => {
         },
         orderBy: { lastName: 'asc' },
       })
+
+      console.log(`Found ${students.length} students`)
       return respond(200, students)
     }
 
     // GET /students/:id
     if (path.startsWith('/students/') && method === 'GET') {
       const id = path.split('/')[2]
-      const student = await prisma.student.findUnique({
+      console.log('Fetching student:', id)
+
+      const student = await db.student.findUnique({
         where: { id },
         include: {
           teams: {
@@ -70,12 +119,15 @@ exports.handler = async (event) => {
           },
         },
       })
+
       return respond(200, student)
     }
 
     // GET /tasks
     if (path === '/tasks' && method === 'GET') {
-      const tasks = await prisma.task.findMany({
+      console.log('Fetching tasks...')
+
+      const tasks = await db.task.findMany({
         where: {
           status: { notIn: ['COMPLETED'] },
         },
@@ -101,12 +153,16 @@ exports.handler = async (event) => {
         },
         orderBy: { dueDate: 'asc' },
       })
+
+      console.log(`Found ${tasks.length} tasks`)
       return respond(200, tasks)
     }
 
     // GET /teams
     if (path === '/teams' && method === 'GET') {
-      const teams = await prisma.team.findMany({
+      console.log('Fetching teams...')
+
+      const teams = await db.team.findMany({
         where: { active: true },
         include: {
           _count: {
@@ -125,39 +181,23 @@ exports.handler = async (event) => {
         },
         orderBy: { teamNumber: 'asc' },
       })
+
+      console.log(`Found ${teams.length} teams`)
       return respond(200, teams)
     }
 
-    // GET /stats (dashboard stats)
-    if (path === '/stats' && method === 'GET') {
-      const [totalStudents, activeTasks, activeTeams, overdueTasks] = await Promise.all([
-        prisma.student.count({ where: { active: true } }),
-        prisma.task.count({ where: { status: { notIn: ['COMPLETED'] } } }),
-        prisma.team.count({ where: { active: true } }),
-        prisma.task.count({
-          where: {
-            status: { notIn: ['COMPLETED'] },
-            dueDate: { lt: new Date() },
-          },
-        }),
-      ])
-
-      return respond(200, {
-        totalStudents,
-        activeTasks,
-        activeTeams,
-        overdueTasks,
-        attendance: 92, // Mock for now
-        meetings: 3, // Mock for now
-      })
-    }
-
     // Not found
-    return respond(404, { error: 'Not found' })
+    console.log('Route not found:', path)
+    return respond(404, { error: 'Not found', path })
+
   } catch (error) {
     console.error('API Error:', error)
-    return respond(500, { error: error.message })
-  } finally {
-    await prisma.$disconnect()
+    return respond(500, {
+      error: error.message,
+      stack: process.env.NODE_ENV === 'development' ? error.stack : undefined,
+      path,
+      method
+    })
   }
+  // Don't disconnect in serverless - reuse connection
 }
