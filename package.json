@@ -4,6 +4,7 @@
   "description": "Robotics club management dashboard for Caution Tape Robotics Club.",
   "main": "index.js",
   "scripts": {
+    "build": "prisma generate",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
