@@ -442,10 +442,10 @@
         <span class="chip-label">Team</span>
         <select id="filter-team" onchange="applyFilters()">
           <option value="">All Teams</option>
-          <option value="42A">42A — Iron Gears</option>
-          <option value="42B">42B — Cyber Knights</option>
-          <option value="42C">42C — Robo Wizards</option>
-          <option value="42D">42D — Gear Grinders</option>
+          <option value="839Z">839Z — V5RC Team 1</option>
+          <option value="839Y">839Y — V5RC Team 2</option>
+          <option value="839X">839X — V5RC Team 3</option>
+          <option value="Foundation">Foundation Program</option>
           <option value="none">No Team</option>
         </select>
         <i data-lucide="chevron-down" style="width:12px;height:12px;"></i>
@@ -456,7 +456,8 @@
         <select id="filter-program" onchange="applyFilters()">
           <option value="">All Programs</option>
           <option value="V5RC">V5RC</option>
-          <option value="VIQRC">VIQRC</option>
+          <option value="Foundation">Foundation</option>
+          <option value="EV">EV Team</option>
         </select>
         <i data-lucide="chevron-down" style="width:12px;height:12px;"></i>
       </div>
@@ -578,40 +579,37 @@ lucide.createIcons();
 
 // ── DATA ────────────────────────────────────────────
 const STUDENTS = [
-  { id:1,  name:'Daniel Edelstein', email:'daniel.edelstein@ctrc.club', initials:'DE', color:'#DBEAFE', textColor:'#1D4ED8', team:'42A', program:'V5RC',  role:'Captain',     attendance:92, trend:'up',   skillLevel:'Lvl 4', skillPct:75, badges:5, status:'Active',   lastSeen:'Today',       grade:12 },
-  { id:2,  name:'Matt Fong',        email:'matt.fong@ctrc.club',        initials:'MF', color:'#D1FAE5', textColor:'#065F46', team:'42A', program:'V5RC',  role:'Programmer',  attendance:88, trend:'up',   skillLevel:'Lvl 3', skillPct:65, badges:4, status:'Active',   lastSeen:'Yesterday',   grade:10 },
-  { id:3,  name:'Daniel Fu',        email:'daniel.fu@ctrc.club',        initials:'DF', color:'#EDE9FE', textColor:'#5B21B6', team:'42B', program:'V5RC',  role:'Builder',     attendance:90, trend:'up',   skillLevel:'Lvl 4', skillPct:70, badges:4, status:'Active',   lastSeen:'Today',       grade:11 },
-  { id:4,  name:'Luke Fu',          email:'luke.fu@ctrc.club',          initials:'LF', color:'#FEF3C7', textColor:'#92400E', team:'42C', program:'VIQRC', role:'Driver',      attendance:85, trend:'flat', skillLevel:'Lvl 2', skillPct:45, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:8  },
-  { id:5,  name:'Ryan Jung',        email:'ryan.jung@ctrc.club',        initials:'RJ', color:'#FCE7F3', textColor:'#9D174D', team:'42A', program:'V5RC',  role:'Programmer',  attendance:91, trend:'up',   skillLevel:'Lvl 3', skillPct:60, badges:3, status:'Active',   lastSeen:'Today',       grade:11 },
-  { id:6,  name:'Bryan Kuan',       email:'bryan.kuan@ctrc.club',       initials:'BK', color:'#ECFDF5', textColor:'#065F46', team:'42B', program:'V5RC',  role:'Builder',     attendance:87, trend:'flat', skillLevel:'Lvl 3', skillPct:55, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:10 },
-  { id:7,  name:'Alessio Lai',      email:'alessio.lai@ctrc.club',      initials:'AL', color:'#FFF7ED', textColor:'#9A3412', team:'42C', program:'VIQRC', role:'Driver',      attendance:83, trend:'up',   skillLevel:'Lvl 2', skillPct:50, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:9  },
-  { id:8,  name:'Cyrus Liu',        email:'cyrus.liu@ctrc.club',        initials:'CL', color:'#F0FDF4', textColor:'#15803D', team:'42D', program:'VIQRC', role:'Builder',     attendance:80, trend:'flat', skillLevel:'Lvl 2', skillPct:40, badges:1, status:'Active',   lastSeen:'3 days ago',  grade:8  },
-  { id:9,  name:'Cici Ma',          email:'cici.ma@ctrc.club',          initials:'CM', color:'#FDF4FF', textColor:'#7E22CE', team:'42D', program:'VIQRC', role:'Notebooker',  attendance:89, trend:'up',   skillLevel:'Lvl 2', skillPct:48, badges:2, status:'Active',   lastSeen:'Yesterday',   grade:7  },
-  { id:10, name:'Zuhaib Mansoor',   email:'zuhaib.mansoor@ctrc.club',   initials:'ZM', color:'#EFF6FF', textColor:'#1D4ED8', team:'42A', program:'V5RC',  role:'Builder',     attendance:86, trend:'flat', skillLevel:'Lvl 3', skillPct:58, badges:3, status:'Active',   lastSeen:'Today',       grade:11 },
-  { id:11, name:'Eli Mindell',      email:'eli.mindell@ctrc.club',      initials:'EM', color:'#FDF2F8', textColor:'#9D174D', team:'42B', program:'V5RC',  role:'Programmer',  attendance:93, trend:'up',   skillLevel:'Lvl 4', skillPct:72, badges:5, status:'Active',   lastSeen:'Today',       grade:11 },
-  { id:12, name:'Steven Papazian',  email:'steven.papazian@ctrc.club',  initials:'SP', color:'#FFFBEB', textColor:'#92400E', team:'42A', program:'V5RC',  role:'Driver',      attendance:95, trend:'up',   skillLevel:'Lvl 5', skillPct:85, badges:6, status:'Active',   lastSeen:'Today',       grade:12 },
-  { id:13, name:'Brialyn Quast',    email:'brialyn.quast@ctrc.club',    initials:'BQ', color:'#F0FDFA', textColor:'#0F766E', team:'42B', program:'V5RC',  role:'Notebooker',  attendance:97, trend:'up',   skillLevel:'Lvl 5', skillPct:90, badges:7, status:'Active',   lastSeen:'Today',       grade:12 },
-  { id:14, name:'Keegan Ramsaran',  email:'keegan.ramsaran@ctrc.club',  initials:'KR', color:'#FEE2E2', textColor:'#991B1B', team:'42C', program:'VIQRC', role:'Builder',     attendance:78, trend:'down', skillLevel:'Lvl 1', skillPct:35, badges:1, status:'At Risk',   lastSeen:'5 days ago',  grade:8  },
-  { id:15, name:'Kiara Ramsaran',   email:'kiara.ramsaran@ctrc.club',   initials:'KI', color:'#FCE7F3', textColor:'#9D174D', team:'42C', program:'VIQRC', role:'Captain',     attendance:91, trend:'up',   skillLevel:'Lvl 4', skillPct:68, badges:4, status:'Active',   lastSeen:'Yesterday',   grade:11 },
-  { id:16, name:'Justin Rui',       email:'justin.rui@ctrc.club',       initials:'JR', color:'#DBEAFE', textColor:'#1D4ED8', team:'42A', program:'V5RC',  role:'Builder',     attendance:89, trend:'flat', skillLevel:'Lvl 3', skillPct:62, badges:3, status:'Active',   lastSeen:'2 days ago',  grade:11 },
-  { id:17, name:'Brandon Situ',     email:'brandon.situ@ctrc.club',     initials:'BS', color:'#D1FAE5', textColor:'#065F46', team:'42B', program:'V5RC',  role:'Driver',      attendance:94, trend:'up',   skillLevel:'Lvl 4', skillPct:78, badges:5, status:'Active',   lastSeen:'Today',       grade:12 },
-  { id:18, name:'Caden Situ',       email:'caden.situ@ctrc.club',       initials:'CS', color:'#EDE9FE', textColor:'#5B21B6', team:'42B', program:'V5RC',  role:'Programmer',  attendance:94, trend:'up',   skillLevel:'Lvl 4', skillPct:76, badges:5, status:'Active',   lastSeen:'Today',       grade:12 },
-  { id:19, name:'Brayden Sun',      email:'brayden.sun@ctrc.club',      initials:'BU', color:'#FEF3C7', textColor:'#92400E', team:'42D', program:'VIQRC', role:'Driver',      attendance:82, trend:'flat', skillLevel:'Lvl 2', skillPct:42, badges:2, status:'Active',   lastSeen:'3 days ago',  grade:8  },
-  { id:20, name:'Nathan Tam',       email:'nathan.tam@ctrc.club',       initials:'NT', color:'#ECFDF5', textColor:'#065F46', team:'42A', program:'V5RC',  role:'Notebooker',  attendance:86, trend:'up',   skillLevel:'Lvl 3', skillPct:54, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:10 },
-  { id:21, name:'Elyse To',         email:'elyse.to@ctrc.club',         initials:'ET', color:'#FFF7ED', textColor:'#9A3412', team:'42C', program:'VIQRC', role:'Notebooker',  attendance:88, trend:'up',   skillLevel:'Lvl 2', skillPct:52, badges:2, status:'Active',   lastSeen:'Yesterday',   grade:9  },
-  { id:22, name:'Allen Wang',       email:'allen.wang@ctrc.club',       initials:'AW', color:'#F0FDF4', textColor:'#15803D', team:'42D', program:'VIQRC', role:'Builder',     attendance:79, trend:'flat', skillLevel:'Lvl 2', skillPct:38, badges:1, status:'Active',   lastSeen:'4 days ago',  grade:8  },
-  { id:23, name:'Jovan Wang',       email:'jovan.wang@ctrc.club',       initials:'JW', color:'#FDF4FF', textColor:'#7E22CE', team:'42B', program:'V5RC',  role:'Builder',     attendance:90, trend:'up',   skillLevel:'Lvl 3', skillPct:64, badges:4, status:'Active',   lastSeen:'Today',       grade:11 },
-  { id:24, name:'Isaac Wong',       email:'isaac.wong@ctrc.club',       initials:'IW', color:'#EFF6FF', textColor:'#1D4ED8', team:'42A', program:'V5RC',  role:'Programmer',  attendance:92, trend:'up',   skillLevel:'Lvl 4', skillPct:74, badges:4, status:'Active',   lastSeen:'Today',       grade:12 },
-  { id:25, name:'Kylie Woo',        email:'kylie.woo@ctrc.club',        initials:'KW', color:'#FDF2F8', textColor:'#9D174D', team:'42C', program:'VIQRC', role:'Builder',     attendance:84, trend:'flat', skillLevel:'Lvl 2', skillPct:46, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:9  },
-  { id:26, name:'Jayden Yang',      email:'jayden.yang@ctrc.club',      initials:'JY', color:'#FFFBEB', textColor:'#92400E', team:'42B', program:'V5RC',  role:'Builder',     attendance:87, trend:'up',   skillLevel:'Lvl 3', skillPct:56, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:10 },
-  { id:27, name:'Thomas Yang',      email:'thomas.yang@ctrc.club',      initials:'TY', color:'#F0FDFA', textColor:'#0F766E', team:'42D', program:'VIQRC', role:'Programmer',  attendance:85, trend:'flat', skillLevel:'Lvl 2', skillPct:50, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:10 },
-  { id:28, name:'Jake Yeung',       email:'jake.yeung@ctrc.club',       initials:'JE', color:'#FEE2E2', textColor:'#991B1B', team:'42C', program:'VIQRC', role:'Driver',      attendance:81, trend:'flat', skillLevel:'Lvl 2', skillPct:44, badges:2, status:'Active',   lastSeen:'3 days ago',  grade:9  },
-  { id:29, name:'Tobias Yeung',    email:'tobias.yeung@ctrc.club',     initials:'TYE', color:'#FCE7F3', textColor:'#9D174D', team:'42D', program:'VIQRC', role:'Builder',     attendance:83, trend:'up',   skillLevel:'Lvl 2', skillPct:48, badges:2, status:'Active',   lastSeen:'Yesterday',   grade:9  },
-  { id:30, name:'Tiger Zhang',      email:'tiger.zhang@ctrc.club',      initials:'TZ', color:'#DBEAFE', textColor:'#1D4ED8', team:'42A', program:'V5RC',  role:'Builder',     attendance:88, trend:'flat', skillLevel:'Lvl 3', skillPct:60, badges:3, status:'Active',   lastSeen:'2 days ago',  grade:10 },
-  { id:31, name:'Brandon Zhao',     email:'brandon.zhao@ctrc.club',     initials:'BZ', color:'#D1FAE5', textColor:'#065F46', team:'42C', program:'VIQRC', role:'Programmer',  attendance:86, trend:'up',   skillLevel:'Lvl 3', skillPct:58, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:9  },
-  { id:32, name:'Yichen Zheng',     email:'yichen.zheng@ctrc.club',     initials:'YZ', color:'#EDE9FE', textColor:'#5B21B6', team:'42B', program:'V5RC',  role:'Notebooker',  attendance:89, trend:'up',   skillLevel:'Lvl 3', skillPct:62, badges:3, status:'Active',   lastSeen:'Today',       grade:9  },
-  { id:33, name:'Spencer Tam',      email:'spencer.tam@ctrc.club',      initials:'ST', color:'#F8FAFC', textColor:'#334155', team:null,  program:null,    role:'Builder',     attendance:0,  trend:'flat', skillLevel:'Lvl 1', skillPct:0,  badges:0, status:'Pending',  lastSeen:'Not started', grade:8  },
-  { id:34, name:'Leo Wu',           email:'leo.wu@ctrc.club',           initials:'LW', color:'#F8FAFC', textColor:'#334155', team:null,  program:null,    role:'Builder',     attendance:0,  trend:'flat', skillLevel:'Lvl 1', skillPct:0,  badges:0, status:'Pending',  lastSeen:'Not started', grade:8  },
+  { id:1,  name:'Daniel Edelstein', email:'daniel.edelstein@ctrc.club', initials:'DE', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Captain',     attendance:92, trend:'up',   skillLevel:'Lvl 4', skillPct:75, badges:5, status:'Active',   lastSeen:'Today',       grade:12 },
+  { id:2,  name:'Daniel Fu',        email:'daniel.fu@ctrc.club',        initials:'DF', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:90, trend:'up',   skillLevel:'Lvl 4', skillPct:70, badges:4, status:'Active',   lastSeen:'Today',       grade:11 },
+  { id:3,  name:'Luke Fu',          email:'luke.fu@ctrc.club',          initials:'LF', color:'#FEF3C7', textColor:'#92400E', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:85, trend:'flat', skillLevel:'Lvl 2', skillPct:45, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:8  },
+  { id:4,  name:'Ryan Jung',        email:'ryan.jung@ctrc.club',        initials:'RJ', color:'#FCE7F3', textColor:'#9D174D', team:'839Z', evTeam:false, program:'V5RC', role:'Programmer',  attendance:91, trend:'up',   skillLevel:'Lvl 3', skillPct:60, badges:3, status:'Active',   lastSeen:'Today',       grade:11 },
+  { id:5,  name:'Bryan Kuan',       email:'bryan.kuan@ctrc.club',       initials:'BK', color:'#ECFDF5', textColor:'#065F46', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:87, trend:'flat', skillLevel:'Lvl 3', skillPct:55, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:10 },
+  { id:6,  name:'Alessio Lai',      email:'alessio.lai@ctrc.club',      initials:'AL', color:'#FFF7ED', textColor:'#9A3412', team:'839Y', evTeam:false, program:'V5RC', role:'Driver',      attendance:83, trend:'up',   skillLevel:'Lvl 2', skillPct:50, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:9  },
+  { id:7,  name:'Cyrus Liu',        email:'cyrus.liu@ctrc.club',        initials:'CL', color:'#F0FDF4', textColor:'#15803D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:80, trend:'flat', skillLevel:'Lvl 2', skillPct:40, badges:1, status:'Active',   lastSeen:'3 days ago',  grade:8  },
+  { id:8,  name:'Cici Ma',          email:'cici.ma@ctrc.club',          initials:'CM', color:'#FDF4FF', textColor:'#7E22CE', team:'839X', evTeam:false, program:'V5RC', role:'Notebooker',  attendance:89, trend:'up',   skillLevel:'Lvl 2', skillPct:48, badges:2, status:'Active',   lastSeen:'Yesterday',   grade:7  },
+  { id:9,  name:'Zuhaib Mansoor',   email:'zuhaib.mansoor@ctrc.club',   initials:'ZM', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:86, trend:'flat', skillLevel:'Lvl 3', skillPct:58, badges:3, status:'Active',   lastSeen:'Today',       grade:11 },
+  { id:10, name:'Eli Mindell',      email:'eli.mindell@ctrc.club',      initials:'EM', color:'#FDF2F8', textColor:'#9D174D', team:'839Z', evTeam:true,  program:'V5RC', role:'Programmer',  attendance:93, trend:'up',   skillLevel:'Lvl 4', skillPct:72, badges:5, status:'Active',   lastSeen:'Today',       grade:11 },
+  { id:11, name:'Steven Papazian',  email:'steven.papazian@ctrc.club',  initials:'SP', color:'#FFFBEB', textColor:'#92400E', team:'839Z', evTeam:true,  program:'V5RC', role:'Driver',      attendance:95, trend:'up',   skillLevel:'Lvl 5', skillPct:85, badges:6, status:'Active',   lastSeen:'Today',       grade:12 },
+  { id:12, name:'Brialyn Quast',    email:'brialyn.quast@ctrc.club',    initials:'BQ', color:'#F0FDFA', textColor:'#0F766E', team:'839Z', evTeam:true,  program:'V5RC', role:'Notebooker',  attendance:97, trend:'up',   skillLevel:'Lvl 5', skillPct:90, badges:7, status:'Active',   lastSeen:'Today',       grade:12 },
+  { id:13, name:'Keegan Ramsaran',  email:'keegan.ramsaran@ctrc.club',  initials:'KR', color:'#FEE2E2', textColor:'#991B1B', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:78, trend:'down', skillLevel:'Lvl 1', skillPct:35, badges:1, status:'At Risk',   lastSeen:'5 days ago',  grade:8  },
+  { id:14, name:'Kiara Ramsaran',   email:'kiara.ramsaran@ctrc.club',   initials:'KI', color:'#FCE7F3', textColor:'#9D174D', team:null,   evTeam:true,  program:'EV',   role:'Builder',     attendance:91, trend:'up',   skillLevel:'Lvl 4', skillPct:68, badges:4, status:'Active',   lastSeen:'Yesterday',   grade:11 },
+  { id:15, name:'Justin Rui',       email:'justin.rui@ctrc.club',       initials:'JR', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:89, trend:'flat', skillLevel:'Lvl 3', skillPct:62, badges:3, status:'Active',   lastSeen:'2 days ago',  grade:11 },
+  { id:16, name:'Brandon Situ',     email:'brandon.situ@ctrc.club',     initials:'BS', color:'#D1FAE5', textColor:'#065F46', team:'839Z', evTeam:false, program:'V5RC', role:'Driver',      attendance:94, trend:'up',   skillLevel:'Lvl 4', skillPct:78, badges:5, status:'Active',   lastSeen:'Today',       grade:12 },
+  { id:17, name:'Caden Situ',       email:'caden.situ@ctrc.club',       initials:'CS', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', evTeam:false, program:'V5RC', role:'Programmer',  attendance:94, trend:'up',   skillLevel:'Lvl 4', skillPct:76, badges:5, status:'Active',   lastSeen:'Today',       grade:12 },
+  { id:18, name:'Brayden Sun',      email:'brayden.sun@ctrc.club',      initials:'BU', color:'#FEF3C7', textColor:'#92400E', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:82, trend:'flat', skillLevel:'Lvl 2', skillPct:42, badges:2, status:'Active',   lastSeen:'3 days ago',  grade:8  },
+  { id:19, name:'Nathan Tam',       email:'nathan.tam@ctrc.club',       initials:'NT', color:'#ECFDF5', textColor:'#065F46', team:'839Z', evTeam:false, program:'V5RC', role:'Notebooker',  attendance:86, trend:'up',   skillLevel:'Lvl 3', skillPct:54, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:10 },
+  { id:20, name:'Elyse To',         email:'elyse.to@ctrc.club',         initials:'ET', color:'#FFF7ED', textColor:'#9A3412', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:88, trend:'up',   skillLevel:'Lvl 2', skillPct:52, badges:2, status:'Active',   lastSeen:'Yesterday',   grade:9  },
+  { id:21, name:'Allen Wang',       email:'allen.wang@ctrc.club',       initials:'AW', color:'#F0FDF4', textColor:'#15803D', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',     attendance:79, trend:'flat', skillLevel:'Lvl 2', skillPct:38, badges:1, status:'Active',   lastSeen:'4 days ago',  grade:8  },
+  { id:22, name:'Jovan Wang',       email:'jovan.wang@ctrc.club',       initials:'JW', color:'#FDF4FF', textColor:'#7E22CE', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',     attendance:90, trend:'up',   skillLevel:'Lvl 3', skillPct:64, badges:4, status:'Active',   lastSeen:'Today',       grade:11 },
+  { id:23, name:'Isaac Wong',       email:'isaac.wong@ctrc.club',       initials:'IW', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Programmer',  attendance:92, trend:'up',   skillLevel:'Lvl 4', skillPct:74, badges:4, status:'Active',   lastSeen:'Today',       grade:12 },
+  { id:24, name:'Kylie Woo',        email:'kylie.woo@ctrc.club',        initials:'KW', color:'#FDF2F8', textColor:'#9D174D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:84, trend:'flat', skillLevel:'Lvl 2', skillPct:46, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:9  },
+  { id:25, name:'Jayden Yang',      email:'jayden.yang@ctrc.club',      initials:'JY', color:'#FFFBEB', textColor:'#92400E', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:87, trend:'up',   skillLevel:'Lvl 3', skillPct:56, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:10 },
+  { id:26, name:'Thomas Yang',      email:'thomas.yang@ctrc.club',      initials:'TY', color:'#F0FDFA', textColor:'#0F766E', team:'Foundation', evTeam:false, program:'Foundation', role:'Student', attendance:85, trend:'flat', skillLevel:'Lvl 2', skillPct:50, badges:2, status:'Active',   lastSeen:'2 days ago',  grade:10 },
+  { id:27, name:'Jake Yeung',       email:'jake.yeung@ctrc.club',       initials:'JE', color:'#FEE2E2', textColor:'#991B1B', team:'839X', evTeam:false, program:'V5RC', role:'Driver',      attendance:81, trend:'flat', skillLevel:'Lvl 2', skillPct:44, badges:2, status:'Active',   lastSeen:'3 days ago',  grade:9  },
+  { id:28, name:'Tobias Yeung',    email:'tobias.yeung@ctrc.club',     initials:'TYE', color:'#FCE7F3', textColor:'#9D174D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:83, trend:'up',   skillLevel:'Lvl 2', skillPct:48, badges:2, status:'Active',   lastSeen:'Yesterday',   grade:9  },
+  { id:29, name:'Tiger Zhang',      email:'tiger.zhang@ctrc.club',      initials:'TZ', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',     attendance:88, trend:'flat', skillLevel:'Lvl 3', skillPct:60, badges:3, status:'Active',   lastSeen:'2 days ago',  grade:10 },
+  { id:30, name:'Brandon Zhao',     email:'brandon.zhao@ctrc.club',     initials:'BZ', color:'#D1FAE5', textColor:'#065F46', team:'839Y', evTeam:true,  program:'V5RC', role:'Programmer',  attendance:86, trend:'up',   skillLevel:'Lvl 3', skillPct:58, badges:3, status:'Active',   lastSeen:'Yesterday',   grade:9  },
+  { id:31, name:'Yichen Zheng',     email:'yichen.zheng@ctrc.club',     initials:'YZ', color:'#EDE9FE', textColor:'#5B21B6', team:'839Y', evTeam:false, program:'V5RC', role:'Notebooker',  attendance:89, trend:'up',   skillLevel:'Lvl 3', skillPct:62, badges:3, status:'Active',   lastSeen:'Today',       grade:9  },
 ];
 
 // ── STATE ────────────────────────────────────────────
@@ -641,9 +639,19 @@ function renderTable() {
     const ac = attClass(s.attendance);
     const apc = attPctClass(s.attendance);
     const trendIcon = s.trend === 'up' ? '<span class="att-trend trend-up">↑</span>' : s.trend === 'down' ? '<span class="att-trend trend-down">↓</span>' : '<span class="att-trend trend-flat">–</span>';
-    const teamPill = s.team
-      ? `<span class="team-pill ${s.program === 'V5RC' ? 'v5rc' : 'viqrc'}">${s.team}</span>`
-      : `<span class="team-pill none">Unassigned</span>`;
+    let teamPill = '';
+    if (s.team === 'Foundation') {
+      teamPill = `<span class="team-pill" style="background:#FFFBEB;color:#92700A;">Foundation</span>`;
+    } else if (s.team) {
+      teamPill = `<span class="team-pill v5rc">${s.team}</span>`;
+      if (s.evTeam) {
+        teamPill += ` <span class="team-pill" style="background:#F0FDF4;color:#15803D;margin-left:4px;">EV</span>`;
+      }
+    } else if (s.evTeam) {
+      teamPill = `<span class="team-pill" style="background:#F0FDF4;color:#15803D;">EV Only</span>`;
+    } else {
+      teamPill = `<span class="team-pill none">Unassigned</span>`;
+    }
     const statusBadge = s.status === 'Active'
       ? '<span class="badge badge-green">Active</span>'
       : s.status === 'At Risk'
@@ -714,7 +722,7 @@ function renderGrid() {
           <div style="font-size:11.5px;color:var(--gray-1);">${s.role} · Gr. ${s.grade}</div>
         </div>
       </div>
-      ${s.team ? `<div style="margin-bottom:10px;"><span class="team-pill ${s.program === 'V5RC' ? 'v5rc' : 'viqrc'}">${s.team} · ${s.program}</span></div>` : ''}
+      ${s.team || s.evTeam ? `<div style="margin-bottom:10px;">${s.team === 'Foundation' ? `<span class="team-pill" style="background:#FFFBEB;color:#92700A;">Foundation</span>` : s.team ? `<span class="team-pill v5rc">${s.team}</span>${s.evTeam ? ` <span class="team-pill" style="background:#F0FDF4;color:#15803D;margin-left:4px;font-size:10px;">EV</span>` : ''}` : s.evTeam ? `<span class="team-pill" style="background:#F0FDF4;color:#15803D;">EV Only</span>` : ''}</div>` : ''}
       <div style="display:flex;justify-content:space-between;font-size:11.5px;color:var(--gray-1);margin-bottom:6px;">
         <span>Attendance</span>
         <span class="${apc}" style="font-weight:700;">${s.attendance}%</span>
@@ -988,19 +996,19 @@ function showStuToast(msg) {
           <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Team</label>
           <select id="as-team" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);background:var(--white);outline:none;">
             <option value="">Unassigned</option>
-            <option value="42A">Team 42A</option>
-            <option value="42B">Team 42B</option>
-            <option value="42C">Team 42C</option>
-            <option value="42D">Team 42D</option>
+            <option value="839Z">Team 839Z</option>
+            <option value="839Y">Team 839Y</option>
+            <option value="839X">Team 839X</option>
+            <option value="Foundation">Foundation</option>
           </select>
         </div>
       </div>
       <div>
         <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Program</label>
         <select id="as-program" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);background:var(--white);outline:none;">
-          <option value="VRC Robotics">VRC Robotics</option>
-          <option value="VIQRC Junior">VIQRC Junior</option>
+          <option value="V5RC">V5RC</option>
           <option value="Foundation">Foundation</option>
+          <option value="EV">EV Team</option>
         </select>
       </div>
     </div>

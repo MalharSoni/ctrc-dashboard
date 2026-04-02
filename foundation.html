@@ -316,7 +316,7 @@
       <div class="stat-card accent-black">
         <div class="stat-icon"><i data-lucide="users" style="width:15px;height:15px;"></i></div>
         <div class="stat-label">Enrolled</div>
-        <div class="stat-value">10</div>
+        <div class="stat-value">7</div>
         <div class="stat-meta">Active this cohort</div>
       </div>
       <div class="stat-card accent-yellow">
@@ -334,7 +334,7 @@
       <div class="stat-card accent-red">
         <div class="stat-icon"><i data-lucide="clock" style="width:15px;height:15px;"></i></div>
         <div class="stat-label">Stalled</div>
-        <div class="stat-value" style="color:#DC2626;">3</div>
+        <div class="stat-value" style="color:#DC2626;">1</div>
         <div class="stat-meta">No progress in 14+ days</div>
       </div>
     </div>
@@ -425,23 +425,7 @@ const STUDENTS = [
     photos:3,
     notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Excellent effort on drive base. Staying late to fix gear mesh.'}]
   },
-  { id:2,  name:'Cyrus Liu',      email:'cyrus.liu@ctrc.club',      initials:'CL', bg:'#D1FAE5', tc:'#065F46',
-    week:6, pct:95, status:'Excellent',       lastSeen:'Today',      stalled:false,
-    weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15',null,null],
-    attendance:[1,1,1,1,1,1,0,0],
-    scores:[{w:1,s:10,n:'Outstanding'},{w:2,s:9,n:'Fast learner'},{w:3,s:10,n:'Best code in class'},{w:4,s:9,n:'Accurate'},{w:5,s:10,n:'Perfect CAD'},{w:6,s:9,n:'Leading the session'}],
-    photos:4,
-    notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Top student this cohort. Recommend promoting to competition team after graduation.'}]
-  },
-  { id:3,  name:'Cici Ma',        email:'cici.ma@ctrc.club',        initials:'CM', bg:'#FCE7F3', tc:'#9D174D',
-    week:5, pct:72, status:'Needs Attention', lastSeen:'1 week ago', stalled:true,
-    weekDates:['Jan 11',null,'Jan 25','Feb 1','Feb 8',null,null,null],
-    attendance:[1,0,1,1,1,0,0,0],
-    scores:[{w:1,s:7,n:'Slow start'},{w:2,s:7,n:'Needs practice'},{w:3,s:6,n:'Struggled with loops'},{w:4,s:8,n:'Improved'},{w:5,s:7,n:'Drive base needs rework'}],
-    photos:1,
-    notes:[{i:'MS',a:'Soni',t:'Feb 10',txt:'Cici needs extra support with programming. Schedule one-on-one before Week 7.'},{i:'EY',a:'Yu',t:'Feb 3',txt:'Missed Week 2 — catch-up materials sent.'}]
-  },
-  { id:4,  name:'Brayden Sun',    email:'brayden.sun@ctrc.club',    initials:'BU', bg:'#FEF3C7', tc:'#92400E',
+  { id:2,  name:'Brayden Sun',    email:'brayden.sun@ctrc.club',    initials:'BU', bg:'#FEF3C7', tc:'#92400E',
     week:6, pct:91, status:'Excellent',       lastSeen:'Today',      stalled:false,
     weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15',null,null],
     attendance:[1,1,1,1,1,1,0,0],
@@ -449,7 +433,7 @@ const STUDENTS = [
     photos:3,
     notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Brayden is reliable. Good candidate for team captain role.'}]
   },
-  { id:5,  name:'Keegan Ramsaran', email:'keegan.ramsaran@ctrc.club', initials:'KR', bg:'#EDE9FE', tc:'#5B21B6',
+  { id:3,  name:'Keegan Ramsaran', email:'keegan.ramsaran@ctrc.club', initials:'KR', bg:'#EDE9FE', tc:'#5B21B6',
     week:4, pct:61, status:'Needs Attention', lastSeen:'2 weeks ago',stalled:true,
     weekDates:['Jan 11','Jan 18',null,'Feb 1',null,null,null,null],
     attendance:[1,1,0,1,0,0,0,0],
@@ -457,15 +441,15 @@ const STUDENTS = [
     photos:0,
     notes:[{i:'MS',a:'Soni',t:'Feb 8',txt:'Keegan has missed 2 sessions. Parent contact attempted.'},{i:'US',a:'Sajjad',t:'Feb 1',txt:'Behind on sensor assignment — extended deadline.'}]
   },
-  { id:6,  name:'Allen Wang',     email:'allen.wang@ctrc.club',     initials:'AW', bg:'#ECFDF5', tc:'#065F46',
-    week:6, pct:85, status:'On Track',        lastSeen:'2 days ago', stalled:false,
-    weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15',null,null],
-    attendance:[1,1,1,1,1,1,0,0],
-    scores:[{w:1,s:8,n:'Good intro'},{w:2,s:9,n:'Fast assembly'},{w:3,s:8,n:'Good logic'},{w:4,s:8,n:'Accurate data'},{w:5,s:9,n:'Great CAD'},{w:6,s:8,n:'On schedule'}],
+  { id:4,  name:'Bryan Kuan',     email:'bryan.kuan@ctrc.club',     initials:'BK', bg:'#ECFDF5', tc:'#065F46',
+    week:5, pct:78, status:'On Track',        lastSeen:'5 days ago', stalled:false,
+    weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8',null,null,null],
+    attendance:[1,1,1,0,1,0,0,0],
+    scores:[{w:1,s:8,n:'Good start'},{w:2,s:8,n:'Steady'},{w:3,s:7,n:'Code review needed'},{w:4,s:8,n:'Improved'},{w:5,s:8,n:'Drive base solid'}],
     photos:2,
-    notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Allen is progressing steadily. Consider autonomous challenge bonus.'}]
+    notes:[{i:'EY',a:'Yu',t:'Feb 10',txt:'Bryan is on track. Focus on code quality next session.'}]
   },
-  { id:7,  name:'Elyse To',       email:'elyse.to@ctrc.club',       initials:'ET', bg:'#FFF7ED', tc:'#9A3412',
+  { id:5,  name:'Elyse To',       email:'elyse.to@ctrc.club',       initials:'ET', bg:'#FFF7ED', tc:'#9A3412',
     week:6, pct:93, status:'Excellent',       lastSeen:'Today',      stalled:false,
     weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15',null,null],
     attendance:[1,1,1,1,1,1,0,0],
@@ -473,29 +457,21 @@ const STUDENTS = [
     photos:4,
     notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Elyse helped two students debug their code this week. Exceptional.'}]
   },
-  { id:8,  name:'Thomas Yang',    email:'thomas.yang@ctrc.club',    initials:'TY', bg:'#F0FDF4', tc:'#15803D',
+  { id:6,  name:'Jayden Yang',      email:'jayden.yang@ctrc.club',      initials:'JY', bg:'#F0FDFA', tc:'#0F766E',
+    week:6, pct:88, status:'On Track',        lastSeen:'2 days ago', stalled:false,
+    weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15',null,null],
+    attendance:[1,1,1,1,1,1,0,0],
+    scores:[{w:1,s:9,n:'Strong intro'},{w:2,s:8,n:'Good teamwork'},{w:3,s:9,n:'Excellent comments'},{w:4,s:8,n:'Clean sensor work'},{w:5,s:9,n:'Nice CAD layout'},{w:6,s:8,n:'Good progress'}],
+    photos:3,
+    notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Jayden is making steady progress.'}]
+  },
+  { id:7,  name:'Thomas Yang',    email:'thomas.yang@ctrc.club',    initials:'TY', bg:'#F0FDF4', tc:'#15803D',
     week:5, pct:78, status:'On Track',        lastSeen:'5 days ago', stalled:false,
     weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8',null,null,null],
     attendance:[1,1,1,0,1,0,0,0],
     scores:[{w:1,s:8,n:'Good start'},{w:2,s:8,n:'Steady'},{w:3,s:7,n:'Code review needed'},{w:4,s:8,n:'Improved'},{w:5,s:8,n:'Drive base solid'}],
     photos:2,
     notes:[{i:'EY',a:'Yu',t:'Feb 10',txt:'Thomas is on track. Focus on code quality next session.'}]
-  },
-  { id:9,  name:'Kylie Woo',      email:'kylie.woo@ctrc.club',      initials:'KW', bg:'#F0FDFA', tc:'#0F766E',
-    week:6, pct:88, status:'On Track',        lastSeen:'2 days ago', stalled:false,
-    weekDates:['Jan 11','Jan 18','Jan 25','Feb 1','Feb 8','Feb 15',null,null],
-    attendance:[1,1,1,1,1,1,0,0],
-    scores:[{w:1,s:9,n:'Strong intro'},{w:2,s:8,n:'Good teamwork'},{w:3,s:9,n:'Excellent comments'},{w:4,s:8,n:'Clean sensor work'},{w:5,s:9,n:'Nice CAD layout'},{w:6,s:8,n:'Good progress'}],
-    photos:3,
-    notes:[{i:'MS',a:'Soni',t:'Feb 15',txt:'Kylie would work well with the VIQRC team.'}]
-  },
-  { id:10, name:'Jake Yeung',     email:'jake.yeung@ctrc.club',     initials:'JE', bg:'#FEF2F2', tc:'#991B1B',
-    week:3, pct:55, status:'Needs Attention', lastSeen:'3 weeks ago',stalled:true,
-    weekDates:['Jan 11',null,'Jan 25',null,null,null,null,null],
-    attendance:[0,0,1,0,0,0,0,0],
-    scores:[{w:1,s:7,n:'Late start'},{w:2,s:6,n:'Struggled with tools'},{w:3,s:5,n:'Programming very difficult'}],
-    photos:0,
-    notes:[{i:'MS',a:'Soni',t:'Feb 3',txt:'Jake is significantly behind. Missed Week 1 and 2. Parent contacted.'},{i:'US',a:'Sajjad',t:'Jan 28',txt:'Recommended additional online resources.'}]
   },
 ];
 
