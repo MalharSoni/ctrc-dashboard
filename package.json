@@ -21,11 +21,15 @@
   },
   "homepage": "https://github.com/MalharSoni/ctrc-dashboard#readme",
   "dependencies": {
+    "@azure/msal-node": "^5.1.2",
+    "@microsoft/microsoft-graph-client": "^3.0.7",
     "@neondatabase/serverless": "^0.9.3",
+    "@netlify/blobs": "^10.7.4",
     "@prisma/adapter-neon": "^5.19.1",
     "@prisma/client": "^5.19.1",
     "bcryptjs": "^3.0.3",
     "dotenv": "^17.3.1",
+    "isomorphic-fetch": "^3.0.0",
     "ws": "^8.19.0"
   },
   "devDependencies": {

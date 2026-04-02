@@ -681,6 +681,9 @@
     <a href="purchases.html" class="nav-item">
       <i data-lucide="receipt"></i> Purchases
     </a>
+    <a href="purchases-invoices.html" class="nav-item">
+      <i data-lucide="file-text"></i> Invoices
+    </a>
     <a href="reports.html" class="nav-item">
       <i data-lucide="bar-chart-2"></i> Reports
     </a>
@@ -694,11 +697,11 @@
   <div class="sidebar-footer">
     <div class="sidebar-user">
       <div class="sidebar-avatar">
-        <img src="icon-white.png" alt="Coach Henderson" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:13px;font-weight:700;color:var(--black)\'>CH</span>'" />
+        <img src="icon-white.png" alt="Malhar Soni" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:13px;font-weight:700;color:var(--black)\'>MS</span>'" />
       </div>
       <div class="sidebar-user-info">
-        <div class="sidebar-user-name">Coach Henderson</div>
-        <div class="sidebar-user-role">Lead Mentor</div>
+        <div class="sidebar-user-name">Malhar Soni</div>
+        <div class="sidebar-user-role">Head Coach</div>
       </div>
       <i data-lucide="chevron-up" style="color:var(--gray-2);width:14px;height:14px;flex-shrink:0;"></i>
     </div>
@@ -1009,31 +1012,31 @@
           </thead>
           <tbody>
             <tr>
-              <td><div class="member-cell"><div class="member-av av-c1">AR</div><span class="member-name">Alex Rivera</span></div></td>
+              <td><div class="member-cell"><div class="member-av av-c1">SP</div><span class="member-name">Steven Papazian</span></div></td>
               <td><span class="role-badge role-captain">Captain</span></td>
-              <td><span class="member-grade">11th</span></td>
-              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:92%;"></div></div><span class="att-label">92%</span></div></td>
-              <td><strong>148</strong></td>
+              <td><span class="member-grade">12th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:95%;"></div></div><span class="att-label">95%</span></div></td>
+              <td><strong>152</strong></td>
               <td><a class="action-link" href="student-profile.html?id=1">View Profile</a></td>
             </tr>
             <tr>
-              <td><div class="member-cell"><div class="member-av av-c2">ML</div><span class="member-name">Maya Liu</span></div></td>
+              <td><div class="member-cell"><div class="member-av av-c2">DE</div><span class="member-name">Daniel Edelstein</span></div></td>
               <td><span class="role-badge role-programmer">Programmer</span></td>
+              <td><span class="member-grade">12th</span></td>
+              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:92%;"></div></div><span class="att-label">92%</span></div></td>
+              <td><strong>148</strong></td>
+              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
+            </tr>
+            <tr>
+              <td><div class="member-cell"><div class="member-av av-c3">MF</div><span class="member-name">Matt Fong</span></div></td>
+              <td><span class="role-badge role-builder">Builder</span></td>
               <td><span class="member-grade">10th</span></td>
               <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:88%;"></div></div><span class="att-label">88%</span></div></td>
-              <td><strong>136</strong></td>
+              <td><strong>141</strong></td>
               <td><a class="action-link" href="student-profile.html">View Profile</a></td>
             </tr>
             <tr>
-              <td><div class="member-cell"><div class="member-av av-c3">RK</div><span class="member-name">Ryan Kim</span></div></td>
-              <td><span class="role-badge role-builder">Builder</span></td>
-              <td><span class="member-grade">11th</span></td>
-              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:74%;"></div></div><span class="att-label">74%</span></div></td>
-              <td><strong>130</strong></td>
-              <td><a class="action-link" href="student-profile.html">View Profile</a></td>
-            </tr>
-            <tr>
-              <td><div class="member-cell"><div class="member-av av-c5">JS</div><span class="member-name">Jason Scott</span></div></td>
+              <td><div class="member-cell"><div class="member-av av-c5">RJ</div><span class="member-name">Ryan Jung</span></div></td>
               <td><span class="role-badge role-driver">Driver</span></td>
               <td><span class="member-grade">12th</span></td>
               <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:95%;"></div></div><span class="att-label">95%</span></div></td>
@@ -1396,21 +1399,23 @@
         <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Student</label>
         <select id="am-student" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;background:var(--white);">
           <option value="">Select a student…</option>
-          <option>Alex Rivera (42A)</option>
-          <option>Jamie Smith (42A)</option>
-          <option>Jordan Lee (42C)</option>
-          <option>Maya Lopez (42B)</option>
-          <option>Ryan Kim (42A)</option>
-          <option>Sofia Patel (42B)</option>
-          <option>Marcus Chen (42C)</option>
-          <option>Priya Nair (42D)</option>
-          <option>Ethan Brooks (42B)</option>
-          <option>Aisha Johnson (42D)</option>
-          <option>Tyler Wong (42A)</option>
-          <option>Lily Martinez (42C)</option>
-          <option>Dev Shah (42B)</option>
-          <option>Chloe Park (42D)</option>
-          <option>Noah Adams (Unassigned)</option>
+          <option>Steven Papazian (42A)</option>
+          <option>Daniel Edelstein (42A)</option>
+          <option>Matt Fong (42A)</option>
+          <option>Ryan Jung (42A)</option>
+          <option>Daniel Fu (42B)</option>
+          <option>Bryan Kuan (42B)</option>
+          <option>Eli Mindell (42B)</option>
+          <option>Brandon Situ (42B)</option>
+          <option>Caden Situ (42B)</option>
+          <option>Luke Fu (42C)</option>
+          <option>Alessio Lai (42C)</option>
+          <option>Kiara Ramsaran (42C)</option>
+          <option>Elyse To (42C)</option>
+          <option>Cyrus Liu (42D)</option>
+          <option>Cici Ma (42D)</option>
+          <option>Spencer Tam (Unassigned)</option>
+          <option>Leo Wu (Unassigned)</option>
         </select>
       </div>
       <div>
