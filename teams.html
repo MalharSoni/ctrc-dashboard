@@ -752,9 +752,6 @@
         <div class="tab" data-filter="vrc" onclick="setTab(this,'vrc')">
           V5RC (VRC) <span class="tab-count">3</span>
         </div>
-        <div class="tab" data-filter="foundation" onclick="setTab(this,'foundation')">
-          Foundation <span class="tab-count">1</span>
-        </div>
         <div class="tab" data-filter="ev" onclick="setTab(this,'ev')">
           EV Team <span class="tab-count">1</span>
         </div>
@@ -780,7 +777,7 @@
               </div>
             </div>
           </div>
-          <div class="team-name">839Z — Main VRC Team</div>
+          <div class="team-name">839Z — Elite</div>
           <div class="team-member-count">15 members <span style="color:#15803D;font-size:10.5px;margin-left:4px;">(9 on EV)</span></div>
           <div class="team-stats">
             <div class="stat-item">
@@ -820,7 +817,7 @@
               </div>
             </div>
           </div>
-          <div class="team-name">839Y — VRC Team 2</div>
+          <div class="team-name">839Y — Rookie</div>
           <div class="team-member-count">4 members <span style="color:#15803D;font-size:10.5px;margin-left:4px;">(1 on EV)</span></div>
           <div class="team-stats">
             <div class="stat-item">
@@ -860,7 +857,7 @@
               </div>
             </div>
           </div>
-          <div class="team-name">839X — VRC Team 3</div>
+          <div class="team-name">839X — Rookie</div>
           <div class="team-member-count">5 members</div>
           <div class="team-stats">
             <div class="stat-item">
@@ -884,44 +881,7 @@
         </div>
       </div>
 
-      <!-- ── CARD 4: Foundation Program ── -->
-      <div class="team-card" data-program="foundation" data-team="foundation" onclick="toggleRoster(this,'foundation')" style="border-top:3px solid #F5D000;">
-        <div class="team-card-inner">
-          <div class="team-card-top">
-            <span class="program-badge" style="background:#FFFBEB;color:#92700A;">Foundation</span>
-            <div class="three-dot" onclick="toggleDropdown(event,'dd-foundation')">
-              <i data-lucide="more-vertical"></i>
-              <div class="dropdown-menu" id="dd-foundation">
-                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Manage Program</div>
-                <div class="dropdown-item" onclick="window.location='foundation.html'"><i data-lucide="book-open" style="width:14px;height:14px;"></i> View Curriculum</div>
-                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Enroll Student</div>
-              </div>
-            </div>
-          </div>
-          <div class="team-name">Foundation Program</div>
-          <div class="team-member-count">8 students (onboarding)</div>
-          <div class="team-stats">
-            <div class="stat-item">
-              <div class="stat-label">Avg Completion</div>
-              <div class="stat-value">68%</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Avg Week</div>
-              <div class="stat-value">5.2</div>
-            </div>
-          </div>
-          <div class="team-card-bottom">
-            <span class="status-chip chip-gray">Active</span>
-            <div class="avatar-stack">
-              <div class="av av-c6">CP</div>
-              <div class="av av-c4">AJ</div>
-              <div class="av av-c1">PN</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ── CARD 5: 42E Dev Squad ── -->
+      <!-- ── CARD 4: 42E Dev Squad ── -->
       <div class="team-card dev" data-program="dev" data-team="42e" onclick="toggleRoster(this,'42e')">
         <div class="team-card-inner">
           <div class="team-card-top">
@@ -1663,7 +1623,6 @@
           <option value="VRC Robotics">VRC Robotics</option>
           <option value="VIQRC Junior">VIQRC Junior</option>
           <option value="VRC Rookie">VRC Rookie</option>
-          <option value="Foundation">Foundation</option>
           <option value="VEXU">VEXU</option>
         </select>
       </div>
