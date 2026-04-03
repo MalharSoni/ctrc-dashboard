@@ -1053,6 +1053,168 @@ function closeNotifPanel(e) {
   panel.style.transform = 'translateX(100%)';
   setTimeout(() => { document.getElementById('notif-overlay').style.display = 'none'; }, 230);
 }
+
+// ── LOAD STUDENT DATA FROM URL ────────────────────────────────────────────
+const STUDENTS = [
+  { id:1,  name:'Daniel Edelstein', email:'Daniel.Edelstein@cautiontape.ca', initials:'DE', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:2,  name:'Daniel Fu',        email:'Daniel.Fu@cautiontape.ca',        initials:'DF', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:3,  name:'Luke Fu',          email:'Luke.Fu@cautiontape.ca',          initials:'LF', color:'#FEF3C7', textColor:'#92400E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:4,  name:'Ryan Jung',        email:'Ryan.Jung@cautiontape.ca',        initials:'RJ', color:'#FCE7F3', textColor:'#9D174D', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:5,  name:'Bryan Kuan',       email:'Bryan.Kuan@cautiontape.ca',       initials:'BK', color:'#ECFDF5', textColor:'#065F46', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
+  { id:6,  name:'Alessio Lai',      email:'Alessio.Lai@cautiontape.ca',      initials:'AL', color:'#FFF7ED', textColor:'#9A3412', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
+  { id:7,  name:'Cyrus Liu',        email:'Cyrus.Liu@cautiontape.ca',        initials:'CL', color:'#F0FDF4', textColor:'#15803D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:8,  name:'Cici Ma',          email:'Cici.Ma@cautiontape.ca',          initials:'CM', color:'#FDF4FF', textColor:'#7E22CE', team:'839X', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:7  },
+  { id:9,  name:'Zuhaib Mansoor',   email:'Zuhaib.Mansoor@cautiontape.ca',   initials:'ZM', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:10, name:'Eli Mindell',      email:'Eli.Mindell@cautiontape.ca',      initials:'EM', color:'#FDF2F8', textColor:'#9D174D', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:11, name:'Steven Papazian',  email:'Steven.Papazian@cautiontape.ca',  initials:'SP', color:'#FFFBEB', textColor:'#92400E', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:12, name:'Brialyn Quast',    email:'Brialyn.Quast@cautiontape.ca',    initials:'BQ', color:'#F0FDFA', textColor:'#0F766E', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:13, name:'Keegan Ramsaran',  email:'Keegan.Ramsaran@cautiontape.ca',  initials:'KR', color:'#FEE2E2', textColor:'#991B1B', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:14, name:'Kiara Ramsaran',   email:'Kiara.Ramsaran@cautiontape.ca',   initials:'KI', color:'#FCE7F3', textColor:'#9D174D', team:null,   evTeam:true,  program:'EV',   role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:11 },
+  { id:15, name:'Justin Rui',       email:'Justin.Rui@cautiontape.ca',       initials:'JR', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:11 },
+  { id:16, name:'Brandon Situ',     email:'Brandon.Situ@cautiontape.ca',     initials:'BS', color:'#D1FAE5', textColor:'#065F46', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:17, name:'Caden Situ',       email:'Caden.Situ@cautiontape.ca',       initials:'CS', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:18, name:'Brayden Sun',      email:'Brayden.Sun@cautiontape.ca',      initials:'BU', color:'#FEF3C7', textColor:'#92400E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:19, name:'Nathan Tam',       email:'Nathan.Tam@cautiontape.ca',       initials:'NT', color:'#ECFDF5', textColor:'#065F46', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
+  { id:20, name:'Elyse To',         email:'Elyse.To@cautiontape.ca',         initials:'ET', color:'#FFF7ED', textColor:'#9A3412', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
+  { id:21, name:'Allen Wang',       email:'Allen.Wang@cautiontape.ca',       initials:'AW', color:'#F0FDF4', textColor:'#15803D', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:22, name:'Jovan Wang',       email:'Jovan.Wang@cautiontape.ca',       initials:'JW', color:'#FDF4FF', textColor:'#7E22CE', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:23, name:'Isaac Wong',       email:'Isaac.Wong@cautiontape.ca',       initials:'IW', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:24, name:'Kylie Woo',        email:'Kylie.Woo@cautiontape.ca',        initials:'KW', color:'#FDF2F8', textColor:'#9D174D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
+  { id:25, name:'Jayden Yang',      email:'Jayden.Yang@cautiontape.ca',      initials:'JY', color:'#FFFBEB', textColor:'#92400E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
+  { id:26, name:'Thomas Yang',      email:'Thomas.Yang@cautiontape.ca',      initials:'TY', color:'#F0FDFA', textColor:'#0F766E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:10 },
+  { id:27, name:'Jake Yeung',       email:'Jake.Yeung@cautiontape.ca',       initials:'JE', color:'#FEE2E2', textColor:'#991B1B', team:'839X', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
+  { id:28, name:'Tobias Yeung',    email:'Tobias.Yeung@cautiontape.ca',     initials:'TYE', color:'#FCE7F3', textColor:'#9D174D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
+  { id:29, name:'Tiger Zhang',      email:'Tiger.Zhang@cautiontape.ca',      initials:'TZ', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:10 },
+  { id:30, name:'Brandon Zhao',     email:'Brandon.Zhao@cautiontape.ca',     initials:'BZ', color:'#D1FAE5', textColor:'#065F46', team:'839Y', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
+  { id:31, name:'Yichen Zheng',     email:'Yichen.Zheng@cautiontape.ca',     initials:'YZ', color:'#EDE9FE', textColor:'#5B21B6', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:9  },
+];
+
+// Load student data on page load
+document.addEventListener('DOMContentLoaded', function() {
+  // Get student ID from URL
+  const params = new URLSearchParams(window.location.search);
+  const studentId = parseInt(params.get('id'));
+
+  // Validate ID exists
+  if (!studentId || isNaN(studentId)) {
+    window.location.href = 'students.html';
+    return;
+  }
+
+  // Find student
+  const student = STUDENTS.find(s => s.id === studentId);
+
+  // Redirect if not found
+  if (!student) {
+    window.location.href = 'students.html';
+    return;
+  }
+
+  // Populate page with student data
+  populateStudentProfile(student);
+});
+
+function populateStudentProfile(student) {
+  // Breadcrumb
+  document.getElementById('bc-name').textContent = student.name;
+
+  // Hero section
+  document.getElementById('hero-name').textContent = student.name;
+
+  // Hero avatar
+  const heroAvatar = document.getElementById('hero-avatar');
+  heroAvatar.style.background = student.color;
+  heroAvatar.style.color = student.textColor;
+  heroAvatar.textContent = student.initials;
+
+  // Grade
+  const gradeEl = document.querySelector('.hero-meta-item:nth-child(1)');
+  if (gradeEl) {
+    gradeEl.innerHTML = `<i data-lucide="graduation-cap" style="width:13px;height:13px;"></i> Grade ${student.grade}`;
+  }
+
+  // Team
+  const teamEl = document.querySelector('.hero-meta-item:nth-child(2)');
+  if (teamEl && student.team) {
+    let teamHTML = '';
+    if (student.team === '839Z') {
+      teamHTML = `<i data-lucide="cpu" style="width:13px;height:13px;"></i>
+        <span class="pill pill-v5rc" style="font-size:11px;">839Z — Elite</span>`;
+    } else if (student.team === '839Y' || student.team === '839X') {
+      teamHTML = `<i data-lucide="cpu" style="width:13px;height:13px;"></i>
+        <span class="pill" style="background:#EDE9FE;color:#5B21B6;font-size:11px;">${student.team} — Rookie</span>`;
+    }
+    if (student.evTeam) {
+      teamHTML += ` <span class="pill pill-green" style="font-size:10px;margin-left:4px;">EV</span>`;
+    }
+    teamEl.innerHTML = teamHTML;
+  } else if (teamEl) {
+    teamEl.innerHTML = `<i data-lucide="cpu" style="width:13px;height:13px;"></i>
+      <span class="pill pill-gray" style="font-size:11px;">Unassigned</span>`;
+  }
+
+  // Email
+  const emailEl = document.querySelector('.hero-meta-item:nth-child(4)');
+  if (emailEl) {
+    emailEl.innerHTML = `<i data-lucide="mail" style="width:13px;height:13px;"></i> ${student.email}`;
+  }
+
+  // Status
+  const statusEl = document.querySelector('.status-pill');
+  if (statusEl && student.status === 'Active') {
+    statusEl.className = 'status-pill status-active';
+    statusEl.innerHTML = `<i data-lucide="circle" style="width:7px;height:7px;fill:currentColor;"></i> Active`;
+  } else if (statusEl && student.status === 'At Risk') {
+    statusEl.className = 'status-pill status-risk';
+    statusEl.innerHTML = `<i data-lucide="triangle-alert" style="width:7px;height:7px;"></i> At Risk`;
+  } else if (statusEl) {
+    statusEl.className = 'status-pill status-inactive';
+    statusEl.innerHTML = `<i data-lucide="circle" style="width:7px;height:7px;"></i> Inactive`;
+  }
+
+  // Stats mini cards
+  const statCards = document.querySelectorAll('.stat-mini');
+  if (statCards[0]) {
+    statCards[0].querySelector('.stat-mini-value').textContent = student.attendance > 0 ? `${student.attendance}%` : '0%';
+    statCards[0].querySelector('.stat-mini-value').style.color = student.attendance === 0 ? 'var(--gray-1)' : 'var(--black)';
+    statCards[0].querySelector('.stat-mini-fill').style.width = `${student.attendance}%`;
+    statCards[0].querySelector('.stat-mini-sub').textContent = student.attendance === 0 ? 'No sessions yet' : `${student.trend} trend`;
+  }
+  if (statCards[1]) {
+    statCards[1].querySelector('.stat-mini-value').textContent = student.skillLevel;
+    statCards[1].querySelector('.stat-mini-fill').style.width = `${student.skillPct}%`;
+    statCards[1].querySelector('.stat-mini-sub').textContent = student.skillPct === 0 ? 'Beginner' : `${student.skillPct}% progress`;
+  }
+  if (statCards[2]) {
+    statCards[2].querySelector('.stat-mini-value').textContent = student.badges;
+    statCards[2].querySelector('.stat-mini-sub').textContent = student.badges === 0 ? 'Start earning badges!' : `${student.badges} earned`;
+  }
+
+  // Update edit profile modal default values
+  document.getElementById('ep-name').value = student.name;
+  document.getElementById('ep-email').value = student.email;
+  document.getElementById('ep-grade').value = student.grade;
+  if (student.team) {
+    document.getElementById('ep-team').value = student.team;
+  } else {
+    document.getElementById('ep-team').value = '';
+  }
+
+  // Update badge award modal text
+  const badgeModalText = document.querySelector('#badge-backdrop p');
+  if (badgeModalText) {
+    badgeModalText.textContent = `Select a badge to award to ${student.name}:`;
+  }
+
+  // Update manage roles modal text
+  const rolesModalText = document.querySelector('#mr-backdrop p');
+  if (rolesModalText) {
+    rolesModalText.textContent = `Click a role to assign or remove it from ${student.name}.`;
+  }
+
+  // Re-render Lucide icons
+  lucide.createIcons();
+}
 </script>
 
 <!-- Edit Profile Modal -->
