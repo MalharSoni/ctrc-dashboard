@@ -939,19 +939,19 @@
 
     <!-- ════════════ ROSTER DETAIL PANELS ════════════ -->
 
-    <!-- 839Z Roster -->
-    <div class="roster-panel" id="roster-839z">
+    <!-- 42A Roster -->
+    <div class="roster-panel" id="roster-42a">
       <div class="roster-panel-header">
         <div class="program-badge badge-vrc" style="flex-shrink:0;">V5RC</div>
         <div class="roster-panel-title">
-          <h2>839Z — Iron Gears</h2>
+          <h2>42A — Iron Gears</h2>
           <p>Competition Ready &nbsp;&bull;&nbsp; 5 members &nbsp;&bull;&nbsp; Skills: 142 &nbsp;&bull;&nbsp; Win Rate: 68%</p>
         </div>
         <div class="roster-panel-actions">
           <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
             <i data-lucide="trophy"></i> Assign to Competition
           </button>
-          <button class="btn btn-yellow" onclick="openEditTeam('839Z','VRC Robotics')">
+          <button class="btn btn-yellow" onclick="openEditTeam('42A','VRC Robotics')">
             <i data-lucide="pencil"></i> Edit Team
           </button>
           <button class="close-panel-btn" onclick="closeRoster('42a')">
@@ -1018,19 +1018,19 @@
       <div class="caution-tape"></div>
     </div>
 
-    <!-- 839Y Roster -->
-    <div class="roster-panel" id="roster-839y">
+    <!-- 42B Roster -->
+    <div class="roster-panel" id="roster-42b">
       <div class="roster-panel-header">
         <div class="program-badge badge-vrc" style="flex-shrink:0;">V5RC</div>
         <div class="roster-panel-title">
-          <h2>839Y — Cyber Knights</h2>
+          <h2>42B — Cyber Knights</h2>
           <p>Registered &nbsp;&bull;&nbsp; 4 members &nbsp;&bull;&nbsp; Skills: 110 &nbsp;&bull;&nbsp; Win Rate: 72%</p>
         </div>
         <div class="roster-panel-actions">
           <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
             <i data-lucide="trophy"></i> Assign to Competition
           </button>
-          <button class="btn btn-yellow" onclick="openEditTeam('839Y','VIQRC Junior')">
+          <button class="btn btn-yellow" onclick="openEditTeam('42B','VIQRC Junior')">
             <i data-lucide="pencil"></i> Edit Team
           </button>
           <button class="close-panel-btn" onclick="closeRoster('42b')">
@@ -1089,12 +1089,12 @@
       <div class="caution-tape"></div>
     </div>
 
-    <!-- 839X Roster -->
-    <div class="roster-panel" id="roster-839x">
+    <!-- 42C Roster -->
+    <div class="roster-panel" id="roster-42c">
       <div class="roster-panel-header">
         <div class="program-badge badge-iqrc" style="flex-shrink:0;">VIQRC</div>
         <div class="roster-panel-title">
-          <h2>839X — Robo Wizards</h2>
+          <h2>42C — Robo Wizards</h2>
           <p style="color:#B91C1C;font-weight:600;">
             <i data-lucide="alert-circle" style="width:12px;height:12px;display:inline;vertical-align:middle;"></i>
             Action Required: Roster incomplete — 6 members &nbsp;&bull;&nbsp; Skills: 155 &nbsp;&bull;&nbsp; Win Rate: 81%
@@ -1104,7 +1104,7 @@
           <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
             <i data-lucide="trophy"></i> Assign to Competition
           </button>
-          <button class="btn btn-yellow" onclick="openEditTeam('839X','VRC Rookie')">
+          <button class="btn btn-yellow" onclick="openEditTeam('42C','VRC Rookie')">
             <i data-lucide="pencil"></i> Edit Team
           </button>
           <button class="close-panel-btn" onclick="closeRoster('42c')">
@@ -1179,19 +1179,19 @@
       <div class="caution-tape"></div>
     </div>
 
-    <!-- 839Z Roster -->
-    <div class="roster-panel" id="roster-839z">
+    <!-- 42D Roster -->
+    <div class="roster-panel" id="roster-42d">
       <div class="roster-panel-header">
         <div class="program-badge badge-iqrc" style="flex-shrink:0;">VIQRC</div>
         <div class="roster-panel-title">
-          <h2>839Z — Gear Grinders</h2>
+          <h2>42D — Gear Grinders</h2>
           <p>Active &nbsp;&bull;&nbsp; 3 members &nbsp;&bull;&nbsp; Skills: 95 &nbsp;&bull;&nbsp; Win Rate: 55%</p>
         </div>
         <div class="roster-panel-actions">
           <button class="btn btn-outline" onclick="showTMToast('Competition assignment coming in live event module')">
             <i data-lucide="trophy"></i> Assign to Competition
           </button>
-          <button class="btn btn-yellow" onclick="openEditTeam('839Z','VRC Robotics')">
+          <button class="btn btn-yellow" onclick="openEditTeam('42D','VRC Robotics')">
             <i data-lucide="pencil"></i> Edit Team
           </button>
           <button class="close-panel-btn" onclick="closeRoster('42d')">
@@ -1360,21 +1360,21 @@
         <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Student</label>
         <select id="am-student" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;background:var(--white);">
           <option value="">Select a student…</option>
-          <option>Steven Papazian (839Z)</option>
-          <option>Daniel Edelstein (839Z)</option>
-          <option>Matt Fong (839Z)</option>
-          <option>Ryan Jung (839Z)</option>
-          <option>Daniel Fu (839Y)</option>
-          <option>Bryan Kuan (839Y)</option>
-          <option>Eli Mindell (839Y)</option>
-          <option>Brandon Situ (839Y)</option>
-          <option>Caden Situ (839Y)</option>
-          <option>Luke Fu (839X)</option>
-          <option>Alessio Lai (839X)</option>
-          <option>Kiara Ramsaran (839X)</option>
-          <option>Elyse To (839X)</option>
-          <option>Cyrus Liu (839Z)</option>
-          <option>Cici Ma (839Z)</option>
+          <option>Steven Papazian (42A)</option>
+          <option>Daniel Edelstein (42A)</option>
+          <option>Matt Fong (42A)</option>
+          <option>Ryan Jung (42A)</option>
+          <option>Daniel Fu (42B)</option>
+          <option>Bryan Kuan (42B)</option>
+          <option>Eli Mindell (42B)</option>
+          <option>Brandon Situ (42B)</option>
+          <option>Caden Situ (42B)</option>
+          <option>Luke Fu (42C)</option>
+          <option>Alessio Lai (42C)</option>
+          <option>Kiara Ramsaran (42C)</option>
+          <option>Elyse To (42C)</option>
+          <option>Cyrus Liu (42D)</option>
+          <option>Cici Ma (42D)</option>
           <option>Spencer Tam (Unassigned)</option>
           <option>Leo Wu (Unassigned)</option>
         </select>
@@ -1613,11 +1613,11 @@
       <div style="display:grid;grid-template-columns:1fr 2fr;gap:12px;">
         <div>
           <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Team #</label>
-          <input id="et-number" type="text" placeholder="839Z" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+          <input id="et-number" type="text" placeholder="42A" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
         </div>
         <div>
           <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Team Name</label>
-          <input id="et-name" type="text" placeholder="Team 839Z" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
+          <input id="et-name" type="text" placeholder="Team 42A" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:9px 12px;font-size:13.5px;font-family:inherit;color:var(--black);outline:none;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'">
         </div>
       </div>
       <div>
@@ -1723,10 +1723,10 @@
 <script>
 /* ── NOTIFICATIONS ────────────────────────────────── */
 const NOTIFS = [
-  { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 839Z', time:'2m ago' },
+  { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
   { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
   { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
-  { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 839Z placed 3rd at State Qualifier', time:'Yesterday' },
+  { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
   { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
   { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
 ];

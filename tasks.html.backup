@@ -225,10 +225,10 @@
       display: inline-block; padding: 2px 8px; border-radius: 99px;
       font-size: 11px; font-weight: 600;
     }
-    .pill-839z { background: #DBEAFE; color: #1D4ED8; }
-    .pill-839y { background: #F3E8FF; color: #7C3AED; }
-    .pill-839x { background: #DCFCE7; color: #15803D; }
-    .pill-839z { background: #FEF3C7; color: #92400E; }
+    .pill-42a { background: #DBEAFE; color: #1D4ED8; }
+    .pill-42b { background: #F3E8FF; color: #7C3AED; }
+    .pill-42c { background: #DCFCE7; color: #15803D; }
+    .pill-42d { background: #FEF3C7; color: #92400E; }
     .pill-coach { background: var(--gray-4); color: var(--gray-1); }
 
     .assignee-cell { display: flex; align-items: center; gap: 7px; white-space: nowrap; }
@@ -482,10 +482,10 @@
       <div class="filter-group">
         <span class="filter-label">Team</span>
         <button class="filter-chip active" onclick="setChip(this,'team')">All</button>
-        <button class="filter-chip" onclick="setChip(this,'team')">839Z</button>
-        <button class="filter-chip" onclick="setChip(this,'team')">839Y</button>
-        <button class="filter-chip" onclick="setChip(this,'team')">839X</button>
-        <button class="filter-chip" onclick="setChip(this,'team')">839Z</button>
+        <button class="filter-chip" onclick="setChip(this,'team')">42A</button>
+        <button class="filter-chip" onclick="setChip(this,'team')">42B</button>
+        <button class="filter-chip" onclick="setChip(this,'team')">42C</button>
+        <button class="filter-chip" onclick="setChip(this,'team')">42D</button>
       </div>
       <div class="filter-divider"></div>
       <div class="filter-group">
@@ -540,7 +540,7 @@
             <!-- T1: Mount intake motor -->
             <tr onclick="toggleExpand('t1',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text overdue">Mount intake motor</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42a">42A</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-green">JS</div>Jason S.</div></td>
               <td class="date-cell overdue-date">Oct 12<span class="overdue-badge">Overdue</span></td>
               <td><span class="pri pri-high">High</span></td>
@@ -568,7 +568,7 @@
             <!-- T2: Code autonomous routine -->
             <tr onclick="toggleExpand('t2',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text overdue">Code autonomous routine</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
+              <td><span class="team-pill pill-42b">42B</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-purple">ML</div>Maya L.</div></td>
               <td class="date-cell overdue-date">Oct 14<span class="overdue-badge">Overdue</span></td>
               <td><span class="pri pri-high">High</span></td>
@@ -593,10 +593,10 @@
               </td>
             </tr>
 
-            <!-- T3: Update engineering notebook 839Z -->
+            <!-- T3: Update engineering notebook 42A -->
             <tr onclick="toggleExpand('t3',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text overdue">Update engineering notebook</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42a">42A</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-pink">RK</div>Ryan K.</div></td>
               <td class="date-cell overdue-date">Yesterday<span class="overdue-badge">Overdue</span></td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -624,7 +624,7 @@
             <!-- T4: Calibrate odometry constants -->
             <tr onclick="toggleExpand('t4',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text overdue">Calibrate odometry constants</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
+              <td><span class="team-pill pill-42c">42C</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-blue">SP</div>Sofia P.</div></td>
               <td class="date-cell overdue-date">Yesterday<span class="overdue-badge">Overdue</span></td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -652,7 +652,7 @@
             <!-- T5: Film skills run -->
             <tr onclick="toggleExpand('t5',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text overdue">Film skills run</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
+              <td><span class="team-pill pill-42b">42B</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-blue">AR</div>Alex R.</div></td>
               <td class="date-cell overdue-date">Oct 18<span class="overdue-badge">Overdue</span></td>
               <td><span class="pri pri-low">Low</span></td>
@@ -682,7 +682,7 @@
             <!-- T6: Design new intake CAD model -->
             <tr onclick="toggleExpand('t6',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text">Design new intake CAD model</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42a">42A</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-blue">AR</div>Alex R.</div></td>
               <td class="date-cell">Feb 20</td>
               <td><span class="pri pri-high">High</span></td>
@@ -697,7 +697,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Design new intake CAD model</h4>
-                    <p>Model a dual-flex-wheel intake in VEX CAD. The design should accommodate the new C-channel frame while keeping the intake width under 15 inches. Export STEP file for review before ordering parts. Version in Google Drive under /839Z/CAD/Intake_v3.</p>
+                    <p>Model a dual-flex-wheel intake in VEX CAD. The design should accommodate the new C-channel frame while keeping the intake width under 15 inches. Export STEP file for review before ordering parts. Version in Google Drive under /42A/CAD/Intake_v3.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -710,7 +710,7 @@
             <!-- T7: Write pre-match autonomous selector -->
             <tr onclick="toggleExpand('t7',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Write pre-match autonomous selector</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
+              <td><span class="team-pill pill-42b">42B</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-blue">SP</div>Sofia P.</div></td>
               <td class="date-cell">Feb 21</td>
               <td><span class="pri pri-high">High</span></td>
@@ -738,7 +738,7 @@
             <!-- T8: Update bill of materials -->
             <tr onclick="toggleExpand('t8',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Update bill of materials</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42a">42A</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-pink">RK</div>Ryan K.</div></td>
               <td class="date-cell">Feb 21</td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -753,7 +753,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Update bill of materials</h4>
-                    <p>Update the 839Z BOM spreadsheet with all parts ordered and used in the last two build sprints. Include part numbers, quantities, unit costs, and supplier. Flag any parts at critical stock levels (under 3 units remaining).</p>
+                    <p>Update the 42A BOM spreadsheet with all parts ordered and used in the last two build sprints. Include part numbers, quantities, unit costs, and supplier. Flag any parts at critical stock levels (under 3 units remaining).</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -766,7 +766,7 @@
             <!-- T9: Practice driver skills x3 -->
             <tr onclick="toggleExpand('t9',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text">Practice driver skills x3</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
+              <td><span class="team-pill pill-42c">42C</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-green">JL</div>Jordan L.</div></td>
               <td class="date-cell">Feb 22</td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -809,7 +809,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Register for March qualifier</h4>
-                    <p>Submit team registrations for the March 8th Southeast Regional Qualifier on RobotEvents.com. Register 839Z and 839Y for V5RC and 839X for VIQRC. Confirm payment method with the school treasurer before deadline. Registration closes Feb 22 at 11:59 PM.</p>
+                    <p>Submit team registrations for the March 8th Southeast Regional Qualifier on RobotEvents.com. Register 42A and 42B for V5RC and 42C for VIQRC. Confirm payment method with the school treasurer before deadline. Registration closes Feb 22 at 11:59 PM.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -850,7 +850,7 @@
             <!-- T12: Document wiring diagram -->
             <tr onclick="toggleExpand('t12',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Document wiring diagram</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42a">42A</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-red">EB</div>Ethan B.</div></td>
               <td class="date-cell">Feb 24</td>
               <td><span class="pri pri-low">Low</span></td>
@@ -865,7 +865,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Document wiring diagram</h4>
-                    <p>Create a labeled wiring diagram for the 839Z robot showing all motor ports, sensor ports, and power cables. Use Google Slides or draw.io. Include port numbers and motor/sensor types. This is required for the notebook and for troubleshooting at competitions.</p>
+                    <p>Create a labeled wiring diagram for the 42A robot showing all motor ports, sensor ports, and power cables. Use Google Slides or draw.io. Include port numbers and motor/sensor types. This is required for the notebook and for troubleshooting at competitions.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -878,7 +878,7 @@
             <!-- T13: Review game manual updates -->
             <tr onclick="toggleExpand('t13',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Review game manual updates</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
+              <td><span class="team-pill pill-42b">42B</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-amber">DS</div>Dev S.</div></td>
               <td class="date-cell">Feb 24</td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -906,7 +906,7 @@
             <!-- T14: Rebuild drive base -->
             <tr onclick="toggleExpand('t14',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Rebuild drive base</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
+              <td><span class="team-pill pill-42c">42C</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-green">MC</div>Marcus C.</div></td>
               <td class="date-cell">Mar 1</td>
               <td><span class="pri pri-high">High</span></td>
@@ -921,7 +921,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Rebuild drive base</h4>
-                    <p>Disassemble and rebuild the 839X drive base with the new 4-inch traction wheels. Re-square the chassis, re-tension the drive chains, and verify all motor mounts are torqued to spec. Run coast-to-stop test to confirm symmetrical deceleration before handing off to programming.</p>
+                    <p>Disassemble and rebuild the 42C drive base with the new 4-inch traction wheels. Re-square the chassis, re-tension the drive chains, and verify all motor mounts are torqued to spec. Run coast-to-stop test to confirm symmetrical deceleration before handing off to programming.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -934,7 +934,7 @@
             <!-- T15: Create sponsor slide deck -->
             <tr onclick="toggleExpand('t15',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Create sponsor slide deck</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42d">42D</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-amber">AJ</div>Aisha J.</div></td>
               <td class="date-cell">Mar 3</td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -962,7 +962,7 @@
             <!-- T16: Run 10 autonomous consistency tests -->
             <tr onclick="toggleExpand('t16',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Run 10 autonomous consistency tests</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
+              <td><span class="team-pill pill-42b">42B</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-red">EB</div>Ethan B.</div></td>
               <td class="date-cell">Mar 5</td>
               <td><span class="pri pri-med">Medium</span></td>
@@ -990,7 +990,7 @@
             <!-- T17: Submit excellence award essay draft -->
             <tr onclick="toggleExpand('t17',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Submit excellence award essay draft</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42a">42A</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-purple">LM</div>Lily M.</div></td>
               <td class="date-cell">Mar 7</td>
               <td><span class="pri pri-high">High</span></td>
@@ -1018,7 +1018,7 @@
             <!-- T18: Train new member on VEX IQ assembly -->
             <tr onclick="toggleExpand('t18',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Train new member on VEX IQ assembly</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42d">42D</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-pink">CP</div>Chloe P.</div></td>
               <td class="date-cell">Mar 10</td>
               <td><span class="pri pri-low">Low</span></td>
@@ -1033,7 +1033,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Train new member on VEX IQ assembly</h4>
-                    <p>Walk the new 839Z member through basic VEX IQ assembly: pegs, beams, motors, and sensors. Complete the "Drive Base in 30 Minutes" challenge together. Assess readiness for independent building by end of session. Log completion in member onboarding checklist.</p>
+                    <p>Walk the new 42D member through basic VEX IQ assembly: pegs, beams, motors, and sensors. Complete the "Drive Base in 30 Minutes" challenge together. Assess readiness for independent building by end of session. Log completion in member onboarding checklist.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -1046,7 +1046,7 @@
             <!-- T19: Prepare pit display boards -->
             <tr onclick="toggleExpand('t19',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Prepare pit display boards</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
+              <td><span class="team-pill pill-42c">42C</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-green">JL</div>Jordan L.</div></td>
               <td class="date-cell">Mar 12</td>
               <td><span class="pri pri-low">Low</span></td>
@@ -1061,7 +1061,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Prepare pit display boards</h4>
-                    <p>Design and print two 24"x36" pit display boards for 839X. Include: team name, robot photo, game strategy overview, and team member names. Use Canva or Google Slides. Print at FedEx Office and bring to competition. Budget: $40.</p>
+                    <p>Design and print two 24"x36" pit display boards for 42C. Include: team name, robot photo, game strategy overview, and team member names. Use Canva or Google Slides. Print at FedEx Office and bring to competition. Budget: $40.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -1074,7 +1074,7 @@
             <!-- T20: Update team bio page -->
             <tr onclick="toggleExpand('t20',this)">
               <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Update team bio page</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
+              <td><span class="team-pill pill-42d">42D</span></td>
               <td><div class="assignee-cell"><div class="assignee-av av-amber">AJ</div>Aisha J.</div></td>
               <td class="date-cell">Mar 15</td>
               <td><span class="pri pri-low">Low</span></td>
@@ -1089,7 +1089,7 @@
                 <div class="task-expand-inner">
                   <div class="task-expand-desc">
                     <h4>Update team bio page</h4>
-                    <p>Refresh the 839Z page on the CTRC club website. Update member photos, add the new season robot picture, update competition history with this season's results, and revise the team goals section. Share the draft link with Malhar Soni for approval before publishing.</p>
+                    <p>Refresh the 42D page on the CTRC club website. Update member photos, add the new season robot picture, update competition history with this season's results, and revise the team goals section. Share the draft link with Malhar Soni for approval before publishing.</p>
                   </div>
                   <div class="task-expand-actions">
                     <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
@@ -1119,7 +1119,7 @@
           <div class="board-card">
             <div class="board-card-name overdue-text">Mount intake motor</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42a">42A</span>
               <span class="pri pri-high" style="font-size:10px;padding:2px 6px;">High</span>
             </div>
             <div class="board-card-meta">
@@ -1133,7 +1133,7 @@
           <div class="board-card">
             <div class="board-card-name overdue-text">Update engineering notebook</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42a">42A</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1147,7 +1147,7 @@
           <div class="board-card">
             <div class="board-card-name overdue-text">Film skills run</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839y">839Y</span>
+              <span class="team-pill pill-42b">42B</span>
               <span class="pri pri-low" style="font-size:10px;padding:2px 6px;">Low</span>
             </div>
             <div class="board-card-meta">
@@ -1161,7 +1161,7 @@
           <div class="board-card">
             <div class="board-card-name">Write pre-match autonomous selector</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839y">839Y</span>
+              <span class="team-pill pill-42b">42B</span>
               <span class="pri pri-high" style="font-size:10px;padding:2px 6px;">High</span>
             </div>
             <div class="board-card-meta">
@@ -1175,7 +1175,7 @@
           <div class="board-card">
             <div class="board-card-name">Update bill of materials</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42a">42A</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1217,7 +1217,7 @@
           <div class="board-card">
             <div class="board-card-name">Document wiring diagram</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42a">42A</span>
               <span class="pri pri-low" style="font-size:10px;padding:2px 6px;">Low</span>
             </div>
             <div class="board-card-meta">
@@ -1231,7 +1231,7 @@
           <div class="board-card">
             <div class="board-card-name">Review game manual updates</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839y">839Y</span>
+              <span class="team-pill pill-42b">42B</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1245,7 +1245,7 @@
           <div class="board-card">
             <div class="board-card-name">Rebuild drive base</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839x">839X</span>
+              <span class="team-pill pill-42c">42C</span>
               <span class="pri pri-high" style="font-size:10px;padding:2px 6px;">High</span>
             </div>
             <div class="board-card-meta">
@@ -1259,7 +1259,7 @@
           <div class="board-card">
             <div class="board-card-name">Submit excellence award essay draft</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42a">42A</span>
               <span class="pri pri-high" style="font-size:10px;padding:2px 6px;">High</span>
             </div>
             <div class="board-card-meta">
@@ -1273,7 +1273,7 @@
           <div class="board-card">
             <div class="board-card-name">Train new member on VEX IQ assembly</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42d">42D</span>
               <span class="pri pri-low" style="font-size:10px;padding:2px 6px;">Low</span>
             </div>
             <div class="board-card-meta">
@@ -1287,7 +1287,7 @@
           <div class="board-card">
             <div class="board-card-name">Update team bio page</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42d">42D</span>
               <span class="pri pri-low" style="font-size:10px;padding:2px 6px;">Low</span>
             </div>
             <div class="board-card-meta">
@@ -1312,7 +1312,7 @@
           <div class="board-card">
             <div class="board-card-name overdue-text">Code autonomous routine</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839y">839Y</span>
+              <span class="team-pill pill-42b">42B</span>
               <span class="pri pri-high" style="font-size:10px;padding:2px 6px;">High</span>
             </div>
             <div class="board-card-meta">
@@ -1326,7 +1326,7 @@
           <div class="board-card">
             <div class="board-card-name overdue-text">Calibrate odometry constants</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839x">839X</span>
+              <span class="team-pill pill-42c">42C</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1340,7 +1340,7 @@
           <div class="board-card">
             <div class="board-card-name">Design new intake CAD model</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42a">42A</span>
               <span class="pri pri-high" style="font-size:10px;padding:2px 6px;">High</span>
             </div>
             <div class="board-card-meta">
@@ -1354,7 +1354,7 @@
           <div class="board-card">
             <div class="board-card-name">Practice driver skills x3</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839x">839X</span>
+              <span class="team-pill pill-42c">42C</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1368,7 +1368,7 @@
           <div class="board-card">
             <div class="board-card-name">Create sponsor slide deck</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839z">839Z</span>
+              <span class="team-pill pill-42d">42D</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1393,7 +1393,7 @@
           <div class="board-card" style="opacity:.75;">
             <div class="board-card-name">Run 10 autonomous consistency tests</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839y">839Y</span>
+              <span class="team-pill pill-42b">42B</span>
               <span class="pri pri-med" style="font-size:10px;padding:2px 6px;">Med</span>
             </div>
             <div class="board-card-meta">
@@ -1407,7 +1407,7 @@
           <div class="board-card" style="opacity:.75;">
             <div class="board-card-name">Prepare pit display boards</div>
             <div class="board-card-meta">
-              <span class="team-pill pill-839x">839X</span>
+              <span class="team-pill pill-42c">42C</span>
               <span class="pri pri-low" style="font-size:10px;padding:2px 6px;">Low</span>
             </div>
             <div class="board-card-meta">
@@ -1617,10 +1617,10 @@
 
   /* ── NOTIFICATIONS ────────────────────────────────── */
   const NOTIFS = [
-    { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 839Z', time:'2m ago' },
+    { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
     { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
     { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
-    { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 839Z placed 3rd at State Qualifier', time:'Yesterday' },
+    { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
     { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
     { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
   ];
@@ -1716,7 +1716,7 @@
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Team</label>
           <select id="nt-team" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);outline:none;background:var(--white);">
-            <option value="">No team</option><option>839Z</option><option>839Y</option><option>839X</option><option>839Z</option><option>42E</option>
+            <option value="">No team</option><option>42A</option><option>42B</option><option>42C</option><option>42D</option><option>42E</option>
           </select>
         </div>
         <div>
@@ -1764,7 +1764,7 @@
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Team</label>
           <select id="et-team" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);outline:none;background:var(--white);">
-            <option value="">No team</option><option>839Z</option><option>839Y</option><option>839X</option><option>839Z</option>
+            <option value="">No team</option><option>42A</option><option>42B</option><option>42C</option><option>42D</option>
           </select>
         </div>
         <div>

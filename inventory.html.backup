@@ -505,10 +505,10 @@
         <span class="chip-label">Team</span>
         <select id="filter-team" onchange="applyFilters()">
           <option value="">All Teams</option>
-          <option value="839Z">839Z</option>
-          <option value="839Y">839Y</option>
-          <option value="839X">839X</option>
-          <option value="839Z">839Z</option>
+          <option value="42A">42A</option>
+          <option value="42B">42B</option>
+          <option value="42C">42C</option>
+          <option value="42D">42D</option>
           <option value="Shared">Shared</option>
         </select>
         <i data-lucide="chevron-down" style="width:12px;height:12px;"></i>
@@ -602,7 +602,7 @@
       qty: 8,
       min: 4,
       status: 'In Stock',
-      team: '839Z',
+      team: '42A',
       updated: 'Feb 15, 2026',
     },
     {
@@ -613,7 +613,7 @@
       qty: 2,
       min: 6,
       status: 'Low Stock',
-      team: '839Z',
+      team: '42A',
       updated: 'Feb 12, 2026',
     },
     {
@@ -624,7 +624,7 @@
       qty: 1,
       min: 4,
       status: 'Low Stock',
-      team: '839Y',
+      team: '42B',
       updated: 'Feb 10, 2026',
     },
     {
@@ -646,7 +646,7 @@
       qty: 5,
       min: 8,
       status: 'Low Stock',
-      team: '839Z',
+      team: '42A',
       updated: 'Feb 11, 2026',
     },
     {
@@ -668,7 +668,7 @@
       qty: 24,
       min: 10,
       status: 'In Stock',
-      team: '839X',
+      team: '42C',
       updated: 'Feb 3, 2026',
     },
     {
@@ -679,7 +679,7 @@
       qty: 0,
       min: 2,
       status: 'Out of Stock',
-      team: '839Y',
+      team: '42B',
       updated: 'Jan 22, 2026',
     },
     {
@@ -690,7 +690,7 @@
       qty: 12,
       min: 6,
       status: 'In Stock',
-      team: '839Z',
+      team: '42D',
       updated: 'Feb 7, 2026',
     },
     {
@@ -712,7 +712,7 @@
       qty: 6,
       min: 4,
       status: 'In Stock',
-      team: '839Z',
+      team: '42A',
       updated: 'Feb 8, 2026',
     },
     {
@@ -756,7 +756,7 @@
       qty: 2,
       min: 1,
       status: 'In Stock',
-      team: '839Y',
+      team: '42B',
       updated: 'Feb 9, 2026',
     },
     {
@@ -767,7 +767,7 @@
       qty: 0,
       min: 1,
       status: 'Out of Stock',
-      team: '839Y',
+      team: '42B',
       updated: 'Jan 20, 2026',
     },
     {
@@ -778,7 +778,7 @@
       qty: 3,
       min: 2,
       status: 'In Stock',
-      team: '839X',
+      team: '42C',
       updated: 'Feb 6, 2026',
     },
     {
@@ -1072,10 +1072,10 @@
 
   /* ── NOTIFICATIONS ────────────────────────────────── */
   const NOTIFS = [
-    { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 839Z', time:'2m ago' },
+    { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
     { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
     { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
-    { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 839Z placed 3rd at State Qualifier', time:'Yesterday' },
+    { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
     { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
     { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
   ];
@@ -1177,7 +1177,7 @@
         <div>
           <label style="font-size:11px;font-weight:700;color:var(--gray-1);text-transform:uppercase;letter-spacing:.06em;display:block;margin-bottom:5px;">Team</label>
           <select id="ai-team" style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:8px 12px;font-size:13px;font-family:'Inter',sans-serif;color:var(--black);outline:none;background:var(--white);">
-            <option value="">General / All Teams</option><option>839Z</option><option>839Y</option><option>839X</option><option>839Z</option>
+            <option value="">General / All Teams</option><option>42A</option><option>42B</option><option>42C</option><option>42D</option>
           </select>
         </div>
       </div>

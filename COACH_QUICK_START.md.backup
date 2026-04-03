@@ -39,7 +39,7 @@ Just double-click `index.html` in Finder. It will open in your default browser.
    - View individual student profiles
 
 2. **Teams** (`teams.html`)
-   - See all 4 teams (839Z, 839Y, 839X)
+   - See all 4 teams (42A, 42B, 42C, 42D)
    - Team rosters and stats
 
 3. **Tasks** (`tasks.html`)
@@ -138,7 +138,7 @@ Navigate to **Students** page to see:
 ## Tips for Using the Dashboard
 
 ### Quick Filters (Students Page)
-- Want to see only Team 839Z? Click the Team dropdown → select "839Z — Elite"
+- Want to see only Team 42A? Click the Team dropdown → select "42A — Iron Gears"
 - Want only V5RC students? Program dropdown → "V5RC"
 - Clear all filters with the "Clear filters" button
 

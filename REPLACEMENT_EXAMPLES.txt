@@ -1,0 +1,50 @@
+=== TEAM 42 → TEAM 839 REPLACEMENT EXAMPLES ===
+
+Before → After Examples:
+
+1. FILTER CHIPS (tasks.html, inventory.html):
+   Before: <button class="filter-chip">42A</button>
+   After:  <button class="filter-chip">839Z</button>
+
+2. CSS CLASSES (tasks.html):
+   Before: <span class="team-pill pill-42a">42A</span>
+   After:  <span class="team-pill pill-839z">839Z</span>
+
+3. TEAM HEADERS (teams.html):
+   Before: <h2>42A — Iron Gears</h2>
+   After:  <h2>839Z — Elite</h2>
+
+4. TEAM PERFORMANCE TABLE (reports.html):
+   Before: <div class="team-name">42A — Iron Gears</div>
+   After:  <div class="team-name">839Z — Elite</div>
+
+5. FOLDER PATHS (tasks.html):
+   Before: Version in Google Drive under /42A/CAD/Intake_v3
+   After:  Version in Google Drive under /839Z/CAD/Intake_v3
+
+6. FUNCTION PARAMETERS (teams.html):
+   Before: onclick="openEditTeam('42A','VRC Robotics')"
+   After:  onclick="openEditTeam('839Z','VRC Robotics')"
+
+7. STUDENT DROPDOWNS (teams.html):
+   Before: <option>Steven Papazian (42A)</option>
+   After:  <option>Steven Papazian (839Z)</option>
+
+8. NOTIFICATIONS (teams.html):
+   Before: body:'Robot chassis CAD is 2 days overdue — Team 42A'
+   After:  body:'Robot chassis CAD is 2 days overdue — Team 839Z'
+
+9. INPUT PLACEHOLDERS (teams.html):
+   Before: placeholder="Team 42A"
+   After:  placeholder="Team 839Z"
+
+10. DOCUMENTATION (COACH_QUICK_START.md):
+    Before: See all 4 teams (42A, 42B, 42C, 42D)
+    After:  See all 4 teams (839Z, 839Y, 839X)
+
+=== TEAM MAPPING ===
+42A → 839Z (Elite)
+42B → 839Y (Rookie)
+42C → 839X (Rookie)  
+42D → 839Z (distributed evenly)
+

@@ -736,7 +736,7 @@
                 <tbody>
                   <tr>
                     <td>
-                      <div class="team-name">839Z — Iron Gears</div>
+                      <div class="team-name">42A — Iron Gears</div>
                       <div style="font-size:11px;color:var(--gray-2);">5 members</div>
                     </td>
                     <td><span class="badge badge-black">V5RC</span></td>
@@ -752,7 +752,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <div class="team-name">839Y — Cyber Knights</div>
+                      <div class="team-name">42B — Cyber Knights</div>
                       <div style="font-size:11px;color:var(--gray-2);">4 members</div>
                     </td>
                     <td><span class="badge badge-black">V5RC</span></td>
@@ -768,7 +768,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <div class="team-name">839X — Robo Wizards</div>
+                      <div class="team-name">42C — Robo Wizards</div>
                       <div style="font-size:11px;color:var(--gray-2);">6 members</div>
                     </td>
                     <td><span class="badge badge-purple">VIQRC</span></td>
@@ -784,7 +784,7 @@
                   </tr>
                   <tr>
                     <td>
-                      <div class="team-name">839Z — Gear Grinders</div>
+                      <div class="team-name">42D — Gear Grinders</div>
                       <div style="font-size:11px;color:var(--gray-2);">3 members</div>
                     </td>
                     <td><span class="badge badge-purple">VIQRC</span></td>
@@ -1079,12 +1079,12 @@
   function attendanceCSV() {
     const rows = [
       ['Student Name', 'Team', 'Grade', 'Sessions Attended', 'Total Sessions', 'Attendance %', 'Last Seen'],
-      ['Alex Rivera', '839Z', '11', 28, 32, '87%', '2025-01-10'],
-      ['Jordan Lee', '839Z', '10', 30, 32, '93%', '2025-01-10'],
-      ['Sam Chen', '839Y', '12', 25, 32, '78%', '2025-01-08'],
-      ['Morgan Davis', '839Y', '9', 32, 32, '100%', '2025-01-10'],
-      ['Taylor Kim', '839X', '11', 20, 32, '62%', '2024-12-20'],
-      ['Riley Park', '839X', '10', 27, 32, '84%', '2025-01-09'],
+      ['Alex Rivera', '42A', '11', 28, 32, '87%', '2025-01-10'],
+      ['Jordan Lee', '42A', '10', 30, 32, '93%', '2025-01-10'],
+      ['Sam Chen', '42B', '12', 25, 32, '78%', '2025-01-08'],
+      ['Morgan Davis', '42B', '9', 32, 32, '100%', '2025-01-10'],
+      ['Taylor Kim', '42C', '11', 20, 32, '62%', '2024-12-20'],
+      ['Riley Park', '42C', '10', 27, 32, '84%', '2025-01-09'],
     ];
     downloadCSV('ctrc-attendance-' + new Date().toISOString().slice(0,10) + '.csv', rows);
     showRPToast('Attendance Report CSV downloaded');
@@ -1094,12 +1094,12 @@
   function studentProgressCSV() {
     const rows = [
       ['Student Name', 'Team', 'Grade', 'Skill Level', 'Badges Earned', 'Tasks Assigned', 'Tasks Completed', 'Completion %'],
-      ['Alex Rivera', '839Z', '11', 'Advanced', 7, 18, 16, '88%'],
-      ['Jordan Lee', '839Z', '10', 'Intermediate', 5, 14, 12, '85%'],
-      ['Sam Chen', '839Y', '12', 'Expert', 10, 22, 21, '95%'],
-      ['Morgan Davis', '839Y', '9', 'Beginner', 2, 8, 6, '75%'],
-      ['Taylor Kim', '839X', '11', 'Intermediate', 4, 12, 9, '75%'],
-      ['Riley Park', '839X', '10', 'Beginner', 3, 10, 8, '80%'],
+      ['Alex Rivera', '42A', '11', 'Advanced', 7, 18, 16, '88%'],
+      ['Jordan Lee', '42A', '10', 'Intermediate', 5, 14, 12, '85%'],
+      ['Sam Chen', '42B', '12', 'Expert', 10, 22, 21, '95%'],
+      ['Morgan Davis', '42B', '9', 'Beginner', 2, 8, 6, '75%'],
+      ['Taylor Kim', '42C', '11', 'Intermediate', 4, 12, 9, '75%'],
+      ['Riley Park', '42C', '10', 'Beginner', 3, 10, 8, '80%'],
     ];
     downloadCSV('ctrc-student-progress-' + new Date().toISOString().slice(0,10) + '.csv', rows);
     showRPToast('Student Progress CSV downloaded');
@@ -1109,10 +1109,10 @@
   function competitionCSV() {
     const rows = [
       ['Event', 'Date', 'Team', 'Qualification Rank', 'W-L-T', 'Alliance', 'Result', 'Awards'],
-      ['Qualifier #1', '2024-10-12', '839Z', 3, '8-2-0', 'Alliance 2 Captain', 'Finalist', 'Excellence Award'],
-      ['Qualifier #1', '2024-10-12', '839Y', 7, '6-4-0', 'Alliance 3 Partner', 'Quarterfinalist', 'Design Award'],
-      ['Qualifier #2', '2024-11-09', '839Z', 1, '9-1-0', 'Alliance 1 Captain', 'Champion', 'Tournament Champion'],
-      ['State Championship', '2024-12-14', '839Z', 12, '5-5-0', 'Alliance 5 Partner', 'Quarterfinalist', ''],
+      ['Qualifier #1', '2024-10-12', '42A', 3, '8-2-0', 'Alliance 2 Captain', 'Finalist', 'Excellence Award'],
+      ['Qualifier #1', '2024-10-12', '42B', 7, '6-4-0', 'Alliance 3 Partner', 'Quarterfinalist', 'Design Award'],
+      ['Qualifier #2', '2024-11-09', '42A', 1, '9-1-0', 'Alliance 1 Captain', 'Champion', 'Tournament Champion'],
+      ['State Championship', '2024-12-14', '42A', 12, '5-5-0', 'Alliance 5 Partner', 'Quarterfinalist', ''],
     ];
     downloadCSV('ctrc-competition-results-' + new Date().toISOString().slice(0,10) + '.csv', rows);
     showRPToast('Competition Results CSV downloaded');
@@ -1164,10 +1164,10 @@
 
   /* ── NOTIFICATIONS ────────────────────────────────── */
   const NOTIFS = [
-    { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 839Z', time:'2m ago' },
+    { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
     { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
     { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
-    { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 839Z placed 3rd at State Qualifier', time:'Yesterday' },
+    { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
     { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
     { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
   ];

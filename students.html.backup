@@ -868,10 +868,10 @@ applyFilters();
 
 /* ── NOTIFICATIONS ────────────────────────────────── */
 const NOTIFS = [
-  { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 839Z', time:'2m ago' },
+  { id:1, unread:true,  icon:'alert-circle',   color:'#EF4444', title:'Overdue Task', body:'Robot chassis CAD is 2 days overdue — Team 42A', time:'2m ago' },
   { id:2, unread:true,  icon:'package',        color:'#F59E0B', title:'Low Inventory', body:'8020 Aluminum Extrusion is low stock (qty: 2)', time:'14m ago' },
   { id:3, unread:true,  icon:'users',          color:'#6366F1', title:'New Student', body:'Jordan Lee enrolled in Foundation Program', time:'1h ago' },
-  { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 839Z placed 3rd at State Qualifier', time:'Yesterday' },
+  { id:4, unread:false, icon:'trophy',         color:'#F5D000', title:'Competition Result', body:'Team 42A placed 3rd at State Qualifier', time:'Yesterday' },
   { id:5, unread:false, icon:'check-circle-2', color:'#15803D', title:'Task Completed', body:'Electronics wiring completed by Sam Chen', time:'Yesterday' },
   { id:6, unread:false, icon:'calendar',       color:'#0EA5E9', title:'Upcoming Event', body:'Regional Championship in 12 days — Feb 28', time:'2d ago' },
 ];
