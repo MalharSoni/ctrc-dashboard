@@ -285,6 +285,8 @@
     .row-btn:hover { border-color: var(--black); }
     .row-btn.primary { background: var(--yellow); border-color: var(--yellow); }
     .row-btn.primary:hover { opacity: .85; }
+    .row-btn.assign { background: var(--yellow); border-color: var(--yellow); color: var(--black); }
+    .row-btn.assign:hover { opacity: .88; }
 
     /* caution stripe */
     .caution-strip {
@@ -332,6 +334,61 @@
     .empty-state-icon { color: var(--gray-3); }
     .empty-state-title { font-size: 15px; font-weight: 700; color: var(--black-3); }
     .empty-state-desc { font-size: 13px; color: var(--gray-1); text-align: center; max-width: 320px; }
+
+    /* ── ASSIGN TEAM MODAL ─────────────────────────── */
+    .team-card {
+      display: flex; flex-direction: column; gap: 8px;
+      padding: 16px; border-radius: var(--radius);
+      border: 2px solid var(--gray-3);
+      background: var(--white); cursor: pointer;
+      transition: all .15s;
+    }
+    .team-card:hover { border-color: var(--gray-2); background: var(--gray-4); }
+    .team-card.selected { border-color: var(--yellow); background: var(--yellow-bg); }
+    .team-card-header { display: flex; align-items: center; justify-content: space-between; }
+    .team-card-title { font-size: 15px; font-weight: 700; color: var(--black); }
+    .team-card-tier { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 4px; letter-spacing: .03em; text-transform: uppercase; }
+    .team-card-tier.elite { background: var(--black); color: var(--white); }
+    .team-card-tier.rookie { background: #EDE9FE; color: #5B21B6; }
+    .team-card-desc { font-size: 12.5px; color: var(--gray-1); line-height: 1.5; }
+    .team-card-meta { font-size: 11.5px; color: var(--gray-2); }
+    .checkbox-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 12px; border-radius: var(--radius-sm);
+      background: var(--gray-4); cursor: pointer;
+      transition: background .15s;
+    }
+    .checkbox-row:hover { background: #EBEBEB; }
+    .checkbox-row input[type="checkbox"] {
+      width: 18px; height: 18px; cursor: pointer;
+      accent-color: var(--yellow);
+    }
+    .checkbox-row label {
+      font-size: 13px; font-weight: 500; color: var(--black);
+      cursor: pointer; user-select: none;
+    }
+
+    /* ── BULK ACTIONS BAR ──────────────────────────── */
+    .bulk-actions {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--black); color: var(--white);
+      padding: 14px 20px; border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(0,0,0,.24);
+      display: flex; align-items: center; gap: 14px;
+      z-index: 600;
+    }
+    .bulk-actions-text { font-size: 13px; font-weight: 600; }
+    .bulk-actions-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .15s; border: none;
+    }
+    .bulk-actions-btn.primary { background: var(--yellow); color: var(--black); }
+    .bulk-actions-btn.primary:hover { opacity: .88; }
+    .bulk-actions-btn.ghost { background: transparent; color: var(--white); border: 1.5px solid var(--black-3); }
+    .bulk-actions-btn.ghost:hover { background: var(--black-2); }
   </style>
 </head>
 
@@ -444,6 +501,13 @@
 
     <!-- FILTER BAR -->
     <div class="filter-bar">
+      <div class="filter-chip" id="chip-unassigned" onclick="toggleUnassignedFilter()" style="cursor:pointer;">
+        <i data-lucide="user-x" style="width:13px;height:13px;flex-shrink:0;"></i>
+        <span style="font-weight:600;">Unassigned Only</span>
+      </div>
+
+      <div class="filter-sep"></div>
+
       <div class="filter-chip" id="chip-team">
         <span class="chip-label">Team</span>
         <select id="filter-team" onchange="applyFilters()">
@@ -526,6 +590,9 @@
         <table>
           <thead>
             <tr>
+              <th style="width:40px;padding-left:14px;">
+                <input type="checkbox" id="select-all" onchange="toggleSelectAll()" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
+              </th>
               <th class="sortable sorted" onclick="sortBy('name')">
                 Student Name <span class="sort-icon asc" id="sort-name"></span>
               </th>
@@ -582,44 +649,47 @@
 lucide.createIcons();
 
 // ── DATA ────────────────────────────────────────────
-const STUDENTS = [
-  { id:1,  name:'Daniel Edelstein', email:'Daniel.Edelstein@cautiontape.ca', initials:'DE', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
-  { id:2,  name:'Daniel Fu',        email:'Daniel.Fu@cautiontape.ca',        initials:'DF', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
-  { id:3,  name:'Luke Fu',          email:'Luke.Fu@cautiontape.ca',          initials:'LF', color:'#FEF3C7', textColor:'#92400E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
-  { id:4,  name:'Ryan Jung',        email:'Ryan.Jung@cautiontape.ca',        initials:'RJ', color:'#FCE7F3', textColor:'#9D174D', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
-  { id:5,  name:'Bryan Kuan',       email:'Bryan.Kuan@cautiontape.ca',       initials:'BK', color:'#ECFDF5', textColor:'#065F46', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
-  { id:6,  name:'Alessio Lai',      email:'Alessio.Lai@cautiontape.ca',      initials:'AL', color:'#FFF7ED', textColor:'#9A3412', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
-  { id:7,  name:'Cyrus Liu',        email:'Cyrus.Liu@cautiontape.ca',        initials:'CL', color:'#F0FDF4', textColor:'#15803D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
-  { id:8,  name:'Cici Ma',          email:'Cici.Ma@cautiontape.ca',          initials:'CM', color:'#FDF4FF', textColor:'#7E22CE', team:'839X', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:7  },
-  { id:9,  name:'Zuhaib Mansoor',   email:'Zuhaib.Mansoor@cautiontape.ca',   initials:'ZM', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
-  { id:10, name:'Eli Mindell',      email:'Eli.Mindell@cautiontape.ca',      initials:'EM', color:'#FDF2F8', textColor:'#9D174D', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
-  { id:11, name:'Steven Papazian',  email:'Steven.Papazian@cautiontape.ca',  initials:'SP', color:'#FFFBEB', textColor:'#92400E', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
-  { id:12, name:'Brialyn Quast',    email:'Brialyn.Quast@cautiontape.ca',    initials:'BQ', color:'#F0FDFA', textColor:'#0F766E', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
-  { id:13, name:'Keegan Ramsaran',  email:'Keegan.Ramsaran@cautiontape.ca',  initials:'KR', color:'#FEE2E2', textColor:'#991B1B', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
-  { id:14, name:'Kiara Ramsaran',   email:'Kiara.Ramsaran@cautiontape.ca',   initials:'KI', color:'#FCE7F3', textColor:'#9D174D', team:null,   evTeam:true,  program:'EV',   role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:11 },
-  { id:15, name:'Justin Rui',       email:'Justin.Rui@cautiontape.ca',       initials:'JR', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:11 },
-  { id:16, name:'Brandon Situ',     email:'Brandon.Situ@cautiontape.ca',     initials:'BS', color:'#D1FAE5', textColor:'#065F46', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
-  { id:17, name:'Caden Situ',       email:'Caden.Situ@cautiontape.ca',       initials:'CS', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
-  { id:18, name:'Brayden Sun',      email:'Brayden.Sun@cautiontape.ca',      initials:'BU', color:'#FEF3C7', textColor:'#92400E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
-  { id:19, name:'Nathan Tam',       email:'Nathan.Tam@cautiontape.ca',       initials:'NT', color:'#ECFDF5', textColor:'#065F46', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
-  { id:20, name:'Elyse To',         email:'Elyse.To@cautiontape.ca',         initials:'ET', color:'#FFF7ED', textColor:'#9A3412', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
-  { id:21, name:'Allen Wang',       email:'Allen.Wang@cautiontape.ca',       initials:'AW', color:'#F0FDF4', textColor:'#15803D', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
-  { id:22, name:'Jovan Wang',       email:'Jovan.Wang@cautiontape.ca',       initials:'JW', color:'#FDF4FF', textColor:'#7E22CE', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
-  { id:23, name:'Isaac Wong',       email:'Isaac.Wong@cautiontape.ca',       initials:'IW', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
-  { id:24, name:'Kylie Woo',        email:'Kylie.Woo@cautiontape.ca',        initials:'KW', color:'#FDF2F8', textColor:'#9D174D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
-  { id:25, name:'Jayden Yang',      email:'Jayden.Yang@cautiontape.ca',      initials:'JY', color:'#FFFBEB', textColor:'#92400E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
-  { id:26, name:'Thomas Yang',      email:'Thomas.Yang@cautiontape.ca',      initials:'TY', color:'#F0FDFA', textColor:'#0F766E', team:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:10 },
-  { id:27, name:'Jake Yeung',       email:'Jake.Yeung@cautiontape.ca',       initials:'JE', color:'#FEE2E2', textColor:'#991B1B', team:'839X', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
-  { id:28, name:'Tobias Yeung',    email:'Tobias.Yeung@cautiontape.ca',     initials:'TYE', color:'#FCE7F3', textColor:'#9D174D', team:'839X', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
-  { id:29, name:'Tiger Zhang',      email:'Tiger.Zhang@cautiontape.ca',      initials:'TZ', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:10 },
-  { id:30, name:'Brandon Zhao',     email:'Brandon.Zhao@cautiontape.ca',     initials:'BZ', color:'#D1FAE5', textColor:'#065F46', team:'839Y', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
-  { id:31, name:'Yichen Zheng',     email:'Yichen.Zheng@cautiontape.ca',     initials:'YZ', color:'#EDE9FE', textColor:'#5B21B6', team:'839Y', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:9  },
+// Load from localStorage or use defaults
+const STUDENTS = JSON.parse(localStorage.getItem('students') || 'null') || [
+  { id:1,  name:'Daniel Edelstein', email:'Daniel.Edelstein@cautiontape.ca', initials:'DE', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:2,  name:'Daniel Fu',        email:'Daniel.Fu@cautiontape.ca',        initials:'DF', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:3,  name:'Luke Fu',          email:'Luke.Fu@cautiontape.ca',          initials:'LF', color:'#FEF3C7', textColor:'#92400E', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:4,  name:'Ryan Jung',        email:'Ryan.Jung@cautiontape.ca',        initials:'RJ', color:'#FCE7F3', textColor:'#9D174D', team:'839Z', teamLabel:'839Z — Elite', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:5,  name:'Bryan Kuan',       email:'Bryan.Kuan@cautiontape.ca',       initials:'BK', color:'#ECFDF5', textColor:'#065F46', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
+  { id:6,  name:'Alessio Lai',      email:'Alessio.Lai@cautiontape.ca',      initials:'AL', color:'#FFF7ED', textColor:'#9A3412', team:'839Y', teamLabel:'839Y — Rookie', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
+  { id:7,  name:'Cyrus Liu',        email:'Cyrus.Liu@cautiontape.ca',        initials:'CL', color:'#F0FDF4', textColor:'#15803D', team:'839X', teamLabel:'839X — Rookie', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:8,  name:'Cici Ma',          email:'Cici.Ma@cautiontape.ca',          initials:'CM', color:'#FDF4FF', textColor:'#7E22CE', team:'839X', teamLabel:'839X — Rookie', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:7  },
+  { id:9,  name:'Zuhaib Mansoor',   email:'Zuhaib.Mansoor@cautiontape.ca',   initials:'ZM', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:10, name:'Eli Mindell',      email:'Eli.Mindell@cautiontape.ca',      initials:'EM', color:'#FDF2F8', textColor:'#9D174D', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:11, name:'Steven Papazian',  email:'Steven.Papazian@cautiontape.ca',  initials:'SP', color:'#FFFBEB', textColor:'#92400E', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:12, name:'Brialyn Quast',    email:'Brialyn.Quast@cautiontape.ca',    initials:'BQ', color:'#F0FDFA', textColor:'#0F766E', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:13, name:'Keegan Ramsaran',  email:'Keegan.Ramsaran@cautiontape.ca',  initials:'KR', color:'#FEE2E2', textColor:'#991B1B', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:14, name:'Kiara Ramsaran',   email:'Kiara.Ramsaran@cautiontape.ca',   initials:'KI', color:'#FCE7F3', textColor:'#9D174D', team:null,   teamLabel:null, evTeam:true,  program:'EV',   role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:11 },
+  { id:15, name:'Justin Rui',       email:'Justin.Rui@cautiontape.ca',       initials:'JR', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:11 },
+  { id:16, name:'Brandon Situ',     email:'Brandon.Situ@cautiontape.ca',     initials:'BS', color:'#D1FAE5', textColor:'#065F46', team:'839Z', teamLabel:'839Z — Elite', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:17, name:'Caden Situ',       email:'Caden.Situ@cautiontape.ca',       initials:'CS', color:'#EDE9FE', textColor:'#5B21B6', team:'839Z', teamLabel:'839Z — Elite', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:18, name:'Brayden Sun',      email:'Brayden.Sun@cautiontape.ca',      initials:'BU', color:'#FEF3C7', textColor:'#92400E', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:19, name:'Nathan Tam',       email:'Nathan.Tam@cautiontape.ca',       initials:'NT', color:'#ECFDF5', textColor:'#065F46', team:'839Z', teamLabel:'839Z — Elite', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
+  { id:20, name:'Elyse To',         email:'Elyse.To@cautiontape.ca',         initials:'ET', color:'#FFF7ED', textColor:'#9A3412', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
+  { id:21, name:'Allen Wang',       email:'Allen.Wang@cautiontape.ca',       initials:'AW', color:'#F0FDF4', textColor:'#15803D', team:'839Y', teamLabel:'839Y — Rookie', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:8  },
+  { id:22, name:'Jovan Wang',       email:'Jovan.Wang@cautiontape.ca',       initials:'JW', color:'#FDF4FF', textColor:'#7E22CE', team:'839Z', teamLabel:'839Z — Elite', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:11 },
+  { id:23, name:'Isaac Wong',       email:'Isaac.Wong@cautiontape.ca',       initials:'IW', color:'#EFF6FF', textColor:'#1D4ED8', team:'839Z', teamLabel:'839Z — Elite', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:12 },
+  { id:24, name:'Kylie Woo',        email:'Kylie.Woo@cautiontape.ca',        initials:'KW', color:'#FDF2F8', textColor:'#9D174D', team:'839X', teamLabel:'839X — Rookie', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
+  { id:25, name:'Jayden Yang',      email:'Jayden.Yang@cautiontape.ca',      initials:'JY', color:'#FFFBEB', textColor:'#92400E', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:10 },
+  { id:26, name:'Thomas Yang',      email:'Thomas.Yang@cautiontape.ca',      initials:'TY', color:'#F0FDFA', textColor:'#0F766E', team:null, teamLabel:null, evTeam:false, program:'V5RC', role:'Builder', attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:10 },
+  { id:27, name:'Jake Yeung',       email:'Jake.Yeung@cautiontape.ca',       initials:'JE', color:'#FEE2E2', textColor:'#991B1B', team:'839X', teamLabel:'839X — Rookie', evTeam:false, program:'V5RC', role:'Builder',      attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:9  },
+  { id:28, name:'Tobias Yeung',    email:'Tobias.Yeung@cautiontape.ca',     initials:'TYE', color:'#FCE7F3', textColor:'#9D174D', team:'839X', teamLabel:'839X — Rookie', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
+  { id:29, name:'Tiger Zhang',      email:'Tiger.Zhang@cautiontape.ca',      initials:'TZ', color:'#DBEAFE', textColor:'#1D4ED8', team:'839Z', teamLabel:'839Z — Elite', evTeam:false, program:'V5RC', role:'Builder',     attendance:0, trend:'flat', skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',  grade:10 },
+  { id:30, name:'Brandon Zhao',     email:'Brandon.Zhao@cautiontape.ca',     initials:'BZ', color:'#D1FAE5', textColor:'#065F46', team:'839Y', teamLabel:'839Y — Rookie', evTeam:true,  program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',   grade:9  },
+  { id:31, name:'Yichen Zheng',     email:'Yichen.Zheng@cautiontape.ca',     initials:'YZ', color:'#EDE9FE', textColor:'#5B21B6', team:'839Y', teamLabel:'839Y — Rookie', evTeam:false, program:'V5RC', role:'Builder',  attendance:0, trend:'flat',   skillLevel:'Lvl 1', skillPct:0, badges:0, status:'Active',   lastSeen:'Not yet',       grade:9  },
 ];
 
 // ── STATE ────────────────────────────────────────────
 let currentSort = { key: 'name', dir: 'asc' };
 let filtered = [...STUDENTS];
 let currentView = 'table';
+let selectedStudents = new Set();
+let unassignedFilterActive = false;
 
 // ── RENDER ───────────────────────────────────────────
 function attClass(pct) { return pct >= 85 ? 'high' : pct >= 70 ? 'mid' : 'low'; }
@@ -643,6 +713,7 @@ function renderTable() {
     const ac = attClass(s.attendance);
     const apc = attPctClass(s.attendance);
     const trendIcon = s.trend === 'up' ? '<span class="att-trend trend-up">↑</span>' : s.trend === 'down' ? '<span class="att-trend trend-down">↓</span>' : '<span class="att-trend trend-flat">–</span>';
+    const isUnassigned = !s.team && !s.evTeam;
     let teamPill = '';
     if (s.team === '839Z') {
       teamPill = `<span class="team-pill v5rc">839Z — Elite</span>`;
@@ -665,7 +736,12 @@ function renderTable() {
       ? '<span class="risk-flag"><i data-lucide="triangle-alert" style="width:10px;height:10px;"></i> At Risk</span>'
       : '<span class="badge badge-gray">Inactive</span>';
 
+    const isChecked = selectedStudents.has(s.id);
+
     return `<tr onclick="viewStudent(${s.id})">
+      <td style="padding-left:14px;" onclick="event.stopPropagation()">
+        <input type="checkbox" class="student-checkbox" data-student-id="${s.id}" ${isChecked ? 'checked' : ''} onchange="toggleStudentSelect(${s.id})" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
+      </td>
       <td>
         <div class="student-cell">
           <div class="avatar" style="background:${s.color};color:${s.textColor};">${s.initials}</div>
@@ -697,12 +773,17 @@ function renderTable() {
       <td style="color:var(--gray-1);font-size:12.5px;">${s.lastSeen}</td>
       <td>
         <div class="row-actions" style="position:relative;">
+          ${isUnassigned ? `<button class="row-btn assign" onclick="event.stopPropagation();openAssignModal(${s.id})">
+            <i data-lucide="user-plus" style="width:13px;height:13px;"></i>
+            Assign
+          </button>` : ''}
           <a class="row-btn primary" href="student-profile.html?id=${s.id}" onclick="event.stopPropagation()">View</a>
           <button class="row-btn" onclick="event.stopPropagation();toggleStudentDD(event,${s.id})">
             <i data-lucide="more-horizontal" style="width:13px;height:13px;"></i>
           </button>
           <div id="sdd-${s.id}" style="display:none;position:absolute;right:0;top:34px;background:var(--white);border:1px solid var(--gray-3);border-radius:var(--radius-sm);box-shadow:0 4px 12px rgba(0,0,0,.10);z-index:200;min-width:170px;overflow:hidden;">
             <div style="padding:6px 14px;font-size:12px;color:var(--gray-1);border-bottom:1px solid var(--gray-3);">${s.name}</div>
+            ${isUnassigned ? `<div style="padding:8px 14px;font-size:13px;font-weight:500;color:var(--black);cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background=''" onclick="openAssignModal(${s.id})"><svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2'></path><circle cx='9' cy='7' r='4'></circle><line x1='19' y1='8' x2='19' y2='14'></line><line x1='22' y1='11' x2='16' y2='11'></line></svg>Assign to Team</div>` : ''}
             <div style="padding:8px 14px;font-size:13px;font-weight:500;color:var(--black);cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background=''" onclick="window.location='student-profile.html?id=${s.id}'"><svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2'></path><circle cx='12' cy='7' r='4'></circle></svg>View Profile</div>
             <div style="padding:8px 14px;font-size:13px;font-weight:500;color:var(--black);cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background=''" onclick="showStuToast('Message sent to ${s.name}')"><svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z'></path><polyline points='22,6 12,12 2,6'></polyline></svg>Send Message</div>
             <div style="padding:8px 14px;font-size:13px;font-weight:500;color:var(--black);cursor:pointer;display:flex;align-items:center;gap:8px;" onmouseover="this.style.background='var(--gray-4)'" onmouseout="this.style.background=''" onclick="showStuToast('${s.name} flagged for follow-up')"><svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><path d='M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z'></path><line x1='4' y1='22' x2='4' y2='15'></line></svg>Flag Student</div>
@@ -753,6 +834,7 @@ function applyFilters() {
   const search  = document.getElementById('table-search').value.toLowerCase().trim();
 
   filtered = STUDENTS.filter(s => {
+    if (unassignedFilterActive && (s.team !== null || s.evTeam)) return false;
     if (team    && team !== 'none' && s.team !== team) return false;
     if (team === 'none' && s.team !== null) return false;
     if (program && s.program !== program) return false;
@@ -765,6 +847,20 @@ function applyFilters() {
   sortFiltered();
   if (currentView === 'table') renderTable(); else renderGrid();
   document.getElementById('pagination-info').textContent = `Showing 1–${Math.min(filtered.length, 15)} of ${filtered.length} students`;
+  updateBulkActionsBar();
+}
+
+function toggleUnassignedFilter() {
+  unassignedFilterActive = !unassignedFilterActive;
+  const chip = document.getElementById('chip-unassigned');
+  if (unassignedFilterActive) {
+    chip.classList.add('active');
+    // Clear team filter if active
+    document.getElementById('filter-team').value = '';
+  } else {
+    chip.classList.remove('active');
+  }
+  applyFilters();
 }
 
 function clearFilters() {
@@ -773,6 +869,8 @@ function clearFilters() {
   document.getElementById('filter-role').value = '';
   document.getElementById('filter-status').value = '';
   document.getElementById('table-search').value = '';
+  unassignedFilterActive = false;
+  document.getElementById('chip-unassigned').classList.remove('active');
   applyFilters();
 }
 
@@ -866,6 +964,200 @@ function exportCSV() {
   a.click();
 }
 
+// ── SELECTION & BULK ACTIONS ─────────────────────────
+function toggleSelectAll() {
+  const checkbox = document.getElementById('select-all');
+  selectedStudents.clear();
+  if (checkbox.checked) {
+    filtered.forEach(s => selectedStudents.add(s.id));
+  }
+  renderTable();
+  updateBulkActionsBar();
+}
+
+function toggleStudentSelect(id) {
+  if (selectedStudents.has(id)) {
+    selectedStudents.delete(id);
+  } else {
+    selectedStudents.add(id);
+  }
+  const selectAll = document.getElementById('select-all');
+  if (selectAll) {
+    selectAll.checked = selectedStudents.size === filtered.length;
+  }
+  updateBulkActionsBar();
+}
+
+function updateBulkActionsBar() {
+  let bar = document.getElementById('bulk-actions-bar');
+  if (selectedStudents.size === 0) {
+    if (bar) bar.remove();
+    return;
+  }
+
+  if (!bar) {
+    bar = document.createElement('div');
+    bar.id = 'bulk-actions-bar';
+    bar.className = 'bulk-actions';
+    document.body.appendChild(bar);
+  }
+
+  const selectedCount = selectedStudents.size;
+  const unassignedCount = Array.from(selectedStudents).filter(id => {
+    const s = STUDENTS.find(st => st.id === id);
+    return s && !s.team && !s.evTeam;
+  }).length;
+
+  bar.innerHTML = `
+    <span class="bulk-actions-text">${selectedCount} student${selectedCount !== 1 ? 's' : ''} selected</span>
+    ${unassignedCount > 0 ? `
+      <button class="bulk-actions-btn primary" onclick="openBulkAssignModal()">
+        <i data-lucide="user-plus" style="width:13px;height:13px;"></i>
+        Assign to Team (${unassignedCount})
+      </button>
+    ` : ''}
+    <button class="bulk-actions-btn ghost" onclick="clearSelection()">
+      <i data-lucide="x" style="width:13px;height:13px;"></i>
+      Clear
+    </button>
+  `;
+  lucide.createIcons();
+}
+
+function clearSelection() {
+  selectedStudents.clear();
+  document.getElementById('select-all').checked = false;
+  renderTable();
+  updateBulkActionsBar();
+}
+
+// ── TEAM ASSIGNMENT ──────────────────────────────────
+let assignModalStudentIds = [];
+let selectedTeam = null;
+let evTeamChecked = false;
+
+function openAssignModal(studentId) {
+  assignModalStudentIds = [studentId];
+  const student = STUDENTS.find(s => s.id === studentId);
+  if (!student) return;
+
+  document.getElementById('assign-modal-title').textContent = 'Assign Student to Team';
+  document.getElementById('assign-modal-student').innerHTML = `
+    <div style="font-size:14px;font-weight:700;color:var(--black);">${student.name}</div>
+    <div style="font-size:12px;color:var(--gray-1);margin-top:2px;">Currently: <span style="color:var(--gray-2);font-weight:600;">Unassigned</span></div>
+  `;
+
+  selectedTeam = null;
+  evTeamChecked = false;
+  document.getElementById('assign-notes').value = '';
+  updateTeamCards();
+
+  document.getElementById('assign-backdrop').style.display = 'flex';
+}
+
+function openBulkAssignModal() {
+  const unassignedIds = Array.from(selectedStudents).filter(id => {
+    const s = STUDENTS.find(st => st.id === id);
+    return s && !s.team && !s.evTeam;
+  });
+
+  if (unassignedIds.length === 0) {
+    showStuToast('No unassigned students selected');
+    return;
+  }
+
+  assignModalStudentIds = unassignedIds;
+  const count = unassignedIds.length;
+
+  document.getElementById('assign-modal-title').textContent = `Assign ${count} Students to Team`;
+  document.getElementById('assign-modal-student').innerHTML = `
+    <div style="font-size:13px;color:var(--gray-1);">
+      Selected <span style="font-weight:700;color:var(--black);">${count} unassigned student${count !== 1 ? 's' : ''}</span> for team assignment
+    </div>
+  `;
+
+  selectedTeam = null;
+  evTeamChecked = false;
+  document.getElementById('assign-notes').value = '';
+  updateTeamCards();
+
+  document.getElementById('assign-backdrop').style.display = 'flex';
+}
+
+function selectTeam(team) {
+  selectedTeam = team;
+  updateTeamCards();
+}
+
+function toggleEvTeam() {
+  evTeamChecked = !evTeamChecked;
+  updateTeamCards();
+}
+
+function updateTeamCards() {
+  const teams = ['839Z', '839Y', '839X'];
+  teams.forEach(team => {
+    const card = document.getElementById(`team-card-${team}`);
+    if (!card) return;
+    if (selectedTeam === team) {
+      card.classList.add('selected');
+    } else {
+      card.classList.remove('selected');
+    }
+  });
+
+  const evCheckbox = document.getElementById('ev-team-checkbox');
+  if (evCheckbox) evCheckbox.checked = evTeamChecked;
+}
+
+function submitTeamAssignment() {
+  if (!selectedTeam) {
+    showStuToast('Please select a team');
+    return;
+  }
+
+  const teamLabel = selectedTeam === '839Z' ? '839Z — Elite' : `${selectedTeam} — Rookie`;
+  const notes = document.getElementById('assign-notes').value.trim();
+
+  assignModalStudentIds.forEach(id => {
+    const student = STUDENTS.find(s => s.id === id);
+    if (student) {
+      student.team = selectedTeam;
+      student.teamLabel = teamLabel;
+      student.evTeam = evTeamChecked;
+    }
+  });
+
+  // Save to localStorage
+  localStorage.setItem('students', JSON.stringify(STUDENTS));
+
+  const count = assignModalStudentIds.length;
+  const names = assignModalStudentIds.map(id => {
+    const s = STUDENTS.find(st => st.id === id);
+    return s ? s.name : '';
+  }).filter(n => n);
+
+  const message = count === 1
+    ? `${names[0]} assigned to Team ${selectedTeam}`
+    : `${count} students assigned to Team ${selectedTeam}`;
+
+  showStuToast(message);
+
+  document.getElementById('assign-backdrop').style.display = 'none';
+
+  // Clear selection if bulk assign
+  if (count > 1) {
+    clearSelection();
+  }
+
+  applyFilters();
+}
+
+function closeAssignModal(e) {
+  if (e && e.target !== document.getElementById('assign-backdrop')) return;
+  document.getElementById('assign-backdrop').style.display = 'none';
+}
+
 // ── INIT ─────────────────────────────────────────────
 applyFilters();
 
@@ -937,6 +1229,8 @@ document.addEventListener('keydown', e => {
     closeNotifPanel(null);
     document.querySelectorAll('[id^="sdd-"]').forEach(el => el.style.display = 'none');
     document.getElementById('as-backdrop').style.display = 'none';
+    const assignBackdrop = document.getElementById('assign-backdrop');
+    if (assignBackdrop) assignBackdrop.style.display = 'none';
   }
 });
 
@@ -1037,6 +1331,81 @@ function showStuToast(msg) {
     <div id="notif-list" style="flex:1;overflow-y:auto;padding:8px 0;"></div>
     <div style="padding:14px 20px;border-top:1px solid var(--gray-3);">
       <a href="#" style="font-size:12.5px;font-weight:600;color:var(--gray-1);text-decoration:none;">View all activity</a>
+    </div>
+  </div>
+</div>
+
+<!-- Assign to Team Modal -->
+<div id="assign-backdrop" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:500;align-items:center;justify-content:center;" onclick="closeAssignModal(event)">
+  <div style="background:var(--white);border-radius:var(--radius);padding:28px;width:100%;max-width:520px;box-shadow:0 8px 32px rgba(0,0,0,.18);" onclick="event.stopPropagation()">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+      <span id="assign-modal-title" style="font-size:16px;font-weight:700;color:var(--black);">Assign Student to Team</span>
+      <button onclick="document.getElementById('assign-backdrop').style.display='none'" style="background:none;border:none;cursor:pointer;color:var(--gray-2);font-size:20px;line-height:1;">&#x2715;</button>
+    </div>
+
+    <!-- Student Info -->
+    <div id="assign-modal-student" style="padding:12px;background:var(--gray-4);border-radius:var(--radius-sm);margin-bottom:24px;">
+      <!-- Populated by JS -->
+    </div>
+
+    <!-- Team Selection -->
+    <div style="margin-bottom:20px;">
+      <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:10px;">Select Team *</label>
+      <div style="display:flex;flex-direction:column;gap:10px;">
+        <!-- 839Z Elite -->
+        <div id="team-card-839Z" class="team-card" onclick="selectTeam('839Z')">
+          <div class="team-card-header">
+            <div class="team-card-title">Team 839Z</div>
+            <span class="team-card-tier elite">Elite</span>
+          </div>
+          <div class="team-card-desc">Competition-ready team for experienced builders. Focus on VRC World Championships qualification.</div>
+          <div class="team-card-meta">Current members: 15</div>
+        </div>
+
+        <!-- 839Y Rookie -->
+        <div id="team-card-839Y" class="team-card" onclick="selectTeam('839Y')">
+          <div class="team-card-header">
+            <div class="team-card-title">Team 839Y</div>
+            <span class="team-card-tier rookie">Rookie</span>
+          </div>
+          <div class="team-card-desc">Development team for students learning VRC fundamentals. First-year competitors.</div>
+          <div class="team-card-meta">Current members: 4</div>
+        </div>
+
+        <!-- 839X Rookie -->
+        <div id="team-card-839X" class="team-card" onclick="selectTeam('839X')">
+          <div class="team-card-header">
+            <div class="team-card-title">Team 839X</div>
+            <span class="team-card-tier rookie">Rookie</span>
+          </div>
+          <div class="team-card-desc">Development team for students learning VRC fundamentals. First-year competitors.</div>
+          <div class="team-card-meta">Current members: 5</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- EV Team Option -->
+    <div class="checkbox-row" onclick="toggleEvTeam()" style="margin-bottom:20px;">
+      <input type="checkbox" id="ev-team-checkbox" onclick="event.stopPropagation();toggleEvTeam()">
+      <label for="ev-team-checkbox">Also add to EV Team</label>
+    </div>
+
+    <!-- Notes -->
+    <div style="margin-bottom:24px;">
+      <label style="font-size:12px;font-weight:600;color:var(--gray-1);display:block;margin-bottom:5px;">Reason for Assignment (optional)</label>
+      <textarea id="assign-notes" placeholder="e.g., Strong mechanical skills, leadership potential..." style="width:100%;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);padding:10px 12px;font-size:13px;font-family:inherit;color:var(--black);outline:none;resize:vertical;min-height:80px;" onfocus="this.style.borderColor='var(--yellow)'" onblur="this.style.borderColor='var(--gray-3)'"></textarea>
+    </div>
+
+    <!-- Actions -->
+    <div style="display:flex;justify-content:flex-end;gap:10px;">
+      <button onclick="document.getElementById('assign-backdrop').style.display='none'" style="padding:9px 18px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:var(--white);color:var(--black-3);font-size:13px;font-weight:600;cursor:pointer;">Cancel</button>
+      <button onclick="submitTeamAssignment()" style="padding:9px 18px;border:none;border-radius:var(--radius-sm);background:var(--yellow);color:var(--black);font-size:13px;font-weight:700;cursor:pointer;">
+        <span style="display:inline-flex;align-items:center;gap:6px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><line x1="19" y1="8" x2="19" y2="14"></line><line x1="22" y1="11" x2="16" y2="11"></line></svg>
+          Assign to Team
+        </span>
+      </button>
     </div>
   </div>
 </div>
