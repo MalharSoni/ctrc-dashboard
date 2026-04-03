@@ -1095,7 +1095,7 @@ function toggleEvTeam() {
 }
 
 function updateTeamCards() {
-  const teams = ['839Z', '839Y', '839X'];
+  const teams = ['839Z', '839Y', '839X', 'foundation'];
   teams.forEach(team => {
     const card = document.getElementById(`team-card-${team}`);
     if (!card) return;
@@ -1112,17 +1112,31 @@ function updateTeamCards() {
 
 function submitTeamAssignment() {
   if (!selectedTeam) {
-    showStuToast('Please select a team');
+    showStuToast('Please select a team or Foundation');
     return;
   }
 
-  const teamLabel = selectedTeam === '839Z' ? '839Z — Elite' : `${selectedTeam} — Rookie`;
+  let teamLabel = '';
+  let teamValue = null;
+
+  if (selectedTeam === 'foundation') {
+    // Keep student unassigned (foundation program)
+    teamLabel = '';
+    teamValue = null;
+  } else if (selectedTeam === '839Z') {
+    teamLabel = '839Z — Elite';
+    teamValue = '839Z';
+  } else {
+    teamLabel = `${selectedTeam} — Rookie`;
+    teamValue = selectedTeam;
+  }
+
   const notes = document.getElementById('assign-notes').value.trim();
 
   assignModalStudentIds.forEach(id => {
     const student = STUDENTS.find(s => s.id === id);
     if (student) {
-      student.team = selectedTeam;
+      student.team = teamValue;
       student.teamLabel = teamLabel;
       student.evTeam = evTeamChecked;
     }
@@ -1137,9 +1151,10 @@ function submitTeamAssignment() {
     return s ? s.name : '';
   }).filter(n => n);
 
+  const destination = selectedTeam === 'foundation' ? 'Foundation Program' : `Team ${selectedTeam}`;
   const message = count === 1
-    ? `${names[0]} assigned to Team ${selectedTeam}`
-    : `${count} students assigned to Team ${selectedTeam}`;
+    ? `${names[0]} assigned to ${destination}`
+    : `${count} students assigned to ${destination}`;
 
   showStuToast(message);
 
@@ -1381,6 +1396,16 @@ function showStuToast(msg) {
           </div>
           <div class="team-card-desc">Development team for students learning VRC fundamentals. First-year competitors.</div>
           <div class="team-card-meta">Current members: 5</div>
+        </div>
+
+        <!-- Foundation -->
+        <div id="team-card-foundation" class="team-card" onclick="selectTeam('foundation')">
+          <div class="team-card-header">
+            <div class="team-card-title">Foundation Program</div>
+            <span class="team-card-tier" style="background:#FEF3C7;color:#92400E;">Foundation</span>
+          </div>
+          <div class="team-card-desc">Saturday onboarding program for new students. Learn VEX basics before joining a competition team.</div>
+          <div class="team-card-meta">Current members: 7</div>
         </div>
       </div>
     </div>
