@@ -681,9 +681,6 @@
     <a href="inventory.html" class="nav-item">
       <i data-lucide="package"></i> Inventory
     </a>
-    <a href="trials.html" class="nav-item">
-      <i data-lucide="user-check"></i> Trial Students
-    </a>
     <a href="purchases.html" class="nav-item">
       <i data-lucide="receipt"></i> Purchases
     </a>

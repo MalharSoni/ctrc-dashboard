@@ -265,9 +265,6 @@
     <a class="nav-item" href="https://matchsight.ct839.com/events?programId=1" target="_blank"><i data-lucide="trophy"></i> Competitions</a>
     <div class="nav-section-label" style="margin-top:8px;">Operations</div>
     <a class="nav-item" href="inventory.html"><i data-lucide="package"></i> Inventory</a>
-    <a class="nav-item" href="trials.html">
-      <i data-lucide="user-check"></i> Trial Students
-    </a>
     <a class="nav-item" href="purchases.html"><i data-lucide="receipt"></i> Purchases</a>
     <a class="nav-item" href="purchases-invoices.html"><i data-lucide="file-text"></i> Invoices</a>
     <a class="nav-item" href="reports.html"><i data-lucide="bar-chart-2"></i> Reports</a>
