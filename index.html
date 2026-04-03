@@ -815,6 +815,113 @@
 
     </div>
 
+    <!-- SATURDAY CLASS — MORNING SESSION -->
+    <div class="meeting-hero">
+      <div class="meeting-stripe"></div>
+      <div class="meeting-body">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+          <div class="meeting-badge">
+            <i data-lucide="book-open" style="width:10px;height:10px;"></i>
+            Saturday Class
+          </div>
+          <div class="meeting-badge">
+            <i data-lucide="map-pin" style="width:10px;height:10px;"></i>
+            205 Riviera
+          </div>
+          <div class="badge" style="background:#EFF6FF;color:#2563EB;font-size:10px;font-weight:600;padding:2px 7px;">
+            <i data-lucide="info" style="width:9px;height:9px;margin-right:3px;"></i>
+            Trial Student Booked
+          </div>
+        </div>
+        <div class="meeting-title">Saturday Class</div>
+        <div class="meeting-meta">
+          <div class="meeting-meta-item">
+            <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+            <span id="sat-date-morning">Saturday, April 5</span>
+          </div>
+          <div class="meeting-meta-item">
+            <i data-lucide="clock" style="width:13px;height:13px;"></i>
+            9:00 AM – 1:00 PM
+          </div>
+          <div class="meeting-meta-item">
+            <i data-lucide="users" style="width:13px;height:13px;"></i>
+            7 students
+          </div>
+        </div>
+        <div class="meeting-desc">
+          Weekly onboarding class covering VEX basics, build fundamentals, and programming intro.
+        </div>
+        <div class="meeting-actions">
+          <button class="btn btn-yellow" onclick="openAttendanceModal('morning')">
+            <i data-lucide="users" style="width:13px;height:13px;"></i>
+            Take Attendance
+          </button>
+          <button class="btn btn-outline">
+            <i data-lucide="book" style="width:13px;height:13px;"></i>
+            View Curriculum
+          </button>
+          <button class="btn btn-ghost">
+            <i data-lucide="bar-chart-3" style="width:13px;height:13px;"></i>
+            Student Progress
+          </button>
+        </div>
+      </div>
+      <div style="background:var(--black);display:flex;align-items:center;justify-content:center;padding:28px 36px;flex-shrink:0;">
+        <img src="icon-white.png" style="width:80px;opacity:.9;" alt="CTRC Icon" />
+      </div>
+    </div>
+
+    <!-- SATURDAY CLASS — AFTERNOON SESSION -->
+    <div class="meeting-hero">
+      <div class="meeting-stripe"></div>
+      <div class="meeting-body">
+        <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap;margin-bottom:10px;">
+          <div class="meeting-badge">
+            <i data-lucide="book-open" style="width:10px;height:10px;"></i>
+            Saturday Class
+          </div>
+          <div class="meeting-badge">
+            <i data-lucide="map-pin" style="width:10px;height:10px;"></i>
+            205 Riviera
+          </div>
+        </div>
+        <div class="meeting-title">Saturday Class — Afternoon Session</div>
+        <div class="meeting-meta">
+          <div class="meeting-meta-item">
+            <i data-lucide="calendar" style="width:13px;height:13px;"></i>
+            <span id="sat-date-afternoon">Saturday, April 5</span>
+          </div>
+          <div class="meeting-meta-item">
+            <i data-lucide="clock" style="width:13px;height:13px;"></i>
+            1:30 PM – 5:30 PM
+          </div>
+          <div class="meeting-meta-item">
+            <i data-lucide="users" style="width:13px;height:13px;"></i>
+            7 students
+          </div>
+        </div>
+        <div class="meeting-desc">
+          Weekly onboarding class covering VEX basics, build fundamentals, and programming intro.
+        </div>
+        <div class="meeting-actions">
+          <button class="btn btn-yellow" onclick="openAttendanceModal('afternoon')">
+            <i data-lucide="users" style="width:13px;height:13px;"></i>
+            Take Attendance
+          </button>
+          <button class="btn btn-outline">
+            <i data-lucide="book" style="width:13px;height:13px;"></i>
+            View Curriculum
+          </button>
+          <button class="btn btn-ghost">
+            <i data-lucide="bar-chart-3" style="width:13px;height:13px;"></i>
+            Student Progress
+          </button>
+        </div>
+      </div>
+      <div style="background:var(--black);display:flex;align-items:center;justify-content:center;padding:28px 36px;flex-shrink:0;">
+        <img src="icon-white.png" style="width:80px;opacity:.9;" alt="CTRC Icon" />
+      </div>
+    </div>
 
     <!-- TWO COL -->
     <div class="two-col">
@@ -1355,62 +1462,16 @@
 
   /* ── ATTENDANCE TRACKING ──────────────────────── */
 
-  // Foundation students with timeslot assignments
+  // Foundation students (unassigned students)
   const FOUNDATION_STUDENTS = [
-    // AM timeslot (9am-1pm)
-    { id: 1, name: 'Luke Fu', timeslots: ['AM'] },
-    { id: 2, name: 'Kevin Jung', timeslots: ['AM'] },
-    { id: 3, name: 'Evan To', timeslots: ['AM'] },
-    { id: 4, name: 'Allen Wang', timeslots: ['AM'] },
-    { id: 5, name: 'Yichen Yang', timeslots: ['AM'] },
-    { id: 6, name: 'Tobias Yeung', timeslots: ['AM'] },
-    { id: 7, name: 'Tiger Zhao', timeslots: ['AM'] },
-
-    // PM timeslot (1:30pm-5:30pm)
-    { id: 8, name: 'Daniel Fu', timeslots: ['PM'] },
-    { id: 9, name: 'Bryan Kuan', timeslots: ['PM'] },
-    { id: 10, name: 'Alvin Lai', timeslots: ['PM'] },
-    { id: 11, name: 'Cyrus Liu', timeslots: ['PM'] },
-    { id: 12, name: 'Cici Ma', timeslots: ['PM'] },
-    { id: 13, name: 'Zuhaib Mansor', timeslots: ['PM'] },
-    { id: 14, name: 'Eli Mindell', timeslots: ['PM'] },
-    { id: 15, name: 'Steven Papazian', timeslots: ['PM'] },
-    { id: 16, name: 'Keegan Ramsaran', timeslots: ['PM'] },
-    { id: 17, name: 'Justin Rui', timeslots: ['PM'] },
-    { id: 18, name: 'Lin Situ', timeslots: ['PM'] },
-    { id: 19, name: 'Daniel Sun', timeslots: ['PM'] },
-    { id: 20, name: 'Nathan Tam', timeslots: ['PM'] },
-    { id: 21, name: 'Jovan Wang', timeslots: ['PM'] },
-    { id: 22, name: 'Isaac Wong', timeslots: ['PM'] },
-    { id: 23, name: 'Kylie Woo', timeslots: ['PM'] },
-    { id: 24, name: 'Aiden Yeung', timeslots: ['PM'] },
-    { id: 25, name: 'Colton Zhang', timeslots: ['PM'] }
+    { id: 1, name: 'Emily Chen' },
+    { id: 2, name: 'Marcus Johnson' },
+    { id: 3, name: 'Sofia Rodriguez' },
+    { id: 4, name: 'Liam Patel' },
+    { id: 5, name: 'Ava Thompson' },
+    { id: 6, name: 'Noah Martinez' },
+    { id: 7, name: 'Olivia Kim' }
   ];
-
-  // Load saved timeslot assignments from localStorage
-  function loadTimeslotAssignments() {
-    const saved = localStorage.getItem('timeslotAssignments');
-    if (saved) {
-      const assignments = JSON.parse(saved);
-      FOUNDATION_STUDENTS.forEach(student => {
-        if (assignments[student.id]) {
-          student.timeslots = assignments[student.id];
-        }
-      });
-    }
-  }
-
-  // Save timeslot assignments to localStorage
-  function saveTimeslotAssignments() {
-    const assignments = {};
-    FOUNDATION_STUDENTS.forEach(student => {
-      assignments[student.id] = student.timeslots;
-    });
-    localStorage.setItem('timeslotAssignments', JSON.stringify(assignments));
-  }
-
-  // Initialize timeslots on page load
-  loadTimeslotAssignments();
 
   let currentSession = null;
   let currentAttendance = new Set();
@@ -1445,32 +1506,17 @@
 
   function renderAttendanceList() {
     const list = document.getElementById('attendance-list');
-    const sessionLabel = currentSession === 'morning' ? 'AM' : 'PM';
-
-    // Filter students for this timeslot
-    const studentsInTimeslot = FOUNDATION_STUDENTS.filter(s => s.timeslots.includes(sessionLabel));
-
-    list.innerHTML = studentsInTimeslot.map(student => {
+    list.innerHTML = FOUNDATION_STUDENTS.map(student => {
       const isPresent = currentAttendance.has(student.id);
-      const hasAM = student.timeslots.includes('AM');
-      const hasPM = student.timeslots.includes('PM');
-
       return `
-        <div style="display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:${isPresent ? 'var(--yellow-bg)' : 'var(--white)'};transition:all .15s;">
-          <div style="width:20px;height:20px;border-radius:4px;border:2px solid ${isPresent ? 'var(--yellow)' : 'var(--gray-3)'};background:${isPresent ? 'var(--yellow)' : 'transparent'};display:flex;align-items:center;justify-content:center;transition:all .15s;cursor:pointer;" onclick="toggleAttendance(${student.id})">
+        <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:${isPresent ? 'var(--yellow-bg)' : 'var(--white)'};transition:all .15s;cursor:pointer;" onclick="toggleAttendance(${student.id})">
+          <div style="width:20px;height:20px;border-radius:4px;border:2px solid ${isPresent ? 'var(--yellow)' : 'var(--gray-3)'};background:${isPresent ? 'var(--yellow)' : 'transparent'};display:flex;align-items:center;justify-content:center;transition:all .15s;">
             ${isPresent ? '<i data-lucide="check" style="width:13px;height:13px;color:var(--black);"></i>' : ''}
           </div>
-          <div style="flex:1;cursor:pointer;" onclick="toggleAttendance(${student.id})">
+          <div style="flex:1;">
             <div style="font-size:13px;font-weight:${isPresent ? '600' : '500'};color:var(--black);">${student.name}</div>
-            <div style="font-size:10px;color:var(--gray-2);margin-top:2px;">
-              ${(hasAM && hasPM) ? 'Both sessions' : (hasAM ? 'AM only' : 'PM only')}
-            </div>
           </div>
-          <div style="display:flex;gap:4px;align-items:center;">
-            <button onclick="event.stopPropagation();toggleTimeslot(${student.id}, 'AM')" style="padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1.5px solid ${hasAM ? 'var(--yellow)' : 'var(--gray-3)'};background:${hasAM ? 'var(--yellow)' : 'transparent'};color:${hasAM ? 'var(--black)' : 'var(--gray-1)'};cursor:pointer;transition:all .15s;white-space:nowrap;">AM</button>
-            <button onclick="event.stopPropagation();toggleTimeslot(${student.id}, 'PM')" style="padding:3px 8px;border-radius:4px;font-size:10px;font-weight:700;border:1.5px solid ${hasPM ? 'var(--yellow)' : 'var(--gray-3)'};background:${hasPM ? 'var(--yellow)' : 'transparent'};color:${hasPM ? 'var(--black)' : 'var(--gray-1)'};cursor:pointer;transition:all .15s;white-space:nowrap;">PM</button>
-          </div>
-          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:${isPresent ? '#15803D' : 'var(--gray-2)'};min-width:52px;text-align:right;">
+          <div style="font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:${isPresent ? '#15803D' : 'var(--gray-2)'};">
             ${isPresent ? 'Present' : 'Absent'}
           </div>
         </div>
@@ -1478,31 +1524,6 @@
     }).join('');
 
     lucide.createIcons();
-  }
-
-  // Toggle timeslot assignment
-  function toggleTimeslot(studentId, timeslot) {
-    const student = FOUNDATION_STUDENTS.find(s => s.id === studentId);
-    if (!student) return;
-
-    const index = student.timeslots.indexOf(timeslot);
-    if (index > -1) {
-      // Remove timeslot if already assigned
-      if (student.timeslots.length > 1) {
-        student.timeslots.splice(index, 1);
-      } else {
-        // Don't allow removing the last timeslot
-        alert('Student must be assigned to at least one timeslot.');
-        return;
-      }
-    } else {
-      // Add timeslot
-      student.timeslots.push(timeslot);
-    }
-
-    saveTimeslotAssignments();
-    // Refresh the list to show updated assignments
-    renderAttendanceList();
   }
 
   function toggleAttendance(studentId) {
@@ -1515,16 +1536,12 @@
   }
 
   function markAllPresent() {
-    const sessionLabel = currentSession === 'morning' ? 'AM' : 'PM';
-    const studentsInTimeslot = FOUNDATION_STUDENTS.filter(s => s.timeslots.includes(sessionLabel));
-    studentsInTimeslot.forEach(student => currentAttendance.add(student.id));
+    FOUNDATION_STUDENTS.forEach(student => currentAttendance.add(student.id));
     renderAttendanceList();
   }
 
   function markAllAbsent() {
-    const sessionLabel = currentSession === 'morning' ? 'AM' : 'PM';
-    const studentsInTimeslot = FOUNDATION_STUDENTS.filter(s => s.timeslots.includes(sessionLabel));
-    studentsInTimeslot.forEach(student => currentAttendance.delete(student.id));
+    currentAttendance.clear();
     renderAttendanceList();
   }
 
