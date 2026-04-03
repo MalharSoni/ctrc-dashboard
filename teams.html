@@ -884,46 +884,6 @@
         </div>
       </div>
 
-      <!-- ── CARD 4: 42E Dev Squad ── -->
-      <div class="team-card dev" data-program="dev" data-team="42e" onclick="toggleRoster(this,'42e')">
-        <div class="team-card-inner">
-          <div class="team-card-top">
-            <span class="program-badge badge-dev">Development</span>
-            <div class="three-dot" onclick="toggleDropdown(event,'dd-42e')">
-              <i data-lucide="more-vertical"></i>
-              <div class="dropdown-menu" id="dd-42e">
-                <div class="dropdown-item"><i data-lucide="pencil" style="width:14px;height:14px;"></i> Edit Team</div>
-                <div class="dropdown-item"><i data-lucide="arrow-up-right" style="width:14px;height:14px;"></i> Graduate to Competition</div>
-                <div class="dropdown-item" onclick="openAddMember(this)"><i data-lucide="user-plus" style="width:14px;height:14px;"></i> Add Member</div>
-                <div class="dropdown-divider"></div>
-                <div class="dropdown-item danger" onclick="openArchiveConfirm(this)"><i data-lucide="archive" style="width:14px;height:14px;"></i> Archive Team</div>
-              </div>
-            </div>
-          </div>
-          <div class="team-name">42E — Dev Squad</div>
-          <div class="team-member-count">4 members</div>
-          <div class="team-stats">
-            <div class="stat-item">
-              <div class="stat-label">Avg Skills Score</div>
-              <div class="stat-value na">No data yet</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-label">Win Rate</div>
-              <div class="stat-value na">—</div>
-            </div>
-          </div>
-          <div class="team-card-bottom">
-            <span class="status-chip chip-blue">In Training</span>
-            <div class="avatar-stack">
-              <div class="av av-gray"></div>
-              <div class="av av-gray"></div>
-              <div class="av av-gray"></div>
-              <div class="av av-gray"></div>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <!-- ── ADD NEW TEAM CARD ── -->
       <div class="team-card-add" data-program="all" onclick="openCreateTeam()">
         <div class="add-icon">
@@ -1243,76 +1203,6 @@
     </div>
 
     <!-- 42E Roster -->
-    <div class="roster-panel" id="roster-42e">
-      <div class="roster-panel-header">
-        <div class="program-badge badge-dev" style="flex-shrink:0;">Development</div>
-        <div class="roster-panel-title">
-          <h2>42E — Dev Squad</h2>
-          <p>In Training &nbsp;&bull;&nbsp; 4 members &nbsp;&bull;&nbsp; No competition data yet</p>
-        </div>
-        <div class="roster-panel-actions">
-          <button class="btn btn-outline" onclick="showTMToast('Team promoted to Competition Track')">
-            <i data-lucide="arrow-up-right"></i> Graduate to Competition
-          </button>
-          <button class="btn btn-yellow" onclick="openEditTeam('42E','Foundation')">
-            <i data-lucide="pencil"></i> Edit Team
-          </button>
-          <button class="close-panel-btn" onclick="closeRoster('42e')">
-            <i data-lucide="x" style="width:14px;height:14px;"></i>
-          </button>
-        </div>
-      </div>
-      <div class="roster-table-wrap">
-        <table class="roster-table">
-          <thead>
-            <tr>
-              <th>Name</th>
-              <th>Role</th>
-              <th>Grade</th>
-              <th>Attendance</th>
-              <th>Skills Score</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
-              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
-              <td><span class="member-grade">9th</span></td>
-              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:70%;"></div></div><span class="att-label">70%</span></div></td>
-              <td><span style="color:var(--gray-2);">N/A</span></td>
-              <td><a class="action-link" href="#">Assign Name</a></td>
-            </tr>
-            <tr>
-              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
-              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
-              <td><span class="member-grade">9th</span></td>
-              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-low" style="width:55%;"></div></div><span class="att-label">55%</span></div></td>
-              <td><span style="color:var(--gray-2);">N/A</span></td>
-              <td><a class="action-link" href="#">Assign Name</a></td>
-            </tr>
-            <tr>
-              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
-              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
-              <td><span class="member-grade">9th</span></td>
-              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-mid" style="width:78%;"></div></div><span class="att-label">78%</span></div></td>
-              <td><span style="color:var(--gray-2);">N/A</span></td>
-              <td><a class="action-link" href="#">Assign Name</a></td>
-            </tr>
-            <tr>
-              <td><div class="member-cell"><div class="member-av av-gray"></div><span class="member-name" style="color:var(--gray-2);">Unassigned</span></div></td>
-              <td><span style="color:var(--gray-2);font-size:12px;">—</span></td>
-              <td><span class="member-grade">9th</span></td>
-              <td><div class="attendance-bar"><div class="att-track"><div class="att-fill att-high" style="width:88%;"></div></div><span class="att-label">88%</span></div></td>
-              <td><span style="color:var(--gray-2);">N/A</span></td>
-              <td><a class="action-link" href="#">Assign Name</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div class="caution-tape"></div>
-    </div>
-
   </div><!-- /content -->
 </main>
 
