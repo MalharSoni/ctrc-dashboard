@@ -1600,22 +1600,18 @@
     renderAttendanceList();
   }
 
-  function saveAttendance() {
+  async function saveAttendance() {
     if (!currentSession) return;
 
     const today = new Date();
     const dateStr = today.toISOString().split('T')[0];
-    const sessionId = `${dateStr}-${currentSession}`;
-
-    // Get existing attendance data
-    let attendanceData = JSON.parse(localStorage.getItem('attendance') || '{}');
 
     // Get total students for current session
     const students = currentSession === 'morning' ? SATURDAY_STUDENTS.morning : SATURDAY_STUDENTS.afternoon;
     const totalStudents = students.length;
 
-    // Save current session
-    attendanceData[sessionId] = {
+    // Build attendance records
+    const records = {
       date: dateStr,
       session: currentSession,
       presentStudents: Array.from(currentAttendance),
@@ -1623,22 +1619,31 @@
       timestamp: new Date().toISOString()
     };
 
-    localStorage.setItem('attendance', JSON.stringify(attendanceData));
+    try {
+      // Save to database via API
+      await attendanceAPI.record(records);
 
-    // Show success message
-    const presentCount = currentAttendance.size;
-    const sessionName = currentSession === 'morning' ? 'Morning' : 'Afternoon';
-    showToast(`Attendance saved: ${presentCount}/${totalStudents} present (${sessionName})`);
+      // Show success message
+      const presentCount = currentAttendance.size;
+      const sessionName = currentSession === 'morning' ? 'Morning' : 'Afternoon';
+      showToast(`Attendance saved: ${presentCount}/${totalStudents} present (${sessionName})`, 'success');
 
-    // Close modal
-    closeAttendanceModal();
+      // Close modal
+      closeAttendanceModal();
+    } catch (error) {
+      console.error('Failed to save attendance:', error);
+      showToast('Failed to save attendance. Please try again.', 'error');
+    }
   }
 
-  function loadAttendanceForSession(date, session) {
-    const attendanceData = JSON.parse(localStorage.getItem('attendance') || '{}');
-    const sessionId = `${date}-${session}`;
-    const sessionData = attendanceData[sessionId];
-    return sessionData ? sessionData.presentStudents : null;
+  async function loadAttendanceForSession(date, session) {
+    try {
+      const data = await attendanceAPI.getForSession(date, session);
+      return data ? data.presentStudents : null;
+    } catch (error) {
+      console.error('Failed to load attendance:', error);
+      return null;
+    }
   }
 
   function closeAttendanceModal(e) {
@@ -1656,9 +1661,10 @@
   });
 
   /* ── TRIAL STUDENTS CARD ──────────────────────── */
-  function loadTrialStudents() {
-    const trials = JSON.parse(localStorage.getItem('trialStudents') || '[]');
-    const upcoming = trials.filter(t => t.status === 'scheduled');
+  async function loadTrialStudents() {
+    try {
+      const trials = await trialsAPI.getAll({ status: 'scheduled' });
+      const upcoming = trials || [];
 
     // Get next Saturday
     const today = new Date();
@@ -1723,11 +1729,21 @@
     }
 
     lucide.createIcons();
+    } catch (error) {
+      console.error('Failed to load trial students:', error);
+      const list = document.getElementById('trials-upcoming-list');
+      if (list) {
+        list.innerHTML = '<div style="text-align:center;padding:20px;color:#DC2626;font-size:12.5px;">Failed to load trial students</div>';
+      }
+    }
   }
 
   // Load trial students on page load
   loadTrialStudents();
 </script>
+
+<!-- Toast Notifications -->
+<script src="js/toast.js"></script>
 
 <!-- API Client -->
 <script src="js/api-client.js"></script>

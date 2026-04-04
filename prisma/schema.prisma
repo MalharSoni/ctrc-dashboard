@@ -188,6 +188,7 @@ model Student {
   attendanceRecords  AttendanceRecord[]
   dailyPerformance   DailyPerformance[]
   xFactorNotes       XFactorNote[]
+  convertedFromTrial TrialStudent? // Reverse relation
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -781,6 +782,51 @@ model XFactorNote {
 
   @@index([studentId])
   @@index([date])
+}
+
+// ==================== TRIAL STUDENTS ====================
+
+model TrialStudent {
+  id String @id @default(cuid())
+
+  studentName String
+  age         Int?
+  grade       Int?
+
+  // Parent contact
+  parentName  String
+  parentEmail String?
+  parentPhone String?
+
+  // Session details
+  sessionDate DateTime
+  timeSlot    String // 'AM' or 'PM'
+
+  // Status tracking
+  status TrialStatus @default(SCHEDULED)
+
+  // Notes
+  notes  String? @db.Text
+  source String? // 'outlook', 'manual', 'website'
+
+  // Conversion
+  convertedToStudentId String?   @unique
+  convertedStudent     Student?  @relation(fields: [convertedToStudentId], references: [id])
+  attendedAt           DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([status])
+  @@index([sessionDate])
+}
+
+enum TrialStatus {
+  SCHEDULED
+  ATTENDED
+  CONVERTED
+  NO_SHOW
+  DECLINED
 }
 
 // ==================== AUDIT LOG ====================
