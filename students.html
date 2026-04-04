@@ -729,7 +729,10 @@ async function loadStudents() {
       };
     });
     filtered = [...STUDENTS];
-    renderView();
+    sortFiltered();
+    if (currentView === 'table') renderTable(); else renderGrid();
+    document.getElementById('pagination-info').textContent = `Showing 1–${Math.min(filtered.length, 15)} of ${filtered.length} students`;
+    lucide.createIcons();
   } catch (error) {
     showStuToast('Failed to load students from database');
   }
