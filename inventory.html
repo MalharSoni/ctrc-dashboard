@@ -1331,11 +1331,13 @@
     </div>
     <div style="padding:14px 20px;border-top:1px solid var(--gray-3);display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn btn-outline" onclick="closeAddItem()">Cancel</button>
-      <button class="btn btn-yellow" onclick="submitAddItem()"><i data-lucide="plus" style="width:13px;height:13px;"></i> Add Item</button>
+      <button class="btn btn-yellow" onclick="submitAddItemValidated()"><i data-lucide="plus" style="width:13px;height:13px;"></i> Add Item</button>
     </div>
   </div>
 </div>
 
 <div id="inv-toast" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--black);color:var(--white);padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.2);align-items:center;gap:8px;"></div>
+<script src="js/validation.js"></script>
+<script src="js/inventory-validation.js"></script>
 </body>
 </html>

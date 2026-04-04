@@ -536,572 +536,7 @@
               <th style="width:11%;">Actions</th>
             </tr>
           </thead>
-          <tbody>
-
-            <!-- ─── OVERDUE TASKS ─── -->
-
-            <!-- T1: Mount intake motor -->
-            <tr onclick="toggleExpand('t1',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text overdue">Mount intake motor</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-green">JS</div>Jason S.</div></td>
-              <td class="date-cell overdue-date">Oct 12<span class="overdue-badge">Overdue</span></td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t1">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Mount intake motor</h4>
-                    <p>Secure the intake motor assembly to the robot chassis using M4 bolts. Ensure proper alignment with the intake rollers and verify motor shaft clearance. Test spin direction before finalizing. This task is blocking the drive team from running full skills runs.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T2: Code autonomous routine -->
-            <tr onclick="toggleExpand('t2',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text overdue">Code autonomous routine</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-purple">ML</div>Maya L.</div></td>
-              <td class="date-cell overdue-date">Oct 14<span class="overdue-badge">Overdue</span></td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-inprog">In Progress</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t2">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Code autonomous routine</h4>
-                    <p>Write a 15-second autonomous program that scores at least 4 triballs and positions the robot for driver control. Include both a left-side and right-side starting configuration. Test against the field wall alignment and tune odometry offsets accordingly.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T3: Update engineering notebook 839Z -->
-            <tr onclick="toggleExpand('t3',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text overdue">Update engineering notebook</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-pink">RK</div>Ryan K.</div></td>
-              <td class="date-cell overdue-date">Yesterday<span class="overdue-badge">Overdue</span></td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t3">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Update engineering notebook</h4>
-                    <p>Add entries for the last three build sessions. Include design rationale for the new intake geometry, photos of the assembly process, and test data from driver practice. Notebook must be up to date before the Feb 22 qualifier submission deadline.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T4: Calibrate odometry constants -->
-            <tr onclick="toggleExpand('t4',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text overdue">Calibrate odometry constants</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-blue">SP</div>Sofia P.</div></td>
-              <td class="date-cell overdue-date">Yesterday<span class="overdue-badge">Overdue</span></td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-inprog">In Progress</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t4">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Calibrate odometry constants</h4>
-                    <p>Run the odometry calibration routine 10 times and average the wheel diameter and track width measurements. Update constants in the odometry config file and verify with a 10-tile straight-line test. Error should be under 0.5 inches over 6 feet.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T5: Film skills run -->
-            <tr onclick="toggleExpand('t5',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text overdue">Film skills run</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-blue">AR</div>Alex R.</div></td>
-              <td class="date-cell overdue-date">Oct 18<span class="overdue-badge">Overdue</span></td>
-              <td><span class="pri pri-low">Low</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t5">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Film skills run</h4>
-                    <p>Film a complete driver skills run from multiple angles (front, side, overhead if possible). Upload to the team shared drive for review. Footage will be used to analyze driver technique and identify bottlenecks in the run path.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- ─── UPCOMING TASKS ─── -->
-
-            <!-- T6: Design new intake CAD model -->
-            <tr onclick="toggleExpand('t6',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text">Design new intake CAD model</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-blue">AR</div>Alex R.</div></td>
-              <td class="date-cell">Feb 20</td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-inprog">In Progress</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t6">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Design new intake CAD model</h4>
-                    <p>Model a dual-flex-wheel intake in VEX CAD. The design should accommodate the new C-channel frame while keeping the intake width under 15 inches. Export STEP file for review before ordering parts. Version in Google Drive under /839Z/CAD/Intake_v3.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T7: Write pre-match autonomous selector -->
-            <tr onclick="toggleExpand('t7',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Write pre-match autonomous selector</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-blue">SP</div>Sofia P.</div></td>
-              <td class="date-cell">Feb 21</td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t7">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Write pre-match autonomous selector</h4>
-                    <p>Implement a brain-screen UI that lets the driver select from 3 autonomous routines before match start (Left, Right, Skills). Display selection with color-coded confirmation. Must save selection to EEPROM so it persists if the brain restarts.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T8: Update bill of materials -->
-            <tr onclick="toggleExpand('t8',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Update bill of materials</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-pink">RK</div>Ryan K.</div></td>
-              <td class="date-cell">Feb 21</td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t8">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Update bill of materials</h4>
-                    <p>Update the 839Z BOM spreadsheet with all parts ordered and used in the last two build sprints. Include part numbers, quantities, unit costs, and supplier. Flag any parts at critical stock levels (under 3 units remaining).</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T9: Practice driver skills x3 -->
-            <tr onclick="toggleExpand('t9',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:#3B82F6;flex-shrink:0;"></i><span class="task-name-text">Practice driver skills x3</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-green">JL</div>Jordan L.</div></td>
-              <td class="date-cell">Feb 22</td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-inprog">In Progress</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t9">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Practice driver skills x3</h4>
-                    <p>Complete three timed driver skills runs and record scores. Focus on the far-goal scoring sequence and minimize time in the loading zone. Target score: 90+ points. Log scores and timestamps in the team training log.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T10: Register for March qualifier -->
-            <tr onclick="toggleExpand('t10',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Register for March qualifier</span></div></td>
-              <td><span class="team-pill pill-coach">Coach</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-dark">CH</div>Coach</div></td>
-              <td class="date-cell">Feb 22</td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t10">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Register for March qualifier</h4>
-                    <p>Submit team registrations for the March 8th Southeast Regional Qualifier on RobotEvents.com. Register 839Z and 839Y for V5RC and 839X for VIQRC. Confirm payment method with the school treasurer before deadline. Registration closes Feb 22 at 11:59 PM.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T11: Order replacement pneumatic cylinders -->
-            <tr onclick="toggleExpand('t11',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Order replacement pneumatic cylinders</span></div></td>
-              <td><span class="team-pill pill-coach">Coach</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-dark">CH</div>Coach</div></td>
-              <td class="date-cell">Feb 22</td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t11">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Order replacement pneumatic cylinders</h4>
-                    <p>Order 4x VEX double-acting pneumatic cylinders (part #276-4150) from VEX Robotics. Also order 2x pneumatic reservoirs and 1x solenoid pack. Ship to school address, mark ATTN: Robotics Lab. Budget: $180. Attach receipt to inventory system when received.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T12: Document wiring diagram -->
-            <tr onclick="toggleExpand('t12',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Document wiring diagram</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-red">EB</div>Ethan B.</div></td>
-              <td class="date-cell">Feb 24</td>
-              <td><span class="pri pri-low">Low</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t12">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Document wiring diagram</h4>
-                    <p>Create a labeled wiring diagram for the 839Z robot showing all motor ports, sensor ports, and power cables. Use Google Slides or draw.io. Include port numbers and motor/sensor types. This is required for the notebook and for troubleshooting at competitions.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T13: Review game manual updates -->
-            <tr onclick="toggleExpand('t13',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Review game manual updates</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-amber">DS</div>Dev S.</div></td>
-              <td class="date-cell">Feb 24</td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t13">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Review game manual updates</h4>
-                    <p>Read the February game manual revision (v2.1) and summarize all rule changes in a bullet-point doc. Share summary with the full team in Discord. Pay special attention to changes to the autonomous bonus and any new expansion rules.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T14: Rebuild drive base -->
-            <tr onclick="toggleExpand('t14',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Rebuild drive base</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-green">MC</div>Marcus C.</div></td>
-              <td class="date-cell">Mar 1</td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t14">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Rebuild drive base</h4>
-                    <p>Disassemble and rebuild the 839X drive base with the new 4-inch traction wheels. Re-square the chassis, re-tension the drive chains, and verify all motor mounts are torqued to spec. Run coast-to-stop test to confirm symmetrical deceleration before handing off to programming.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T15: Create sponsor slide deck -->
-            <tr onclick="toggleExpand('t15',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Create sponsor slide deck</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-amber">AJ</div>Aisha J.</div></td>
-              <td class="date-cell">Mar 3</td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t15">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Create sponsor slide deck</h4>
-                    <p>Build a 12-slide sponsor presentation covering: club overview, team accomplishments, competition schedule, student impact stats, and sponsorship tiers ($250/$500/$1000). Use the CTRC brand colors. Share with Malhar Soni for review before sending to prospects.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T16: Run 10 autonomous consistency tests -->
-            <tr onclick="toggleExpand('t16',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Run 10 autonomous consistency tests</span></div></td>
-              <td><span class="team-pill pill-839y">839Y</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-red">EB</div>Ethan B.</div></td>
-              <td class="date-cell">Mar 5</td>
-              <td><span class="pri pri-med">Medium</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t16">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Run 10 autonomous consistency tests</h4>
-                    <p>Run the primary autonomous routine 10 consecutive times from the same starting position. Record pass/fail for each run and log any deviation from the intended path. Target: 9/10 passes. If below target, flag Sofia to investigate PID tuning.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T17: Submit excellence award essay draft -->
-            <tr onclick="toggleExpand('t17',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Submit excellence award essay draft</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-purple">LM</div>Lily M.</div></td>
-              <td class="date-cell">Mar 7</td>
-              <td><span class="pri pri-high">High</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t17">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Submit excellence award essay draft</h4>
-                    <p>Write a first draft of the Excellence Award essay (max 500 words) covering: team mission, community outreach, STEM promotion activities, and competition performance. Share in Google Docs and tag Malhar Soni and two other reviewers for feedback before final submission on Mar 10.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T18: Train new member on VEX IQ assembly -->
-            <tr onclick="toggleExpand('t18',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Train new member on VEX IQ assembly</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-pink">CP</div>Chloe P.</div></td>
-              <td class="date-cell">Mar 10</td>
-              <td><span class="pri pri-low">Low</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t18">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Train new member on VEX IQ assembly</h4>
-                    <p>Walk the new 839Z member through basic VEX IQ assembly: pegs, beams, motors, and sensors. Complete the "Drive Base in 30 Minutes" challenge together. Assess readiness for independent building by end of session. Log completion in member onboarding checklist.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T19: Prepare pit display boards -->
-            <tr onclick="toggleExpand('t19',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Prepare pit display boards</span></div></td>
-              <td><span class="team-pill pill-839x">839X</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-green">JL</div>Jordan L.</div></td>
-              <td class="date-cell">Mar 12</td>
-              <td><span class="pri pri-low">Low</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t19">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Prepare pit display boards</h4>
-                    <p>Design and print two 24"x36" pit display boards for 839X. Include: team name, robot photo, game strategy overview, and team member names. Use Canva or Google Slides. Print at FedEx Office and bring to competition. Budget: $40.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
-            <!-- T20: Update team bio page -->
-            <tr onclick="toggleExpand('t20',this)">
-              <td><div class="task-name-cell"><i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i><span class="task-name-text">Update team bio page</span></div></td>
-              <td><span class="team-pill pill-839z">839Z</span></td>
-              <td><div class="assignee-cell"><div class="assignee-av av-amber">AJ</div>Aisha J.</div></td>
-              <td class="date-cell">Mar 15</td>
-              <td><span class="pri pri-low">Low</span></td>
-              <td><span class="status status-open">Open</span></td>
-              <td><div class="action-icons">
-                <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete(this)"><i data-lucide="check" style="width:12px;height:12px;"></i></div>
-                <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask(this)"><i data-lucide="pencil" style="width:12px;height:12px;"></i></div>
-              </div></td>
-            </tr>
-            <tr class="task-expand-row" id="expand-t20">
-              <td class="task-expand-cell" colspan="7">
-                <div class="task-expand-inner">
-                  <div class="task-expand-desc">
-                    <h4>Update team bio page</h4>
-                    <p>Refresh the 839Z page on the CTRC club website. Update member photos, add the new season robot picture, update competition history with this season's results, and revise the team goals section. Share the draft link with Malhar Soni for approval before publishing.</p>
-                  </div>
-                  <div class="task-expand-actions">
-                    <button class="btn btn-yellow" onclick="markTaskComplete(this)"><i data-lucide="check"></i> Mark Complete</button>
-                    <button class="btn btn-outline" onclick="openEditTask(this)"><i data-lucide="pencil"></i> Edit</button>
-                  </div>
-                </div>
-              </td>
-            </tr>
-
+          <tbody id="tasks-tbody">
           </tbody>
         </table>
         <div class="caution-tape"></div>
@@ -1432,8 +867,106 @@
 <!-- ════════════════════════════════════════════════════
      JAVASCRIPT
 ═════════════════════════════════════════════════════ -->
+<!-- Toast Notifications -->
+<script src="js/toast.js"></script>
+
+<!-- API Client -->
+<script src="js/api-client.js"></script>
+
 <script>
   lucide.createIcons();
+
+  // ── DATA ────────────────────────────────────────────
+  let TASKS = [];
+
+  async function loadTasks() {
+    try {
+      TASKS = await tasksAPI.getAll();
+      renderTasks();
+    } catch (error) {
+      console.error('Failed to load tasks:', error);
+      showToast('Failed to load tasks', 'error');
+    }
+  }
+
+  function renderTasks() {
+    const tbody = document.getElementById('tasks-tbody');
+    if (!TASKS || TASKS.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;padding:40px;color:var(--gray-2);">No tasks found</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = TASKS.map(task => {
+      const isOverdue = new Date(task.dueDate) < new Date() && task.status !== 'COMPLETED';
+      const teamClass = `pill-${task.team?.teamNumber.toLowerCase() || 'unassigned'}`;
+      const priorityClass = task.priority === 'URGENT' ? 'pri-high' : task.priority === 'HIGH' ? 'pri-high' : 'pri-med';
+      const statusClass = task.status === 'IN_PROGRESS' ? 'status-inprog' : task.status === 'COMPLETED' ? 'status-done' : 'status-open';
+
+      return `
+        <tr onclick="toggleExpand('task-${task.id}',this)">
+          <td><div class="task-name-cell">
+            <i data-lucide="circle" style="width:14px;height:14px;color:var(--gray-3);flex-shrink:0;"></i>
+            <span class="task-name-text ${isOverdue ? 'overdue' : ''}">${task.title}</span>
+          </div></td>
+          <td><span class="team-pill ${teamClass}">${task.team?.teamNumber || 'None'}</span></td>
+          <td><div class="assignee-cell">Unassigned</div></td>
+          <td class="date-cell ${isOverdue ? 'overdue-date' : ''}">${formatDate(task.dueDate)}${isOverdue ? '<span class="overdue-badge">Overdue</span>' : ''}</td>
+          <td><span class="pri ${priorityClass}">${task.priority}</span></td>
+          <td><span class="status ${statusClass}">${task.status.replace('_', ' ')}</span></td>
+          <td><div class="action-icons">
+            <div class="action-icon-btn" title="Complete" onclick="event.stopPropagation();markTaskComplete('${task.id}')">
+              <i data-lucide="check" style="width:12px;height:12px;"></i>
+            </div>
+            <div class="action-icon-btn" title="Edit" onclick="event.stopPropagation();openEditTask('${task.id}')">
+              <i data-lucide="pencil" style="width:12px;height:12px;"></i>
+            </div>
+          </div></td>
+        </tr>
+        <tr class="task-expand-row" id="expand-task-${task.id}">
+          <td class="task-expand-cell" colspan="7">
+            <div class="task-expand-inner">
+              <div class="task-expand-desc">
+                <h4>${task.title}</h4>
+                <p>${task.description || 'No description provided.'}</p>
+              </div>
+              <div class="task-expand-actions">
+                <button class="btn btn-yellow" onclick="markTaskComplete('${task.id}')"><i data-lucide="check"></i> Mark Complete</button>
+                <button class="btn btn-outline" onclick="openEditTask('${task.id}')"><i data-lucide="pencil"></i> Edit</button>
+              </div>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    lucide.createIcons();
+  }
+
+  function formatDate(dateStr) {
+    const date = new Date(dateStr);
+    const month = date.toLocaleDateString('en-US', { month: 'short' });
+    const day = date.getDate();
+    return `${month} ${day}`;
+  }
+
+  async function markTaskComplete(taskId) {
+    try {
+      await tasksAPI.updateStatus(taskId, 'COMPLETED');
+      showToast('Task completed!', 'success');
+      await loadTasks();
+    } catch (error) {
+      console.error('Failed to complete task:', error);
+      showToast('Failed to complete task', 'error');
+    }
+  }
+
+  function openEditTask(taskId) {
+    // TODO: Implement edit modal
+    showToast('Edit functionality coming soon', 'info');
+  }
+
+  // Load tasks on page load
+  loadTasks();
 
   // ── FILTER CHIPS ───────────────────────────────────
   function setChip(el, group) {
@@ -1746,7 +1279,7 @@
     </div>
     <div style="padding:14px 20px;border-top:1px solid var(--gray-3);display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn btn-outline" onclick="closeNewTask()">Cancel</button>
-      <button class="btn btn-yellow" onclick="submitNewTask()"><i data-lucide="plus" style="width:13px;height:13px;"></i> Create Task</button>
+      <button class="btn btn-yellow" onclick="submitNewTaskValidated()"><i data-lucide="plus" style="width:13px;height:13px;"></i> Create Task</button>
     </div>
   </div>
 </div>
@@ -1790,5 +1323,7 @@
 </div>
 
 <div id="task-toast" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--black);color:var(--white);padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.2);align-items:center;gap:8px;"></div>
+<script src="js/validation.js"></script>
+<script src="js/tasks-validation.js"></script>
 </body>
 </html>

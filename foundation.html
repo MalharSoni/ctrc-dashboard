@@ -916,7 +916,7 @@ document.addEventListener('keydown', e => {
     </div>
     <div style="padding:14px 20px;border-top:1px solid var(--gray-3);display:flex;gap:8px;justify-content:flex-end;">
       <button class="btn btn-outline" onclick="closeEnrollModal()">Cancel</button>
-      <button class="btn btn-yellow" onclick="submitEnroll()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Enroll</button>
+      <button class="btn btn-yellow" onclick="submitEnrollValidated()"><i data-lucide="user-plus" style="width:13px;height:13px;"></i> Enroll</button>
     </div>
   </div>
 </div>
@@ -924,5 +924,7 @@ document.addEventListener('keydown', e => {
 <!-- TOAST -->
 <div id="fn-toast" style="display:none;position:fixed;bottom:24px;right:24px;background:var(--black);color:var(--white);padding:12px 18px;border-radius:var(--radius-sm);font-size:13px;font-weight:600;z-index:600;box-shadow:0 4px 16px rgba(0,0,0,.2);align-items:center;gap:8px;"></div>
 
+<script src="js/validation.js"></script>
+<script src="js/foundation-validation.js"></script>
 </body>
 </html>
