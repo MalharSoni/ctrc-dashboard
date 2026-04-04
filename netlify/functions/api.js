@@ -77,6 +77,67 @@ exports.handler = async (event) => {
       return respond(200, stats)
     }
 
+    // GET /dashboard/stats (enhanced dashboard stats)
+    if (path === '/dashboard/stats' && method === 'GET') {
+      console.log('Fetching enhanced dashboard stats...')
+
+      // Get date range for attendance calculation
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+      const thirtyDaysAgo = new Date(today)
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30)
+
+      const [
+        totalStudents,
+        activeTeams,
+        activeProjects,
+        overdueTasksCount,
+        attendanceRecords,
+        totalAttendanceRecords
+      ] = await Promise.all([
+        db.student.count({ where: { active: true } }),
+        db.team.count({ where: { active: true } }),
+        db.project.count({
+          where: {
+            status: { in: ['PLANNING', 'IN_PROGRESS', 'TESTING'] }
+          }
+        }),
+        db.task.count({
+          where: {
+            status: { notIn: ['COMPLETED'] },
+            dueDate: { lt: new Date() },
+          },
+        }),
+        db.attendanceRecord.count({
+          where: {
+            date: { gte: thirtyDaysAgo },
+            status: 'PRESENT'
+          }
+        }),
+        db.attendanceRecord.count({
+          where: {
+            date: { gte: thirtyDaysAgo }
+          }
+        })
+      ])
+
+      // Calculate attendance rate (last 30 days)
+      const attendanceRate = totalAttendanceRecords > 0
+        ? Math.round((attendanceRecords / totalAttendanceRecords) * 100)
+        : 0
+
+      const stats = {
+        totalStudents,
+        activeTeams,
+        attendanceRate,
+        activeProjects,
+        overdueTasksCount
+      }
+
+      console.log('Enhanced dashboard stats:', stats)
+      return respond(200, stats)
+    }
+
     // GET /students
     if (path === '/students' && method === 'GET') {
       console.log('Fetching students...')
@@ -548,6 +609,63 @@ exports.handler = async (event) => {
       })
 
       return respond(200, { success: true, student, trial })
+    }
+
+    // GET /foundation/trial-students (trial students for Foundation program)
+    if (path === '/foundation/trial-students' && method === 'GET') {
+      console.log('Fetching foundation trial students...')
+
+      const today = new Date()
+      today.setHours(0, 0, 0, 0)
+
+      // This week: from today to end of this week (Sunday)
+      const endOfWeek = new Date(today)
+      const dayOfWeek = today.getDay()
+      const daysUntilSunday = 7 - dayOfWeek
+      endOfWeek.setDate(today.getDate() + daysUntilSunday)
+      endOfWeek.setHours(23, 59, 59, 999)
+
+      // Next 30 days for upcoming
+      const next30Days = new Date(today)
+      next30Days.setDate(today.getDate() + 30)
+
+      const [thisWeekTrials, upcomingTrials, allTrials] = await Promise.all([
+        db.trialStudent.count({
+          where: {
+            status: 'SCHEDULED',
+            sessionDate: {
+              gte: today,
+              lte: endOfWeek
+            }
+          }
+        }),
+        db.trialStudent.count({
+          where: {
+            status: 'SCHEDULED',
+            sessionDate: {
+              gt: endOfWeek,
+              lte: next30Days
+            }
+          }
+        }),
+        db.trialStudent.findMany({
+          where: {
+            status: { in: ['SCHEDULED', 'ATTENDED'] },
+            sessionDate: { gte: today }
+          },
+          orderBy: { sessionDate: 'asc' },
+          take: 20
+        })
+      ])
+
+      const result = {
+        thisWeek: thisWeekTrials,
+        upcoming: upcomingTrials,
+        students: allTrials
+      }
+
+      console.log('Foundation trial students:', result)
+      return respond(200, result)
     }
 
     // GET /projects
