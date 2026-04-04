@@ -1,7 +1,7 @@
 // API Client for CTRC Dashboard
 // Centralized API layer replacing localStorage
 
-const API_BASE = '/.netlify/functions';
+const API_BASE = '/.netlify/functions/api';
 
 // Helper function to fetch from API with full HTTP method support
 async function fetchAPI(endpoint, options = {}) {
