@@ -379,37 +379,151 @@ exports.handler = async (event) => {
       return respond(200, records)
     }
 
+    // GET /attendance/:studentId (get attendance by student)
+    if (path.startsWith('/attendance/') && !path.includes('/session') && !path.includes('/stats') && method === 'GET') {
+      const studentId = path.split('/')[2]
+      console.log('Fetching attendance for student:', studentId)
+
+      const records = await db.attendanceRecord.findMany({
+        where: { studentId },
+        include: {
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+        orderBy: { date: 'desc' },
+      })
+
+      return respond(200, records)
+    }
+
+    // GET /attendance/session (get attendance for a specific date/session)
+    if (path === '/attendance/session' && method === 'GET') {
+      const { date, session } = event.queryStringParameters || {}
+      console.log('Fetching attendance for session:', { date, session })
+
+      if (!date) {
+        return respond(400, { error: 'Date parameter is required' })
+      }
+
+      const targetDate = new Date(date)
+      targetDate.setHours(0, 0, 0, 0)
+
+      // Get attendance records for the date
+      const records = await db.attendanceRecord.findMany({
+        where: {
+          date: targetDate,
+        },
+        include: {
+          student: {
+            select: {
+              id: true,
+              firstName: true,
+              lastName: true,
+            },
+          },
+        },
+      })
+
+      // Extract present student IDs for the session
+      const presentStudents = records
+        .filter(r => r.status === 'PRESENT')
+        .map(r => r.studentId)
+
+      return respond(200, {
+        date,
+        session: session || 'morning',
+        presentStudents,
+        records
+      })
+    }
+
     // POST /attendance (record attendance)
     if (path === '/attendance' && method === 'POST') {
-      const { records, recordedBy } = JSON.parse(event.body)
-      console.log('Recording attendance for', records.length, 'students')
+      const body = JSON.parse(event.body)
+      const { date, session, presentStudents, totalStudents, records: bodyRecords } = body
 
-      // Create or update attendance records
-      const created = await Promise.all(
-        records.map((record) =>
-          db.attendanceRecord.upsert({
-            where: {
-              studentId_date: {
+      console.log('Recording attendance:', { date, session, presentCount: presentStudents?.length || 0, totalStudents })
+
+      // Handle new format (from index.html)
+      if (presentStudents && date) {
+        const targetDate = new Date(date)
+        targetDate.setHours(0, 0, 0, 0)
+
+        // Get all active students to mark absent ones
+        const allStudents = await db.student.findMany({
+          where: { active: true },
+          select: { id: true }
+        })
+
+        // Create attendance records for all students
+        const created = await Promise.all(
+          allStudents.map((student) =>
+            db.attendanceRecord.upsert({
+              where: {
+                studentId_date: {
+                  studentId: student.id,
+                  date: targetDate,
+                },
+              },
+              create: {
+                studentId: student.id,
+                date: targetDate,
+                status: presentStudents.includes(student.id) ? 'PRESENT' : 'ABSENT',
+                recordedBy: 'system',
+              },
+              update: {
+                status: presentStudents.includes(student.id) ? 'PRESENT' : 'ABSENT',
+              },
+            })
+          )
+        )
+
+        return respond(200, {
+          success: true,
+          count: created.length,
+          presentCount: presentStudents.length,
+          records: created
+        })
+      }
+
+      // Handle old format (from legacy code)
+      if (bodyRecords && Array.isArray(bodyRecords)) {
+        const { recordedBy } = body
+        console.log('Recording attendance for', bodyRecords.length, 'students')
+
+        const created = await Promise.all(
+          bodyRecords.map((record) =>
+            db.attendanceRecord.upsert({
+              where: {
+                studentId_date: {
+                  studentId: record.studentId,
+                  date: new Date(record.date),
+                },
+              },
+              create: {
                 studentId: record.studentId,
                 date: new Date(record.date),
+                status: record.status || 'PRESENT',
+                recordedBy: recordedBy || 'system',
+                notes: record.notes,
               },
-            },
-            create: {
-              studentId: record.studentId,
-              date: new Date(record.date),
-              status: record.status || 'PRESENT',
-              recordedBy: recordedBy || 'system',
-              notes: record.notes,
-            },
-            update: {
-              status: record.status || 'PRESENT',
-              notes: record.notes,
-            },
-          })
+              update: {
+                status: record.status || 'PRESENT',
+                notes: record.notes,
+              },
+            })
+          )
         )
-      )
 
-      return respond(200, { success: true, count: created.length, records: created })
+        return respond(200, { success: true, count: created.length, records: created })
+      }
+
+      return respond(400, { error: 'Invalid request format' })
     }
 
     // GET /attendance/stats (attendance statistics)

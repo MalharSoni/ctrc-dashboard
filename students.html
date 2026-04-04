@@ -792,9 +792,9 @@ function renderTable() {
 
     const isChecked = selectedStudents.has(s.id);
 
-    return `<tr onclick="viewStudent(${s.id})">
+    return `<tr onclick="viewStudent('${s.id}')">
       <td style="padding-left:14px;" onclick="event.stopPropagation()">
-        <input type="checkbox" class="student-checkbox" data-student-id="${s.id}" ${isChecked ? 'checked' : ''} onchange="toggleStudentSelect(${s.id})" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
+        <input type="checkbox" class="student-checkbox" data-student-id="${s.id}" ${isChecked ? 'checked' : ''} onchange="toggleStudentSelect('${s.id}')" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
       </td>
       <td>
         <div class="student-cell">
@@ -856,7 +856,7 @@ function renderGrid() {
   grid.innerHTML = filtered.map(s => {
     const ac = attClass(s.attendance);
     const apc = attPctClass(s.attendance);
-    return `<div onclick="viewStudent(${s.id})" style="background:var(--white);border:1px solid var(--gray-3);border-radius:var(--radius);padding:18px;cursor:pointer;transition:box-shadow .15s;" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.10)'" onmouseleave="this.style.boxShadow=''">
+    return `<div onclick="viewStudent('${s.id}')" style="background:var(--white);border:1px solid var(--gray-3);border-radius:var(--radius);padding:18px;cursor:pointer;transition:box-shadow .15s;" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.10)'" onmouseleave="this.style.boxShadow=''">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
         <div class="avatar" style="width:44px;height:44px;font-size:14px;background:${s.color};color:${s.textColor};">${s.initials}</div>
         <div>
