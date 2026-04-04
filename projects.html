@@ -6,6 +6,8 @@
   <title>Student Projects — CTRC Club Manager</title>
 
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="/js/api-client.js"></script>
+  <script src="/js/toast.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <style>
     @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: block; src: url('fonts/inter-400.woff2') format('woff2'); }
@@ -708,8 +710,22 @@ function getStudent(id) {
   return STUDENTS.find(s => s.id === id) || STUDENTS[0];
 }
 
-// MOCK PROJECTS DATA
-const PROJECTS = [
+// PROJECTS DATA
+let PROJECTS = [];
+
+// Load projects from API
+async function loadProjects() {
+  try {
+    PROJECTS = await projectsAPI.getAll();
+    renderProjects();
+  } catch (error) {
+    console.error('Failed to load projects:', error);
+    showToast('Could not load projects. Please refresh the page.', 'error');
+  }
+}
+
+// MOCK PROJECTS DATA (for reference - will be replaced by API)
+const MOCK_PROJECTS = [
   {
     id: 1,
     title: 'Custom Robot Chassis Design',
@@ -1172,7 +1188,7 @@ function updateSliderValue() {
   document.getElementById('slider-value').textContent = val;
 }
 
-function saveWeeklyProgress() {
+async function saveWeeklyProgress() {
   if (!currentProject) return;
 
   const progress = parseInt(document.getElementById('progress-slider').value);
@@ -1204,20 +1220,25 @@ function saveWeeklyProgress() {
     coachNotes: coachNotes
   };
 
-  if (!currentProject.weeklyProgress) {
-    currentProject.weeklyProgress = [];
+  try {
+    if (!currentProject.weeklyProgress) {
+      currentProject.weeklyProgress = [];
+    }
+    currentProject.weeklyProgress.push(newEntry);
+    currentProject.latestProgress = progress;
+    currentProject.lastUpdated = 'Just now';
+
+    // Save to API
+    await projectsAPI.update(currentProject.id, currentProject);
+
+    closeProgressModal();
+    renderProgressTimeline();
+    showToast('Weekly progress added successfully!', 'success');
+    lucide.createIcons();
+  } catch (error) {
+    console.error('Failed to save progress:', error);
+    showToast('Failed to save progress. Please try again.', 'error');
   }
-  currentProject.weeklyProgress.push(newEntry);
-  currentProject.latestProgress = progress;
-  currentProject.lastUpdated = 'Just now';
-
-  // Save to localStorage
-  saveProjects();
-
-  closeProgressModal();
-  renderProgressTimeline();
-  showToast('Weekly progress added successfully!');
-  lucide.createIcons();
 }
 
 // PLACEHOLDER FUNCTIONS
@@ -1225,14 +1246,19 @@ function editProject() {
   showToast('Edit project feature coming soon!');
 }
 
-function archiveProject() {
+async function archiveProject() {
   if (!currentProject) return;
-  if (confirm(`Archive "${currentProject.title}"?`)) {
+  if (!confirm(`Archive "${currentProject.title}"?`)) return;
+
+  try {
+    await projectsAPI.update(currentProject.id, { status: 'COMPLETED' });
     currentProject.status = 'Completed';
-    saveProjects();
     closeDetailModal();
     renderProjects();
-    showToast('Project archived successfully!');
+    showToast('Project archived successfully!', 'success');
+  } catch (error) {
+    console.error('Failed to archive project:', error);
+    showToast('Failed to archive project. Please try again.', 'error');
   }
 }
 
@@ -1272,23 +1298,7 @@ function showToast(msg) {
   toastTimer = setTimeout(() => { t.style.display = 'none'; }, 3200);
 }
 
-// LOCAL STORAGE PERSISTENCE
-function saveProjects() {
-  localStorage.setItem('ctrc-projects', JSON.stringify(PROJECTS));
-}
-
-function loadProjects() {
-  const stored = localStorage.getItem('ctrc-projects');
-  if (stored) {
-    try {
-      const parsed = JSON.parse(stored);
-      PROJECTS.length = 0;
-      PROJECTS.push(...parsed);
-    } catch (e) {
-      console.error('Failed to load projects from localStorage', e);
-    }
-  }
-}
+// Removed localStorage persistence - using API now
 
 // KEYBOARD SHORTCUTS
 document.addEventListener('keydown', e => {
@@ -1299,8 +1309,10 @@ document.addEventListener('keydown', e => {
 });
 
 // INIT
-loadProjects();
-renderProjects();
+document.addEventListener('DOMContentLoaded', () => {
+  loadProjects();
+  lucide.createIcons();
+});
 </script>
 
 </body>

@@ -626,6 +626,24 @@
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .content { padding: 16px; }
     }
+
+    /* ── GLOBAL SEARCH MODAL ── */
+    .search-section { padding: 8px 16px 4px; }
+    .search-section-title {
+      font-size: 10px; font-weight: 700; color: var(--gray-1);
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 4px; padding: 4px 0;
+    }
+    .search-result-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 12px; cursor: pointer;
+      transition: background .15s; border-radius: var(--radius-sm);
+    }
+    .search-result-item:hover { background: var(--gray-4); }
+    .search-result-icon { width: 20px; height: 20px; color: var(--gray-2); flex-shrink: 0; }
+    .search-result-text { flex: 1; min-width: 0; }
+    .search-result-title { font-size: 13px; font-weight: 600; color: var(--black); }
+    .search-result-subtitle { font-size: 11px; color: var(--gray-1); margin-top: 2px; }
   </style>
 </head>
 
@@ -724,9 +742,9 @@
 
   <!-- TOPBAR -->
   <header class="topbar">
-    <div class="search-wrap">
+    <div class="search-wrap" onclick="openSearchModal()" style="cursor:pointer;">
       <i data-lucide="search" style="width:14px;height:14px;color:#A3A3A3;flex-shrink:0;"></i>
-      <input type="text" placeholder="Search students, teams, events…" />
+      <input type="text" placeholder="Search students, teams, events…" readonly style="cursor:pointer;" />
       <span class="search-kbd">⌘K</span>
     </div>
 
@@ -1747,6 +1765,27 @@
 
 <!-- API Client -->
 <script src="js/api-client.js"></script>
+
+<!-- Global Search -->
+<script src="js/global-search.js"></script>
+
+<!-- ═══ GLOBAL SEARCH MODAL (⌘K) ═══ -->
+<div id="search-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;">
+  <div style="width:600px;max-width:90vw;background:var(--white);border-radius:var(--radius);box-shadow:0 20px 50px rgba(0,0,0,.3);overflow:hidden;">
+    <div style="display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--gray-3);">
+      <i data-lucide="search" style="width:18px;height:18px;color:var(--gray-2);"></i>
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search students, teams, pages..."
+        autocomplete="off"
+        style="flex:1;border:none;outline:none;font-size:16px;font-weight:500;color:var(--black);background:transparent;"
+      />
+      <kbd style="background:var(--gray-4);color:var(--gray-1);padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;">ESC</kbd>
+    </div>
+    <div id="search-results" style="max-height:400px;overflow-y:auto;"></div>
+  </div>
+</div>
 
 </body>
 </html>

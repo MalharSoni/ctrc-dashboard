@@ -1,0 +1,114 @@
+<!-- ═══ GLOBAL SEARCH MODAL (⌘K) ═══ -->
+<!-- Add this snippet before closing </body> tag on all pages -->
+<!-- Requires: js/global-search.js -->
+
+<div id="search-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;">
+  <div style="width:600px;max-width:90vw;background:var(--white);border-radius:var(--radius);box-shadow:0 20px 50px rgba(0,0,0,.3);overflow:hidden;">
+
+    <!-- Search Input -->
+    <div style="display:flex;align-items:center;gap:10px;padding:16px;border-bottom:1px solid var(--gray-3);">
+      <i data-lucide="search" style="width:18px;height:18px;color:var(--gray-2);"></i>
+      <input
+        type="text"
+        id="search-input"
+        placeholder="Search students, teams, pages..."
+        autocomplete="off"
+        style="flex:1;border:none;outline:none;font-size:16px;font-weight:500;color:var(--black);background:transparent;"
+      />
+      <kbd style="background:var(--gray-4);color:var(--gray-1);padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600;font-family:'Inter',sans-serif;">ESC</kbd>
+    </div>
+
+    <!-- Search Results -->
+    <div id="search-results" style="max-height:400px;overflow-y:auto;">
+      <!-- Results populated by global-search.js -->
+    </div>
+
+  </div>
+</div>
+
+<style>
+/* Search result styles */
+.search-section {
+  padding: 8px 16px 4px;
+}
+
+.search-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--gray-1);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 4px;
+  padding: 4px 0;
+}
+
+.search-result-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: background .15s;
+  border-radius: var(--radius-sm);
+}
+
+.search-result-item:hover {
+  background: var(--gray-4);
+}
+
+.search-result-icon {
+  width: 20px;
+  height: 20px;
+  color: var(--gray-2);
+  flex-shrink: 0;
+}
+
+.search-result-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.search-result-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--black);
+}
+
+.search-result-subtitle {
+  font-size: 11px;
+  color: var(--gray-1);
+  margin-top: 2px;
+}
+
+/* Keyboard hint in topbar */
+.search-hint {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--gray-2);
+  padding: 4px 8px;
+  border-radius: var(--radius-sm);
+  background: var(--gray-4);
+  border: 1px solid var(--gray-3);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+}
+
+.search-hint:hover {
+  background: var(--white);
+  border-color: var(--gray-2);
+  color: var(--gray-1);
+}
+
+.search-hint kbd {
+  font-size: 10px;
+  font-weight: 700;
+  font-family: 'Inter', sans-serif;
+  padding: 2px 4px;
+  background: var(--white);
+  border: 1px solid var(--gray-3);
+  border-radius: 3px;
+}
+</style>

@@ -323,6 +323,30 @@
     .page-btn.active { background: var(--yellow); border-color: var(--yellow); color: var(--black); }
     .page-btn:disabled { opacity: .4; cursor: not-allowed; }
 
+    /* ── BULK ACTIONS BAR ──────────────────────────── */
+    .bulk-actions {
+      position: fixed; bottom: 28px; left: 50%;
+      transform: translateX(-50%);
+      background: var(--black); color: var(--white);
+      padding: 14px 20px; border-radius: var(--radius);
+      box-shadow: 0 8px 32px rgba(0,0,0,.24);
+      display: flex; align-items: center; gap: 14px;
+      z-index: 600;
+    }
+    .bulk-actions-text { font-size: 13px; font-weight: 600; }
+    .bulk-actions-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 14px; border-radius: var(--radius-sm);
+      font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all .15s; border: none;
+    }
+    .bulk-actions-btn.primary { background: var(--yellow); color: var(--black); }
+    .bulk-actions-btn.primary:hover { opacity: .88; }
+    .bulk-actions-btn.ghost { background: transparent; color: var(--white); border: 1.5px solid var(--black-3); }
+    .bulk-actions-btn.ghost:hover { background: var(--black-2); }
+    .bulk-actions-btn.danger { background: #DC2626; color: var(--white); }
+    .bulk-actions-btn.danger:hover { background: #B91C1C; }
+
     /* ── RESPONSIVE ────────────────────────────────── */
     @media (max-width: 1100px) {
       .stat-grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -557,6 +581,9 @@
         <table>
           <thead>
             <tr>
+              <th style="width:40px;padding-left:14px;">
+                <input type="checkbox" id="select-all" onchange="toggleSelectAll()" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
+              </th>
               <th>Item Name</th>
               <th>Category</th>
               <th>Qty</th>
@@ -820,6 +847,7 @@
   ];
 
   let filtered = [...ITEMS];
+  let selectedItems = new Set();
 
   // ── STATUS BADGE ─────────────────────────────────────
   function statusBadge(status) {
@@ -876,7 +904,11 @@
     tbody.innerHTML = filtered.map(item => {
       const isOos = item.status === 'Out of Stock';
       const rowClass = isOos ? 'oos-row' : '';
+      const isChecked = selectedItems.has(item.id);
       return `<tr class="${rowClass}">
+        <td style="padding-left:14px;" onclick="event.stopPropagation()">
+          <input type="checkbox" class="item-checkbox" data-item-id="${item.id}" ${isChecked ? 'checked' : ''} onchange="toggleItemSelect(${item.id})" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
+        </td>
         <td>
           <div class="item-name">${item.name}</div>
           <div class="item-sku">${item.sku}</div>
@@ -1139,6 +1171,100 @@
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeNotifPanel(null);
   });
+
+  // ── BULK SELECT ACTIONS ──────────────────────────────
+  function toggleSelectAll() {
+    const checkbox = document.getElementById('select-all');
+    selectedItems.clear();
+    if (checkbox.checked) {
+      filtered.forEach(item => selectedItems.add(item.id));
+    }
+    renderTable();
+    updateBulkActionsBar();
+  }
+
+  function toggleItemSelect(id) {
+    if (selectedItems.has(id)) {
+      selectedItems.delete(id);
+    } else {
+      selectedItems.add(id);
+    }
+    const selectAll = document.getElementById('select-all');
+    if (selectAll) {
+      selectAll.checked = selectedItems.size === filtered.length && filtered.length > 0;
+    }
+    updateBulkActionsBar();
+  }
+
+  function updateBulkActionsBar() {
+    let bar = document.getElementById('bulk-actions-bar');
+    if (selectedItems.size === 0) {
+      if (bar) bar.remove();
+      return;
+    }
+
+    if (!bar) {
+      bar = document.createElement('div');
+      bar.id = 'bulk-actions-bar';
+      bar.className = 'bulk-actions';
+      document.body.appendChild(bar);
+    }
+
+    const selectedCount = selectedItems.size;
+    const lowStockCount = Array.from(selectedItems).filter(id => {
+      const item = ITEMS.find(i => i.id === id);
+      return item && item.status === 'Low Stock';
+    }).length;
+
+    bar.innerHTML = `
+      <span class="bulk-actions-text">${selectedCount} item${selectedCount !== 1 ? 's' : ''} selected</span>
+      <button class="bulk-actions-btn ghost" onclick="clearSelection()">
+        <i data-lucide="x" style="width:13px;height:13px;"></i>
+        Clear
+      </button>
+      <button class="bulk-actions-btn primary" onclick="bulkReorder()">
+        <i data-lucide="refresh-cw" style="width:13px;height:13px;"></i>
+        Reorder (${selectedCount})
+      </button>
+      <button class="bulk-actions-btn ghost" onclick="bulkAssign()">
+        <i data-lucide="users" style="width:13px;height:13px;"></i>
+        Assign to Team
+      </button>
+      <button class="bulk-actions-btn danger" onclick="bulkDelete()">
+        <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
+        Delete
+      </button>
+    `;
+    lucide.createIcons();
+  }
+
+  function clearSelection() {
+    selectedItems.clear();
+    const selectAll = document.getElementById('select-all');
+    if (selectAll) selectAll.checked = false;
+    renderTable();
+    updateBulkActionsBar();
+  }
+
+  function bulkReorder() {
+    const count = selectedItems.size;
+    alert(`Reorder action triggered for ${count} item${count !== 1 ? 's' : ''}`);
+    clearSelection();
+  }
+
+  function bulkAssign() {
+    const count = selectedItems.size;
+    alert(`Assign to team triggered for ${count} item${count !== 1 ? 's' : ''}`);
+    // Could open a modal to select team
+  }
+
+  function bulkDelete() {
+    const count = selectedItems.size;
+    if (confirm(`Are you sure you want to delete ${count} item${count !== 1 ? 's' : ''}? This action cannot be undone.`)) {
+      alert(`Delete action triggered for ${count} item${count !== 1 ? 's' : ''}`);
+      clearSelection();
+    }
+  }
 </script>
 
 <!-- Notification Panel -->

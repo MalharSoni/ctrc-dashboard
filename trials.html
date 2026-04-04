@@ -6,6 +6,8 @@
   <title>Trial Students — CTRC Club Manager</title>
 
   <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script src="/js/api-client.js"></script>
+  <script src="/js/toast.js"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <style>
     @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: block; src: url('fonts/inter-400.woff2') format('woff2'); }
@@ -396,27 +398,19 @@
 lucide.createIcons();
 
 // TRIAL STUDENTS DATA
-const TRIAL_STUDENTS = JSON.parse(localStorage.getItem('trialStudents') || '[]');
-if (TRIAL_STUDENTS.length === 0) {
-  // Initialize with mock data
-  TRIAL_STUDENTS.push(
-    { id: 1, studentName: 'Alex Johnson', age: 13, grade: 8, parentName: 'Sarah Johnson', parentEmail: 'sarah.johnson@email.com', parentPhone: '(416) 555-0123', sessionDate: '2026-04-05', timeSlot: 'AM', status: 'scheduled', notes: 'Interested in V5RC competition team', source: 'outlook', createdAt: '2026-04-01T10:30:00Z', attendedAt: null, convertedToStudentId: null },
-    { id: 2, studentName: 'Maya Chen', age: 14, grade: 9, parentName: 'David Chen', parentEmail: 'david.chen@email.com', parentPhone: '(416) 555-0124', sessionDate: '2026-04-05', timeSlot: 'PM', status: 'scheduled', notes: 'Has robotics experience from middle school', source: 'website', createdAt: '2026-04-02T14:20:00Z', attendedAt: null, convertedToStudentId: null },
-    { id: 3, studentName: 'Liam Patel', age: 12, grade: 7, parentName: 'Priya Patel', parentEmail: 'priya.patel@email.com', parentPhone: '(416) 555-0125', sessionDate: '2026-04-12', timeSlot: 'AM', status: 'scheduled', notes: 'Very interested in programming', source: 'referral', createdAt: '2026-04-03T09:15:00Z', attendedAt: null, convertedToStudentId: null },
-    { id: 4, studentName: 'Emma Rodriguez', age: 15, grade: 10, parentName: 'Carlos Rodriguez', parentEmail: 'carlos.rodriguez@email.com', parentPhone: '(416) 555-0126', sessionDate: '2026-03-29', timeSlot: 'AM', status: 'attended', notes: 'Strong mechanical aptitude', source: 'outlook', createdAt: '2026-03-25T11:45:00Z', attendedAt: '2026-03-29T09:30:00Z', convertedToStudentId: null },
-    { id: 5, studentName: 'Noah Kim', age: 13, grade: 8, parentName: 'Jennifer Kim', parentEmail: 'jennifer.kim@email.com', parentPhone: '(416) 555-0127', sessionDate: '2026-03-29', timeSlot: 'PM', status: 'converted', notes: 'Enrolled after successful trial', source: 'website', createdAt: '2026-03-26T16:30:00Z', attendedAt: '2026-03-29T13:45:00Z', convertedToStudentId: 999 },
-    { id: 6, studentName: 'Sophia Martinez', age: 14, grade: 9, parentName: 'Maria Martinez', parentEmail: 'maria.martinez@email.com', parentPhone: '(416) 555-0128', sessionDate: '2026-03-22', timeSlot: 'AM', status: 'noShow', notes: 'Did not attend scheduled trial', source: 'walkin', createdAt: '2026-03-18T13:20:00Z', attendedAt: null, convertedToStudentId: null },
-    { id: 7, studentName: 'Ethan Brown', age: 16, grade: 11, parentName: 'Michael Brown', parentEmail: 'michael.brown@email.com', parentPhone: '(416) 555-0129', sessionDate: '2026-03-22', timeSlot: 'PM', status: 'declined', notes: 'Parent decided on different program', source: 'outlook', createdAt: '2026-03-19T10:10:00Z', attendedAt: null, convertedToStudentId: null },
-    { id: 8, studentName: 'Olivia Taylor', age: 12, grade: 7, parentName: 'Jessica Taylor', parentEmail: 'jessica.taylor@email.com', parentPhone: '(416) 555-0130', sessionDate: '2026-04-12', timeSlot: 'PM', status: 'scheduled', notes: 'Friend of current member', source: 'referral', createdAt: '2026-04-03T15:45:00Z', attendedAt: null, convertedToStudentId: null }
-  );
-  saveTrials();
-}
-
-let filtered = [...TRIAL_STUDENTS];
+let TRIAL_STUDENTS = [];
+let filtered = [];
 let currentFilter = 'all';
 
-function saveTrials() {
-  localStorage.setItem('trialStudents', JSON.stringify(TRIAL_STUDENTS));
+// Load trials from API
+async function loadTrials() {
+  try {
+    TRIAL_STUDENTS = await trialsAPI.getAll();
+    applyFilters();
+  } catch (error) {
+    console.error('Failed to load trials:', error);
+    showToast('Could not load trials. Please refresh the page.', 'error');
+  }
 }
 
 function getNextSaturday() {
@@ -468,12 +462,14 @@ function renderTable() {
       else daysBadge = `<span class="days-badge" style="background:#FEF2F2;color:#DC2626;">${Math.abs(daysUntil)} days ago</span>`;
     }
 
-    const statusBadge =
-      t.status === 'scheduled' ? '<span class="badge badge-blue">Scheduled</span>' :
-      t.status === 'attended' ? '<span class="badge badge-green">Attended</span>' :
-      t.status === 'converted' ? '<span class="badge badge-black">Converted</span>' :
-      t.status === 'noShow' ? '<span class="badge badge-red">No Show</span>' :
-      '<span class="badge badge-gray">Declined</span>';
+    const statusMap = {
+      'SCHEDULED': '<span class="badge badge-blue">Scheduled</span>',
+      'ATTENDED': '<span class="badge badge-green">Attended</span>',
+      'CONVERTED': '<span class="badge badge-black">Converted</span>',
+      'NO_SHOW': '<span class="badge badge-red">No Show</span>',
+      'DECLINED': '<span class="badge badge-gray">Declined</span>'
+    };
+    const statusBadge = statusMap[t.status] || statusMap['SCHEDULED'];
 
     const slotBadge = `<span class="slot-pill ${t.timeSlot.toLowerCase()}">${t.timeSlot}</span>`;
 
@@ -514,8 +510,17 @@ function renderTable() {
 
 function applyFilters() {
   const searchTerm = document.getElementById('table-search').value.toLowerCase();
+  const filterStatusMap = {
+    'all': 'all',
+    'scheduled': 'SCHEDULED',
+    'attended': 'ATTENDED',
+    'converted': 'CONVERTED',
+    'noShow': 'NO_SHOW',
+    'declined': 'DECLINED'
+  };
+
   filtered = TRIAL_STUDENTS.filter(t => {
-    if (currentFilter !== 'all' && t.status !== currentFilter) return false;
+    if (currentFilter !== 'all' && t.status !== filterStatusMap[currentFilter]) return false;
     if (searchTerm) {
       const searchable = `${t.studentName} ${t.parentName} ${t.parentEmail} ${t.parentPhone}`.toLowerCase();
       if (!searchable.includes(searchTerm)) return false;
@@ -544,14 +549,14 @@ function filterByStatus(status) {
 
 function updateCounts() {
   document.getElementById('count-all').textContent = TRIAL_STUDENTS.length;
-  document.getElementById('count-scheduled').textContent = TRIAL_STUDENTS.filter(t => t.status === 'scheduled').length;
-  document.getElementById('count-attended').textContent = TRIAL_STUDENTS.filter(t => t.status === 'attended').length;
-  document.getElementById('count-converted').textContent = TRIAL_STUDENTS.filter(t => t.status === 'converted').length;
-  document.getElementById('count-noShow').textContent = TRIAL_STUDENTS.filter(t => t.status === 'noShow').length;
-  document.getElementById('count-declined').textContent = TRIAL_STUDENTS.filter(t => t.status === 'declined').length;
+  document.getElementById('count-scheduled').textContent = TRIAL_STUDENTS.filter(t => t.status === 'SCHEDULED').length;
+  document.getElementById('count-attended').textContent = TRIAL_STUDENTS.filter(t => t.status === 'ATTENDED').length;
+  document.getElementById('count-converted').textContent = TRIAL_STUDENTS.filter(t => t.status === 'CONVERTED').length;
+  document.getElementById('count-noShow').textContent = TRIAL_STUDENTS.filter(t => t.status === 'NO_SHOW').length;
+  document.getElementById('count-declined').textContent = TRIAL_STUDENTS.filter(t => t.status === 'DECLINED').length;
 
   // Update sidebar badge
-  const upcomingCount = TRIAL_STUDENTS.filter(t => t.status === 'scheduled').length;
+  const upcomingCount = TRIAL_STUDENTS.filter(t => t.status === 'SCHEDULED').length;
   const badge = document.getElementById('sidebar-upcoming-count');
   if (badge) {
     badge.textContent = upcomingCount;
@@ -572,7 +577,7 @@ function closeAddModal(e) {
   document.getElementById('add-modal-backdrop').style.display = 'none';
 }
 
-function submitAddTrial() {
+async function submitAddTrial() {
   const studentName = document.getElementById('add-student-name').value.trim();
   const parentEmail = document.getElementById('add-parent-email').value.trim();
   const sessionDate = document.getElementById('add-session-date').value;
@@ -583,8 +588,7 @@ function submitAddTrial() {
     return;
   }
 
-  const newTrial = {
-    id: Date.now(),
+  const data = {
     studentName,
     age: parseInt(document.getElementById('add-age').value) || null,
     grade: parseInt(document.getElementById('add-grade').value),
@@ -593,27 +597,28 @@ function submitAddTrial() {
     parentPhone: document.getElementById('add-parent-phone').value.trim(),
     sessionDate,
     timeSlot,
-    status: 'scheduled',
     notes: document.getElementById('add-notes').value.trim(),
-    source: document.getElementById('add-source').value,
-    createdAt: new Date().toISOString(),
-    attendedAt: null,
-    convertedToStudentId: null
+    source: document.getElementById('add-source').value
   };
 
-  TRIAL_STUDENTS.unshift(newTrial);
-  saveTrials();
-  applyFilters();
-  closeAddModal(null);
-  showToast(`Trial booked for ${studentName} on ${formatDate(sessionDate)} (${timeSlot})`);
+  try {
+    const newTrial = await trialsAPI.create(data);
+    TRIAL_STUDENTS.unshift(newTrial);
+    applyFilters();
+    closeAddModal(null);
+    showToast(`Trial booked for ${studentName} on ${formatDate(sessionDate)} (${timeSlot})`, 'success');
 
-  // Reset form
-  document.getElementById('add-student-name').value = '';
-  document.getElementById('add-age').value = '';
-  document.getElementById('add-parent-name').value = '';
-  document.getElementById('add-parent-email').value = '';
-  document.getElementById('add-parent-phone').value = '';
-  document.getElementById('add-notes').value = '';
+    // Reset form
+    document.getElementById('add-student-name').value = '';
+    document.getElementById('add-age').value = '';
+    document.getElementById('add-parent-name').value = '';
+    document.getElementById('add-parent-email').value = '';
+    document.getElementById('add-parent-phone').value = '';
+    document.getElementById('add-notes').value = '';
+  } catch (error) {
+    console.error('Failed to create trial:', error);
+    showToast('Failed to create trial. Please try again.', 'error');
+  }
 }
 
 // DETAIL MODAL
@@ -623,19 +628,19 @@ function openDetailModal(id) {
 
   const daysUntil = getDaysUntil(trial.sessionDate);
   const statusLabel = {
-    scheduled: 'Scheduled',
-    attended: 'Attended',
-    converted: 'Converted to Member',
-    noShow: 'No Show',
-    declined: 'Declined'
+    'SCHEDULED': 'Scheduled',
+    'ATTENDED': 'Attended',
+    'CONVERTED': 'Converted to Member',
+    'NO_SHOW': 'No Show',
+    'DECLINED': 'Declined'
   }[trial.status];
 
   const statusColor = {
-    scheduled: '#2563EB',
-    attended: '#22C55E',
-    converted: '#171717',
-    noShow: '#DC2626',
-    declined: '#737373'
+    'SCHEDULED': '#2563EB',
+    'ATTENDED': '#22C55E',
+    'CONVERTED': '#171717',
+    'NO_SHOW': '#DC2626',
+    'DECLINED': '#737373'
   }[trial.status];
 
   let statusTimeline = `
@@ -789,56 +794,74 @@ function closeConvertModal(e) {
   document.getElementById('convert-modal-backdrop').style.display = 'none';
 }
 
-function submitConvert(id) {
+async function submitConvert(id) {
   const trial = TRIAL_STUDENTS.find(t => t.id === id);
   if (!trial) return;
 
-  const team = document.getElementById('convert-team').value;
-  const email = document.getElementById('convert-email').value;
+  try {
+    const result = await trialsAPI.convert(id);
 
-  // Update trial status
-  trial.status = 'converted';
-  trial.convertedToStudentId = Date.now();
-  saveTrials();
+    // Update local state
+    trial.status = 'CONVERTED';
+    trial.convertedToStudentId = result.student.id;
 
-  // TODO: In real implementation, create actual student record
-  // For now, just show success message
-
-  closeConvertModal(null);
-  applyFilters();
-  showToast(`${trial.studentName} converted to member successfully!`);
+    closeConvertModal(null);
+    applyFilters();
+    showToast(`${trial.studentName} converted to member successfully!`, 'success');
+  } catch (error) {
+    console.error('Failed to convert trial:', error);
+    showToast('Failed to convert trial student. Please try again.', 'error');
+  }
 }
 
 // ACTIONS
-function markAttended(id) {
+async function markAttended(id) {
   const trial = TRIAL_STUDENTS.find(t => t.id === id);
   if (!trial) return;
-  trial.status = 'attended';
-  trial.attendedAt = new Date().toISOString();
-  saveTrials();
-  applyFilters();
-  showToast(`${trial.studentName} marked as attended`);
+
+  try {
+    await trialsAPI.update(id, { status: 'ATTENDED' });
+    trial.status = 'ATTENDED';
+    trial.attendedAt = new Date().toISOString();
+    applyFilters();
+    showToast(`${trial.studentName} marked as attended`, 'success');
+  } catch (error) {
+    console.error('Failed to mark attended:', error);
+    showToast('Failed to update status. Please try again.', 'error');
+  }
 }
 
-function markNoShow(id) {
+async function markNoShow(id) {
   const trial = TRIAL_STUDENTS.find(t => t.id === id);
   if (!trial) return;
   if (!confirm(`Mark ${trial.studentName} as no-show?`)) return;
-  trial.status = 'noShow';
-  saveTrials();
-  applyFilters();
-  showToast(`${trial.studentName} marked as no-show`);
+
+  try {
+    await trialsAPI.update(id, { status: 'NO_SHOW' });
+    trial.status = 'NO_SHOW';
+    applyFilters();
+    showToast(`${trial.studentName} marked as no-show`, 'success');
+  } catch (error) {
+    console.error('Failed to mark no-show:', error);
+    showToast('Failed to update status. Please try again.', 'error');
+  }
 }
 
-function deleteTrial(id) {
+async function deleteTrial(id) {
   const trial = TRIAL_STUDENTS.find(t => t.id === id);
   if (!trial) return;
   if (!confirm(`Delete trial for ${trial.studentName}?`)) return;
-  const index = TRIAL_STUDENTS.findIndex(t => t.id === id);
-  TRIAL_STUDENTS.splice(index, 1);
-  saveTrials();
-  applyFilters();
-  showToast(`Trial for ${trial.studentName} deleted`);
+
+  try {
+    await trialsAPI.delete(id);
+    const index = TRIAL_STUDENTS.findIndex(t => t.id === id);
+    TRIAL_STUDENTS.splice(index, 1);
+    applyFilters();
+    showToast(`Trial for ${trial.studentName} deleted`, 'success');
+  } catch (error) {
+    console.error('Failed to delete trial:', error);
+    showToast('Failed to delete trial. Please try again.', 'error');
+  }
 }
 
 // TOAST
@@ -874,8 +897,11 @@ document.addEventListener('keydown', e => {
   }
 });
 
-applyFilters();
-lucide.createIcons();
+// Load data on page load
+document.addEventListener('DOMContentLoaded', () => {
+  loadTrials();
+  lucide.createIcons();
+});
 </script>
 
 </body>

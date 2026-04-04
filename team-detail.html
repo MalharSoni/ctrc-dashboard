@@ -1,0 +1,782 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Team Detail — CTRC Club Manager</title>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <style>
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 400; font-display: block; src: url('fonts/inter-400.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 500; font-display: block; src: url('fonts/inter-500.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 600; font-display: block; src: url('fonts/inter-600.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 700; font-display: block; src: url('fonts/inter-700.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 800; font-display: block; src: url('fonts/inter-800.woff2') format('woff2'); }
+    @font-face { font-family: 'Inter'; font-style: normal; font-weight: 900; font-display: block; src: url('fonts/inter-900.woff2') format('woff2'); }
+  </style>
+
+  <style>
+    :root {
+      --yellow:     #F5D000;
+      --yellow-dim: #C8AA00;
+      --yellow-bg:  #FFFBDC;
+      --black:      #171717;
+      --black-2:    #262626;
+      --black-3:    #404040;
+      --gray-1:     #737373;
+      --gray-2:     #A3A3A3;
+      --gray-3:     #D4D4D4;
+      --gray-4:     #F5F5F5;
+      --white:      #FFFFFF;
+      --sidebar-w:  240px;
+      --radius:     10px;
+      --radius-sm:  6px;
+      --shadow:     0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.05);
+      --shadow-md:  0 4px 12px rgba(0,0,0,.10);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Inter', sans-serif; background: var(--gray-4); color: var(--black); min-height: 100vh; display: flex; }
+
+    /* ── SIDEBAR ── */
+    .sidebar { width: var(--sidebar-w); background: var(--black); display: flex; flex-direction: column; position: fixed; top: 0; left: 0; bottom: 0; z-index: 100; }
+    .sidebar-logo { padding: 20px 18px 16px; border-bottom: 1px solid var(--black-2); }
+    .sidebar-logo img { width: 140px; display: block; }
+    .sidebar-logo-sub { font-size: 10px; color: var(--gray-2); letter-spacing: .08em; text-transform: uppercase; margin-top: 6px; }
+    .sidebar-nav { flex: 1; padding: 12px 10px; display: flex; flex-direction: column; gap: 2px; overflow-y: auto; }
+    .nav-section-label { font-size: 10px; font-weight: 600; color: var(--gray-1); letter-spacing: .1em; text-transform: uppercase; padding: 10px 8px 4px; }
+    .nav-item { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-sm); color: var(--gray-2); font-size: 13.5px; font-weight: 500; cursor: pointer; transition: background .15s, color .15s; text-decoration: none; }
+    .nav-item:hover { background: var(--black-2); color: var(--white); }
+    .nav-item.active { background: var(--yellow); color: var(--black); font-weight: 700; }
+    .nav-item i { width: 16px; height: 16px; }
+    .nav-badge { margin-left: auto; background: var(--yellow); color: var(--black); font-size: 10px; font-weight: 700; padding: 1px 6px; border-radius: 99px; }
+    .nav-item.active .nav-badge { background: var(--black); color: var(--yellow); }
+    .sidebar-footer { padding: 14px 14px; border-top: 1px solid var(--black-3); }
+    .sidebar-user { display: flex; align-items: center; gap: 10px; cursor: pointer; }
+    .sidebar-avatar { width: 34px; height: 34px; border-radius: 50%; background: var(--yellow); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .sidebar-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .sidebar-user-info { flex: 1; min-width: 0; }
+    .sidebar-user-name { font-size: 13px; font-weight: 600; color: var(--white); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .sidebar-user-role { font-size: 11px; color: var(--gray-2); }
+
+    /* ── MAIN ── */
+    .main { margin-left: var(--sidebar-w); flex: 1; min-width: 0; overflow-x: hidden; display: flex; flex-direction: column; min-height: 100vh; }
+
+    /* ── TOPBAR ── */
+    .topbar { background: var(--white); border-bottom: 1px solid var(--gray-3); padding: 0 28px; height: 56px; display: flex; align-items: center; gap: 12px; position: sticky; top: 0; z-index: 50; }
+    .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; }
+    .breadcrumb a { color: var(--gray-1); text-decoration: none; font-weight: 500; }
+    .breadcrumb a:hover { color: var(--black); }
+    .breadcrumb-sep { color: var(--gray-3); }
+    .breadcrumb-cur { color: var(--black); font-weight: 600; }
+    .topbar-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; padding: 7px 14px; border-radius: var(--radius-sm); border: none; cursor: pointer; transition: opacity .15s, transform .1s; white-space: nowrap; }
+    .btn:active { transform: scale(.97); }
+    .btn-yellow { background: var(--yellow); color: var(--black); }
+    .btn-yellow:hover { opacity: .88; }
+    .btn-outline { background: transparent; border: 1.5px solid var(--gray-3); color: var(--black-3); }
+    .btn-outline:hover { border-color: var(--gray-2); }
+    .btn-ghost { background: transparent; color: var(--gray-1); padding: 7px 10px; }
+    .btn-ghost:hover { background: var(--gray-4); color: var(--black); }
+    .btn-danger { background: #FEF2F2; color: #DC2626; border: 1.5px solid #FECACA; }
+    .btn-danger:hover { background: #FEE2E2; }
+    .icon-btn { width: 34px; height: 34px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; border: 1.5px solid var(--gray-3); background: var(--white); cursor: pointer; color: var(--gray-1); transition: all .15s; position: relative; }
+    .icon-btn:hover { border-color: var(--gray-2); color: var(--black); }
+    .notif-dot { position: absolute; top: 5px; right: 5px; width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; border: 1.5px solid var(--white); }
+
+    /* ── CONTENT ── */
+    .content { padding: 28px; display: flex; flex-direction: column; gap: 20px; max-width: 1400px; width: 100%; }
+
+    /* ── TEAM HERO ── */
+    .team-hero {
+      background: var(--white);
+      border: 1px solid var(--gray-3);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    .hero-top {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 24px 28px;
+    }
+    .hero-logo {
+      width: 80px; height: 80px;
+      border-radius: var(--radius);
+      font-size: 28px; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      border: 3px solid var(--white);
+      box-shadow: 0 0 0 2px var(--gray-3);
+      background: var(--black);
+      color: var(--yellow);
+    }
+    .hero-info { flex: 1; }
+    .hero-name { font-size: 24px; font-weight: 900; color: var(--black); letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+    .hero-meta { display: flex; align-items: center; gap: 16px; margin-top: 6px; flex-wrap: wrap; }
+    .hero-meta-item { display: flex; align-items: center; gap: 5px; font-size: 13px; color: var(--gray-1); }
+    .hero-actions { display: flex; gap: 8px; align-items: center; }
+
+    .program-badge {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; padding: 3px 10px;
+      border-radius: 99px; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .badge-vrc { background: var(--black); color: var(--white); }
+    .badge-ev { background: #F0FDF4; color: #15803D; }
+
+    .status-chip {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 11px; font-weight: 700; padding: 3px 9px;
+      border-radius: 99px; letter-spacing: .04em;
+    }
+    .chip-green { background: #DCFCE7; color: #15803D; }
+    .chip-yellow { background: var(--yellow-bg); color: #92700A; }
+    .chip-red { background: #FEE2E2; color: #DC2626; }
+
+    .hero-strip {
+      height: 5px;
+      background: repeating-linear-gradient(-55deg, var(--yellow) 0, var(--yellow) 10px, var(--black) 10px, var(--black) 20px);
+      opacity: .15;
+    }
+
+    /* ── TABS ── */
+    .tabs { display: flex; gap: 0; border-bottom: 1px solid var(--gray-3); padding: 0 28px; background: var(--white); }
+    .tab {
+      padding: 12px 16px; font-size: 13.5px; font-weight: 600;
+      color: var(--gray-1); cursor: pointer; border-bottom: 2px solid transparent;
+      margin-bottom: -1px; transition: color .15s, border-color .15s;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .tab:hover { color: var(--black); }
+    .tab.active { color: var(--black); border-bottom-color: var(--yellow); }
+
+    /* ── STAT MINI CARDS ── */
+    .stat-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .stat-mini {
+      background: var(--white); border: 1px solid var(--gray-3);
+      border-radius: var(--radius); padding: 16px 18px;
+      box-shadow: var(--shadow);
+    }
+    .stat-mini-label { font-size: 10.5px; font-weight: 700; color: var(--gray-1); text-transform: uppercase; letter-spacing: .07em; }
+    .stat-mini-value { font-size: 28px; font-weight: 900; color: var(--black); letter-spacing: -.03em; line-height: 1.1; margin-top: 4px; }
+    .stat-mini-sub { font-size: 11.5px; color: var(--gray-2); margin-top: 3px; }
+    .stat-mini-bar { height: 4px; background: var(--gray-3); border-radius: 99px; margin-top: 8px; overflow: hidden; }
+    .stat-mini-fill { height: 100%; background: var(--yellow); border-radius: 99px; }
+    .stat-mini-fill.green { background: #22C55E; }
+    .stat-mini-fill.red { background: #EF4444; }
+
+    /* ── TWO COL ── */
+    .two-col { display: grid; grid-template-columns: 1fr 320px; gap: 20px; align-items: start; }
+
+    /* ── CARD ── */
+    .card { background: var(--white); border: 1px solid var(--gray-3); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; padding: 14px 20px; border-bottom: 1px solid var(--gray-3); }
+    .card-title { font-size: 14px; font-weight: 700; color: var(--black); }
+    .card-link { font-size: 12px; color: var(--gray-1); font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 3px; text-decoration: none; }
+    .card-link:hover { color: var(--black); }
+    .card-body { padding: 18px 20px; }
+
+    /* ── MEMBERS TABLE ── */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; }
+    thead th {
+      font-size: 11px; font-weight: 700; color: var(--gray-1);
+      letter-spacing: .06em; text-transform: uppercase;
+      text-align: left; padding: 10px 20px;
+      border-bottom: 1px solid var(--gray-3);
+      background: var(--gray-4);
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid var(--gray-3); transition: background .1s; cursor: pointer; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: var(--yellow-bg); }
+    td { padding: 13px 20px; font-size: 13px; color: var(--black-3); vertical-align: middle; }
+
+    .member-cell { display: flex; align-items: center; gap: 12px; }
+    .member-avatar {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .member-name { font-weight: 600; color: var(--black); }
+    .member-email { font-size: 12px; color: var(--gray-1); margin-top: 1px; }
+
+    .role-badge {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 3px 8px;
+      border-radius: 99px;
+    }
+    .role-captain { background: var(--yellow-bg); color: var(--yellow-dim); }
+    .role-driver { background: #EFF6FF; color: #1D4ED8; }
+    .role-programmer { background: #F5F3FF; color: #7C3AED; }
+    .role-builder { background: #FFF7ED; color: #C2410C; }
+    .role-notebooker { background: #F0FDF4; color: #15803D; }
+
+    .att-bar { width: 60px; height: 6px; background: var(--gray-3); border-radius: 99px; overflow: hidden; display: inline-block; }
+    .att-fill { height: 100%; border-radius: 99px; }
+    .att-high { background: #16A34A; }
+    .att-mid { background: #CA8A04; }
+    .att-low { background: #DC2626; }
+
+    .action-link {
+      color: var(--yellow-dim);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .action-link:hover { color: var(--black); }
+
+    /* ── TASKS ── */
+    .task-item { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--gray-3); }
+    .task-item:last-child { border-bottom: none; }
+    .task-check { width: 16px; height: 16px; border-radius: 4px; border: 2px solid var(--gray-3); flex-shrink: 0; margin-top: 1px; display: flex; align-items: center; justify-content: center; cursor: pointer; }
+    .task-check.done { background: var(--yellow); border-color: var(--yellow); }
+    .task-info { flex: 1; }
+    .task-name { font-size: 13px; font-weight: 600; color: var(--black); }
+    .task-name.done { text-decoration: line-through; color: var(--gray-2); }
+    .task-meta { font-size: 11.5px; color: var(--gray-1); margin-top: 2px; display: flex; gap: 10px; }
+    .task-due-red { color: #DC2626; font-weight: 600; }
+
+    /* ── COMPETITION HISTORY ── */
+    .comp-row { display: flex; align-items: center; gap: 14px; padding: 12px 0; border-bottom: 1px solid var(--gray-3); }
+    .comp-row:last-child { border-bottom: none; }
+    .comp-rank { width: 36px; height: 36px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 900; flex-shrink: 0; }
+    .comp-rank.gold   { background: var(--yellow); color: var(--black); }
+    .comp-rank.silver { background: var(--gray-3); color: var(--black-3); }
+    .comp-rank.bronze { background: #FED7AA; color: #9A3412; }
+    .comp-rank.other  { background: var(--gray-4); color: var(--gray-1); border: 1px solid var(--gray-3); }
+    .comp-info { flex: 1; }
+    .comp-name { font-size: 13px; font-weight: 700; color: var(--black); }
+    .comp-date { font-size: 11.5px; color: var(--gray-1); margin-top: 1px; }
+    .comp-result { margin-left: auto; text-align: right; font-size: 12px; font-weight: 700; color: var(--black); }
+    .comp-result-sub { font-size: 11px; color: var(--gray-1); font-weight: 400; }
+
+    /* ── EMPTY STATE ── */
+    .empty-state { padding: 40px; text-align: center; color: var(--gray-2); }
+    .empty-state i { color: var(--gray-3); margin-bottom: 10px; }
+    .empty-state-title { font-size: 14px; font-weight: 600; color: var(--gray-1); margin-top: 8px; }
+    .empty-state-desc { font-size: 12px; color: var(--gray-2); margin-top: 4px; }
+
+    /* ── CAUTION TAPE ── */
+    .caution-tape {
+      height: 5px;
+      background: repeating-linear-gradient(-55deg, var(--yellow) 0, var(--yellow) 10px, var(--black) 10px, var(--black) 20px);
+      opacity: .15;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══ SIDEBAR ═══ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <img src="logo-white.png" alt="Caution Tape Robotics" />
+    <div class="sidebar-logo-sub">Club Manager</div>
+  </div>
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">General</div>
+    <a class="nav-item" href="index.html"><i data-lucide="layout-dashboard"></i> Dashboard</a>
+    <a class="nav-item" href="students.html"><i data-lucide="users"></i> Students</a>
+    <a class="nav-item" href="foundation.html"><i data-lucide="book-open"></i> Foundation</a>
+    <a class="nav-item active" href="teams.html"><i data-lucide="cpu"></i> Teams</a>
+    <a class="nav-item" href="tasks.html"><i data-lucide="circle-check"></i> Tasks <span class="nav-badge">5</span></a>
+    <a class="nav-item" href="projects.html"><i data-lucide="folder"></i> Projects</a>
+    <div class="nav-section-label" style="margin-top:8px;">Competition</div>
+    <a class="nav-item" href="https://matchsight.ct839.com/events?programId=1" target="_blank"><i data-lucide="trophy"></i> Competitions</a>
+    <div class="nav-section-label" style="margin-top:8px;">Operations</div>
+    <a class="nav-item" href="inventory.html"><i data-lucide="package"></i> Inventory</a>
+    <a class="nav-item" href="trials.html"><i data-lucide="user-check"></i> Trial Students</a>
+    <a class="nav-item" href="purchases.html"><i data-lucide="receipt"></i> Purchases</a>
+    <a class="nav-item" href="purchases-invoices.html"><i data-lucide="file-text"></i> Invoices</a>
+    <a class="nav-item" href="reports.html"><i data-lucide="bar-chart-2"></i> Reports</a>
+    <div style="margin-top:auto;"></div>
+    <a class="nav-item" href="#"><i data-lucide="settings"></i> Settings</a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="sidebar-user">
+      <div class="sidebar-avatar">
+        <img src="icon-white.png" alt="User" onerror="this.style.display='none';this.parentElement.innerHTML='<span style=\'font-size:13px;font-weight:700;color:var(--black)\'>MS</span>'" />
+      </div>
+      <div class="sidebar-user-info">
+        <div class="sidebar-user-name">Malhar Soni</div>
+        <div class="sidebar-user-role">Head Coach</div>
+      </div>
+      <i data-lucide="chevron-up" style="color:var(--gray-2);width:14px;height:14px;flex-shrink:0;"></i>
+    </div>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ═══ -->
+<main class="main">
+
+  <!-- TOPBAR -->
+  <header class="topbar">
+    <nav class="breadcrumb">
+      <a href="index.html">Dashboard</a>
+      <span class="breadcrumb-sep"><i data-lucide="chevron-right" style="width:14px;height:14px;"></i></span>
+      <a href="teams.html">Teams</a>
+      <span class="breadcrumb-sep"><i data-lucide="chevron-right" style="width:14px;height:14px;"></i></span>
+      <span class="breadcrumb-cur" id="team-breadcrumb">839Z</span>
+    </nav>
+    <div class="topbar-right">
+      <button class="btn btn-outline">
+        <i data-lucide="pencil"></i> Edit Team
+      </button>
+      <button class="btn btn-yellow">
+        <i data-lucide="user-plus"></i> Add Member
+      </button>
+      <div class="icon-btn" style="position:relative;cursor:pointer;">
+        <i data-lucide="bell" style="width:15px;height:15px;"></i>
+        <span class="notif-dot"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTENT -->
+  <div class="content">
+
+    <!-- TEAM HERO -->
+    <div class="team-hero">
+      <div class="hero-top">
+        <div class="hero-logo" id="team-logo">839Z</div>
+        <div class="hero-info">
+          <h1 class="hero-name">
+            <span id="team-name">839Z — Elite</span>
+            <span class="program-badge badge-vrc" id="program-badge">V5RC</span>
+          </h1>
+          <div class="hero-meta">
+            <div class="hero-meta-item">
+              <i data-lucide="users" style="width:14px;height:14px;"></i>
+              <span id="member-count">15 members</span>
+            </div>
+            <div class="hero-meta-item">
+              <i data-lucide="user-check" style="width:14px;height:14px;"></i>
+              <span id="captain-name">Daniel Edelstein (Captain)</span>
+            </div>
+            <div class="hero-meta-item">
+              <i data-lucide="calendar" style="width:14px;height:14px;"></i>
+              <span>Est. September 2024</span>
+            </div>
+          </div>
+        </div>
+        <div class="hero-actions">
+          <span class="status-chip chip-green" id="team-status">Competition Ready</span>
+        </div>
+      </div>
+      <div class="hero-strip"></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('overview')">
+        <i data-lucide="layout-dashboard" style="width:14px;height:14px;"></i>
+        Overview
+      </div>
+      <div class="tab" onclick="switchTab('members')">
+        <i data-lucide="users" style="width:14px;height:14px;"></i>
+        Members
+      </div>
+      <div class="tab" onclick="switchTab('tasks')">
+        <i data-lucide="circle-check" style="width:14px;height:14px;"></i>
+        Tasks
+      </div>
+      <div class="tab" onclick="switchTab('competitions')">
+        <i data-lucide="trophy" style="width:14px;height:14px;"></i>
+        Competitions
+      </div>
+    </div>
+
+    <!-- OVERVIEW TAB -->
+    <div id="tab-overview">
+      <!-- STAT CARDS -->
+      <div class="stat-row">
+        <div class="stat-mini">
+          <div class="stat-mini-label">Avg Skills Score</div>
+          <div class="stat-mini-value" id="skills-score">158</div>
+          <div class="stat-mini-sub">Last updated 2 days ago</div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-fill green" style="width: 78%;"></div>
+          </div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Win Rate</div>
+          <div class="stat-mini-value" id="win-rate">74%</div>
+          <div class="stat-mini-sub">18-6 this season</div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-fill" style="width: 74%;"></div>
+          </div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Avg Attendance</div>
+          <div class="stat-mini-value" id="avg-attendance">92%</div>
+          <div class="stat-mini-sub">Across all members</div>
+          <div class="stat-mini-bar">
+            <div class="stat-mini-fill green" style="width: 92%;"></div>
+          </div>
+        </div>
+        <div class="stat-mini">
+          <div class="stat-mini-label">Next Competition</div>
+          <div class="stat-mini-value" style="font-size: 18px; margin-top: 6px;">Feb 15</div>
+          <div class="stat-mini-sub">Provincial Championship</div>
+        </div>
+      </div>
+
+      <!-- TWO COLUMN LAYOUT -->
+      <div class="two-col">
+        <!-- LEFT: Recent Tasks -->
+        <div class="card">
+          <div class="card-header">
+            <span class="card-title">Team Tasks</span>
+            <a href="#" class="card-link">View all <i data-lucide="arrow-right" style="width:12px;height:12px;"></i></a>
+          </div>
+          <div class="card-body">
+            <div id="team-tasks">
+              <!-- Rendered by JS -->
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT: Quick Info -->
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+          <!-- Team Captain -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Team Captain</span>
+            </div>
+            <div class="card-body">
+              <div class="member-cell">
+                <div class="member-avatar" style="background:#DBEAFE;color:#1D4ED8;">DE</div>
+                <div style="flex:1;">
+                  <div class="member-name">Daniel Edelstein</div>
+                  <div class="member-email">Daniel.Edelstein@cautiontape.ca</div>
+                </div>
+              </div>
+              <div style="margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--gray-3);">
+                <div style="display: flex; gap: 8px;">
+                  <button class="btn btn-outline" style="flex: 1; font-size: 12px; padding: 6px 10px;">
+                    <i data-lucide="mail" style="width:12px;height:12px;"></i>
+                    Message
+                  </button>
+                  <button class="btn btn-outline" style="flex: 1; font-size: 12px; padding: 6px 10px;">
+                    <i data-lucide="user" style="width:12px;height:12px;"></i>
+                    View Profile
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="card">
+            <div class="card-header">
+              <span class="card-title">Quick Stats</span>
+            </div>
+            <div class="card-body" style="display: flex; flex-direction: column; gap: 12px;">
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--gray-1);">Active Members</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--black);">15</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--gray-1);">Total Competitions</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--black);">8</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--gray-1);">Awards Won</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--black);">12</span>
+              </div>
+              <div style="display: flex; justify-content: space-between; align-items: center;">
+                <span style="font-size: 12px; color: var(--gray-1);">Current Ranking</span>
+                <span style="font-size: 13px; font-weight: 700; color: var(--black);">3rd in Province</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMBERS TAB -->
+    <div id="tab-members" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">Team Members</span>
+            <span class="card-meta" id="member-list-count" style="margin-left:10px;">15 members</span>
+          </div>
+          <button class="btn btn-yellow">
+            <i data-lucide="user-plus" style="width:13px;height:13px;"></i>
+            Add Member
+          </button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Member</th>
+                <th>Role</th>
+                <th>Grade</th>
+                <th>Attendance</th>
+                <th>Skills</th>
+                <th>Status</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="members-tbody">
+              <!-- Rendered by JS -->
+            </tbody>
+          </table>
+        </div>
+        <div class="caution-tape"></div>
+      </div>
+    </div>
+
+    <!-- TASKS TAB -->
+    <div id="tab-tasks" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <span class="card-title">Team Tasks</span>
+            <span class="card-meta" id="task-count" style="margin-left:10px;"></span>
+          </div>
+          <button class="btn btn-yellow">
+            <i data-lucide="plus" style="width:13px;height:13px;"></i>
+            New Task
+          </button>
+        </div>
+        <div class="card-body">
+          <div id="all-team-tasks">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMPETITIONS TAB -->
+    <div id="tab-competitions" style="display: none;">
+      <div class="card">
+        <div class="card-header">
+          <span class="card-title">Competition History</span>
+        </div>
+        <div class="card-body">
+          <div id="competition-history">
+            <!-- Rendered by JS -->
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+lucide.createIcons();
+
+// ── MOCK DATA ────────────────────────────────────────────
+const TEAM_DATA = {
+  '839z': {
+    id: '839z',
+    name: '839Z — Elite',
+    program: 'V5RC',
+    memberCount: 15,
+    captain: 'Daniel Edelstein',
+    captainEmail: 'Daniel.Edelstein@cautiontape.ca',
+    captainInitials: 'DE',
+    captainColor: '#DBEAFE',
+    captainTextColor: '#1D4ED8',
+    status: 'Competition Ready',
+    skillsScore: 158,
+    winRate: 74,
+    avgAttendance: 92,
+    nextComp: 'Feb 15',
+    nextCompName: 'Provincial Championship',
+    established: 'September 2024',
+    members: [
+      { id: 1, name: 'Daniel Edelstein', email: 'Daniel.Edelstein@cautiontape.ca', initials: 'DE', color: '#DBEAFE', textColor: '#1D4ED8', role: 'Captain', grade: 12, attendance: 95, skillLevel: 'Lvl 3', skillPct: 75, status: 'Active' },
+      { id: 2, name: 'Daniel Fu', email: 'Daniel.Fu@cautiontape.ca', initials: 'DF', color: '#EDE9FE', textColor: '#5B21B6', role: 'Builder', grade: 11, attendance: 92, skillLevel: 'Lvl 2', skillPct: 50, status: 'Active' },
+      { id: 4, name: 'Ryan Jung', email: 'Ryan.Jung@cautiontape.ca', initials: 'RJ', color: '#FCE7F3', textColor: '#9D174D', role: 'Driver', grade: 11, attendance: 88, skillLevel: 'Lvl 2', skillPct: 60, status: 'Active' },
+      { id: 9, name: 'Zuhaib Mansoor', email: 'Zuhaib.Mansoor@cautiontape.ca', initials: 'ZM', color: '#EFF6FF', textColor: '#1D4ED8', role: 'Programmer', grade: 11, attendance: 90, skillLevel: 'Lvl 3', skillPct: 80, status: 'Active' },
+      { id: 10, name: 'Eli Mindell', email: 'Eli.Mindell@cautiontape.ca', initials: 'EM', color: '#FDF2F8', textColor: '#9D174D', role: 'Builder', grade: 11, attendance: 87, skillLevel: 'Lvl 2', skillPct: 55, status: 'Active' },
+      { id: 11, name: 'Steven Papazian', email: 'Steven.Papazian@cautiontape.ca', initials: 'SP', color: '#FFFBEB', textColor: '#92400E', role: 'Builder', grade: 12, attendance: 94, skillLevel: 'Lvl 2', skillPct: 65, status: 'Active' },
+      { id: 12, name: 'Brialyn Quast', email: 'Brialyn.Quast@cautiontape.ca', initials: 'BQ', color: '#F0FDFA', textColor: '#0F766E', role: 'Notebooker', grade: 12, attendance: 96, skillLevel: 'Lvl 3', skillPct: 85, status: 'Active' },
+      { id: 15, name: 'Justin Rui', email: 'Justin.Rui@cautiontape.ca', initials: 'JR', color: '#DBEAFE', textColor: '#1D4ED8', role: 'Builder', grade: 11, attendance: 89, skillLevel: 'Lvl 2', skillPct: 58, status: 'Active' },
+      { id: 16, name: 'Brandon Situ', email: 'Brandon.Situ@cautiontape.ca', initials: 'BS', color: '#D1FAE5', textColor: '#065F46', role: 'Builder', grade: 12, attendance: 93, skillLevel: 'Lvl 3', skillPct: 70, status: 'Active' },
+      { id: 17, name: 'Caden Situ', email: 'Caden.Situ@cautiontape.ca', initials: 'CS', color: '#EDE9FE', textColor: '#5B21B6', role: 'Builder', grade: 12, attendance: 91, skillLevel: 'Lvl 2', skillPct: 62, status: 'Active' },
+      { id: 19, name: 'Nathan Tam', email: 'Nathan.Tam@cautiontape.ca', initials: 'NT', color: '#ECFDF5', textColor: '#065F46', role: 'Builder', grade: 10, attendance: 85, skillLevel: 'Lvl 2', skillPct: 52, status: 'Active' },
+      { id: 22, name: 'Jovan Wang', email: 'Jovan.Wang@cautiontape.ca', initials: 'JW', color: '#FDF4FF', textColor: '#7E22CE', role: 'Builder', grade: 11, attendance: 90, skillLevel: 'Lvl 2', skillPct: 60, status: 'Active' },
+      { id: 23, name: 'Isaac Wong', email: 'Isaac.Wong@cautiontape.ca', initials: 'IW', color: '#EFF6FF', textColor: '#1D4ED8', role: 'Builder', grade: 12, attendance: 92, skillLevel: 'Lvl 3', skillPct: 72, status: 'Active' },
+      { id: 29, name: 'Tiger Zhang', email: 'Tiger.Zhang@cautiontape.ca', initials: 'TZ', color: '#DBEAFE', textColor: '#1D4ED8', role: 'Builder', grade: 10, attendance: 88, skillLevel: 'Lvl 2', skillPct: 54, status: 'Active' }
+    ],
+    tasks: [
+      { id: 1, name: 'Test autonomous program', assignee: 'Zuhaib Mansoor', due: '2026-04-05', status: 'pending', priority: 'high' },
+      { id: 2, name: 'Rebuild intake mechanism', assignee: 'Daniel Fu', due: '2026-04-08', status: 'in-progress', priority: 'medium' },
+      { id: 3, name: 'Update engineering notebook', assignee: 'Brialyn Quast', due: '2026-04-04', status: 'done', priority: 'high' },
+      { id: 4, name: 'Practice driver skills', assignee: 'Ryan Jung', due: '2026-04-06', status: 'pending', priority: 'medium' },
+      { id: 5, name: 'Order replacement parts', assignee: 'Daniel Edelstein', due: '2026-04-07', status: 'pending', priority: 'low' }
+    ],
+    competitions: [
+      { id: 1, name: 'Ontario Provincial Championship', date: 'March 15, 2026', rank: 1, result: 'Champion', award: 'Excellence Award' },
+      { id: 2, name: 'Toronto Regional', date: 'February 8, 2026', rank: 2, result: 'Finalist', award: 'Design Award' },
+      { id: 3, name: 'Winter Showdown', date: 'January 12, 2026', rank: 1, result: 'Champion', award: 'Tournament Champion' },
+      { id: 4, name: 'Fall Classic', date: 'November 20, 2025', rank: 3, result: 'Semi-Finalist', award: null },
+      { id: 5, name: 'Early Season Qualifier', date: 'October 5, 2025', rank: 5, result: 'Quarter-Finalist', award: null }
+    ]
+  }
+};
+
+// ── GET TEAM ID FROM URL ─────────────────────────────────
+function getTeamId() {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('id') || '839z';
+}
+
+const teamId = getTeamId();
+const team = TEAM_DATA[teamId] || TEAM_DATA['839z'];
+
+// ── POPULATE HERO ────────────────────────────────────────
+document.getElementById('team-breadcrumb').textContent = team.name.split(' — ')[0];
+document.getElementById('team-logo').textContent = team.name.split(' — ')[0];
+document.getElementById('team-name').textContent = team.name;
+document.getElementById('program-badge').textContent = team.program;
+document.getElementById('program-badge').className = `program-badge ${team.program === 'V5RC' ? 'badge-vrc' : 'badge-ev'}`;
+document.getElementById('member-count').textContent = `${team.memberCount} members`;
+document.getElementById('captain-name').textContent = `${team.captain} (Captain)`;
+document.getElementById('team-status').textContent = team.status;
+document.getElementById('skills-score').textContent = team.skillsScore;
+document.getElementById('win-rate').textContent = `${team.winRate}%`;
+document.getElementById('avg-attendance').textContent = `${team.avgAttendance}%`;
+
+// ── RENDER MEMBERS ───────────────────────────────────────
+function renderMembers() {
+  const tbody = document.getElementById('members-tbody');
+  tbody.innerHTML = team.members.map(m => {
+    const attClass = m.attendance >= 90 ? 'att-high' : m.attendance >= 75 ? 'att-mid' : 'att-low';
+    const roleClass = m.role === 'Captain' ? 'role-captain' : m.role === 'Driver' ? 'role-driver' : m.role === 'Programmer' ? 'role-programmer' : m.role === 'Notebooker' ? 'role-notebooker' : 'role-builder';
+    return `
+      <tr onclick="window.location='student-profile.html?id=${m.id}'">
+        <td>
+          <div class="member-cell">
+            <div class="member-avatar" style="background:${m.color};color:${m.textColor};">${m.initials}</div>
+            <div>
+              <div class="member-name">${m.name}</div>
+              <div class="member-email">${m.email}</div>
+            </div>
+          </div>
+        </td>
+        <td><span class="role-badge ${roleClass}">${m.role}</span></td>
+        <td style="color:var(--gray-1);">Grade ${m.grade}</td>
+        <td>
+          <div style="display:flex;align-items:center;gap:6px;">
+            <span style="font-size:12px;font-weight:600;color:var(--black);">${m.attendance}%</span>
+            <div class="att-bar"><div class="att-fill ${attClass}" style="width:${m.attendance}%;"></div></div>
+          </div>
+        </td>
+        <td>
+          <span style="font-size:12px;color:var(--gray-1);">${m.skillLevel} (${m.skillPct}%)</span>
+        </td>
+        <td>
+          <span style="font-size:11px;font-weight:600;padding:3px 8px;border-radius:99px;background:#DCFCE7;color:#15803D;">Active</span>
+        </td>
+        <td>
+          <a href="student-profile.html?id=${m.id}" class="action-link" onclick="event.stopPropagation();">View Profile</a>
+        </td>
+      </tr>
+    `;
+  }).join('');
+  lucide.createIcons();
+}
+
+// ── RENDER TASKS ─────────────────────────────────────────
+function renderTasks(container, tasks, limit) {
+  const tasksToShow = limit ? tasks.slice(0, limit) : tasks;
+  const html = tasksToShow.map(t => {
+    const isDone = t.status === 'done';
+    const isPending = t.status === 'pending';
+    const dueDate = new Date(t.due);
+    const today = new Date();
+    const isOverdue = dueDate < today && !isDone;
+    return `
+      <div class="task-item">
+        <div class="task-check ${isDone ? 'done' : ''}" onclick="toggleTask(${t.id})">
+          ${isDone ? '<i data-lucide="check" style="width:10px;height:10px;color:var(--black);"></i>' : ''}
+        </div>
+        <div class="task-info">
+          <div class="task-name ${isDone ? 'done' : ''}">${t.name}</div>
+          <div class="task-meta">
+            <span><i data-lucide="user" style="width:10px;height:10px;vertical-align:middle;"></i> ${t.assignee}</span>
+            <span class="${isOverdue ? 'task-due-red' : ''}"><i data-lucide="calendar" style="width:10px;height:10px;vertical-align:middle;"></i> ${isOverdue ? 'Overdue: ' : ''}${t.due}</span>
+          </div>
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById(container).innerHTML = html || '<div class="empty-state"><i data-lucide="circle-check" style="width:40px;height:40px;"></i><div class="empty-state-title">No tasks assigned</div></div>';
+  lucide.createIcons();
+}
+
+// ── RENDER COMPETITIONS ──────────────────────────────────
+function renderCompetitions() {
+  const html = team.competitions.map(c => {
+    const rankClass = c.rank === 1 ? 'gold' : c.rank === 2 ? 'silver' : c.rank === 3 ? 'bronze' : 'other';
+    const rankText = c.rank === 1 ? '1st' : c.rank === 2 ? '2nd' : c.rank === 3 ? '3rd' : `${c.rank}th`;
+    return `
+      <div class="comp-row">
+        <div class="comp-rank ${rankClass}">${rankText}</div>
+        <div class="comp-info">
+          <div class="comp-name">${c.name}</div>
+          <div class="comp-date">${c.date}</div>
+        </div>
+        <div class="comp-result">
+          ${c.result}
+          ${c.award ? `<div class="comp-result-sub"><i data-lucide="trophy" style="width:10px;height:10px;vertical-align:middle;"></i> ${c.award}</div>` : ''}
+        </div>
+      </div>
+    `;
+  }).join('');
+  document.getElementById('competition-history').innerHTML = html;
+  lucide.createIcons();
+}
+
+// ── TAB SWITCHING ────────────────────────────────────────
+function switchTab(tabName) {
+  // Hide all tabs
+  document.getElementById('tab-overview').style.display = 'none';
+  document.getElementById('tab-members').style.display = 'none';
+  document.getElementById('tab-tasks').style.display = 'none';
+  document.getElementById('tab-competitions').style.display = 'none';
+
+  // Show selected tab
+  document.getElementById(`tab-${tabName}`).style.display = 'block';
+
+  // Update tab active state
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event.target.closest('.tab').classList.add('active');
+
+  lucide.createIcons();
+}
+
+// ── TOGGLE TASK ──────────────────────────────────────────
+function toggleTask(taskId) {
+  const task = team.tasks.find(t => t.id === taskId);
+  if (task) {
+    task.status = task.status === 'done' ? 'pending' : 'done';
+    renderTasks('team-tasks', team.tasks, 5);
+    renderTasks('all-team-tasks', team.tasks);
+  }
+}
+
+// ── INIT ─────────────────────────────────────────────────
+renderMembers();
+renderTasks('team-tasks', team.tasks, 5);
+renderTasks('all-team-tasks', team.tasks);
+renderCompetitions();
+lucide.createIcons();
+</script>
+
+</body>
+</html>
