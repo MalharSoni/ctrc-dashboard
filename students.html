@@ -858,11 +858,14 @@ function attachRowClickHandlers() {
   const tbody = document.getElementById('students-tbody');
   if (!tbody) return;
 
-  // Remove old listeners if any
-  tbody.replaceWith(tbody.cloneNode(true));
-  const newTbody = document.getElementById('students-tbody');
+  // Remove existing click listeners by cloning
+  const clone = tbody.cloneNode(true);
+  tbody.parentNode.replaceChild(clone, tbody);
 
-  newTbody.addEventListener('click', (e) => {
+  // Add event listener to the new tbody
+  const freshTbody = document.getElementById('students-tbody');
+
+  freshTbody.addEventListener('click', (e) => {
     // Find the row that was clicked
     const row = e.target.closest('tr.student-row');
     if (!row) return;
@@ -918,11 +921,14 @@ function attachGridClickHandlers() {
   const grid = document.getElementById('students-grid');
   if (!grid) return;
 
-  // Remove old listeners
-  grid.replaceWith(grid.cloneNode(true));
-  const newGrid = document.getElementById('students-grid');
+  // Remove existing click listeners by cloning
+  const clone = grid.cloneNode(true);
+  grid.parentNode.replaceChild(clone, grid);
 
-  newGrid.addEventListener('click', (e) => {
+  // Add event listener to the new grid
+  const freshGrid = document.getElementById('students-grid');
+
+  freshGrid.addEventListener('click', (e) => {
     const card = e.target.closest('.student-card');
     if (!card) return;
 
