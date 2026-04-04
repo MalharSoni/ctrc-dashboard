@@ -895,7 +895,7 @@
           </div>
           <div class="meeting-meta-item">
             <i data-lucide="users" style="width:13px;height:13px;"></i>
-            7 students
+            20 students
           </div>
         </div>
         <div class="meeting-desc">
@@ -1489,16 +1489,40 @@
 
   /* ── ATTENDANCE TRACKING ──────────────────────── */
 
-  // Foundation students (unassigned students)
-  const FOUNDATION_STUDENTS = [
-    { id: 1, name: 'Emily Chen' },
-    { id: 2, name: 'Marcus Johnson' },
-    { id: 3, name: 'Sofia Rodriguez' },
-    { id: 4, name: 'Liam Patel' },
-    { id: 5, name: 'Ava Thompson' },
-    { id: 6, name: 'Noah Martinez' },
-    { id: 7, name: 'Olivia Kim' }
-  ];
+  // Saturday Class students organized by timeslot
+  const SATURDAY_STUDENTS = {
+    morning: [
+      { id: 3, name: 'Luke Fu' },
+      { id: 4, name: 'Ryan Jung' },
+      { id: 20, name: 'Elyse To' },
+      { id: 21, name: 'Allen Wang' },
+      { id: 25, name: 'Jayden Yang' },
+      { id: 28, name: 'Tobias Yeung' },
+      { id: 29, name: 'Tiger Zhang' }
+    ],
+    afternoon: [
+      { id: 1, name: 'Daniel Edelstein' },
+      { id: 2, name: 'Daniel Fu' },
+      { id: 5, name: 'Bryan Kuan' },
+      { id: 6, name: 'Alessio Lai' },
+      { id: 7, name: 'Cyrus Liu' },
+      { id: 8, name: 'Cici Ma' },
+      { id: 9, name: 'Zuhaib Mansoor' },
+      { id: 10, name: 'Eli Mindell' },
+      { id: 11, name: 'Steven Papazian' },
+      { id: 13, name: 'Keegan Ramsaran' },
+      { id: 14, name: 'Kiara Ramsaran' },
+      { id: 15, name: 'Justin Rui' },
+      { id: 16, name: 'Brandon Situ' },
+      { id: 18, name: 'Brayden Sun' },
+      { id: 19, name: 'Nathan Tam' },
+      { id: 22, name: 'Jovan Wang' },
+      { id: 23, name: 'Isaac Wong' },
+      { id: 24, name: 'Kylie Woo' },
+      { id: 27, name: 'Jake Yeung' },
+      { id: 30, name: 'Brandon Zhao' }
+    ]
+  };
 
   let currentSession = null;
   let currentAttendance = new Set();
@@ -1533,7 +1557,10 @@
 
   function renderAttendanceList() {
     const list = document.getElementById('attendance-list');
-    list.innerHTML = FOUNDATION_STUDENTS.map(student => {
+    // Get students for current session
+    const students = currentSession === 'morning' ? SATURDAY_STUDENTS.morning : SATURDAY_STUDENTS.afternoon;
+
+    list.innerHTML = students.map(student => {
       const isPresent = currentAttendance.has(student.id);
       return `
         <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border:1.5px solid var(--gray-3);border-radius:var(--radius-sm);background:${isPresent ? 'var(--yellow-bg)' : 'var(--white)'};transition:all .15s;cursor:pointer;" onclick="toggleAttendance(${student.id})">
@@ -1563,7 +1590,8 @@
   }
 
   function markAllPresent() {
-    FOUNDATION_STUDENTS.forEach(student => currentAttendance.add(student.id));
+    const students = currentSession === 'morning' ? SATURDAY_STUDENTS.morning : SATURDAY_STUDENTS.afternoon;
+    students.forEach(student => currentAttendance.add(student.id));
     renderAttendanceList();
   }
 
@@ -1582,12 +1610,16 @@
     // Get existing attendance data
     let attendanceData = JSON.parse(localStorage.getItem('attendance') || '{}');
 
+    // Get total students for current session
+    const students = currentSession === 'morning' ? SATURDAY_STUDENTS.morning : SATURDAY_STUDENTS.afternoon;
+    const totalStudents = students.length;
+
     // Save current session
     attendanceData[sessionId] = {
       date: dateStr,
       session: currentSession,
       presentStudents: Array.from(currentAttendance),
-      totalStudents: FOUNDATION_STUDENTS.length,
+      totalStudents: totalStudents,
       timestamp: new Date().toISOString()
     };
 
@@ -1596,7 +1628,7 @@
     // Show success message
     const presentCount = currentAttendance.size;
     const sessionName = currentSession === 'morning' ? 'Morning' : 'Afternoon';
-    showToast(`Attendance saved: ${presentCount}/${FOUNDATION_STUDENTS.length} present (${sessionName})`);
+    showToast(`Attendance saved: ${presentCount}/${totalStudents} present (${sessionName})`);
 
     // Close modal
     closeAttendanceModal();
