@@ -792,8 +792,8 @@ function renderTable() {
 
     const isChecked = selectedStudents.has(s.id);
 
-    return `<tr onclick="viewStudent('${s.id}')">
-      <td style="padding-left:14px;" onclick="event.stopPropagation()">
+    return `<tr data-student-id="${s.id}" class="student-row" style="cursor:pointer;">
+      <td style="padding-left:14px;">
         <input type="checkbox" class="student-checkbox" data-student-id="${s.id}" ${isChecked ? 'checked' : ''} onchange="toggleStudentSelect('${s.id}')" style="width:16px;height:16px;cursor:pointer;accent-color:var(--yellow);">
       </td>
       <td>
@@ -849,6 +849,38 @@ function renderTable() {
   }).join('');
 
   lucide.createIcons();
+
+  // Add event delegation for row clicks
+  attachRowClickHandlers();
+}
+
+function attachRowClickHandlers() {
+  const tbody = document.getElementById('students-tbody');
+  if (!tbody) return;
+
+  // Remove old listeners if any
+  tbody.replaceWith(tbody.cloneNode(true));
+  const newTbody = document.getElementById('students-tbody');
+
+  newTbody.addEventListener('click', (e) => {
+    // Find the row that was clicked
+    const row = e.target.closest('tr.student-row');
+    if (!row) return;
+
+    // Don't navigate if clicking checkbox, button, or link
+    if (e.target.matches('input[type="checkbox"]') ||
+        e.target.closest('button') ||
+        e.target.closest('a') ||
+        e.target.closest('.row-actions')) {
+      return;
+    }
+
+    // Navigate to student profile
+    const studentId = row.dataset.studentId;
+    if (studentId) {
+      window.location.href = `student-profile.html?id=${studentId}`;
+    }
+  });
 }
 
 function renderGrid() {
@@ -856,7 +888,7 @@ function renderGrid() {
   grid.innerHTML = filtered.map(s => {
     const ac = attClass(s.attendance);
     const apc = attPctClass(s.attendance);
-    return `<div onclick="viewStudent('${s.id}')" style="background:var(--white);border:1px solid var(--gray-3);border-radius:var(--radius);padding:18px;cursor:pointer;transition:box-shadow .15s;" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.10)'" onmouseleave="this.style.boxShadow=''">
+    return `<div data-student-id="${s.id}" class="student-card" style="background:var(--white);border:1px solid var(--gray-3);border-radius:var(--radius);padding:18px;cursor:pointer;transition:box-shadow .15s;" onmouseenter="this.style.boxShadow='0 4px 12px rgba(0,0,0,.10)'" onmouseleave="this.style.boxShadow=''">
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px;">
         <div class="avatar" style="width:44px;height:44px;font-size:14px;background:${s.color};color:${s.textColor};">${s.initials}</div>
         <div>
@@ -877,6 +909,28 @@ function renderGrid() {
     </div>`;
   }).join('');
   lucide.createIcons();
+
+  // Add event delegation for card clicks
+  attachGridClickHandlers();
+}
+
+function attachGridClickHandlers() {
+  const grid = document.getElementById('students-grid');
+  if (!grid) return;
+
+  // Remove old listeners
+  grid.replaceWith(grid.cloneNode(true));
+  const newGrid = document.getElementById('students-grid');
+
+  newGrid.addEventListener('click', (e) => {
+    const card = e.target.closest('.student-card');
+    if (!card) return;
+
+    const studentId = card.dataset.studentId;
+    if (studentId) {
+      window.location.href = `student-profile.html?id=${studentId}`;
+    }
+  });
 }
 
 // ── FILTERS ──────────────────────────────────────────
